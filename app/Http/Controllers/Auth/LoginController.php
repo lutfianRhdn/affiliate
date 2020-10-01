@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -26,7 +27,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    // protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
      * Create a new controller instance.
@@ -36,5 +37,28 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout'); 
+    }
+
+    public function login(Request $request) {
+        $fieldData = $request->all();
+        // $this->validate([
+        //     'email' => 'required|email',
+        //     'password' => 'required',
+        // ]);
+
+        if (auth()->attempt(array('email' => $fieldData['email'], 'password' => $fieldData['password'])))
+        {
+            if (auth()->user()->role == 1 && auth()->user()->register_status == 1) {
+                return redirect()->route('admin.route');
+            } elseif (auth()->user()->role == 2 && auth()->user()->register_status == 1) {
+                return redirect()->route('user.route');
+            } else {
+                return redirect()->route('home');
+            } 
+        }
+        else
+        {
+            return redirect()->route('login')->with('error','Your provided information wrong!');
+        }
     }
 }

@@ -83,7 +83,7 @@
               <div class="sidebar-wrapper">
                 <ul class="nav">
                   <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home') }}">
+                    <a class="nav-link" href="">
                       <i class="material-icons">dashboard</i>
                         <p>{{ __('Dashboard') }}</p>
                     </a>
@@ -148,7 +148,7 @@
                       <p>{{ __('RTL Support') }}</p>
                     </a>
                   </li>
-                  <li class="nav-item active-pro{{ $activePage == 'upgrade' ? ' active' : '' }}">
+                  <li class="nav-item">
                     <a class="nav-link text-white bg-danger" href="{{ route('upgrade') }}">
                       <i class="material-icons text-white">unarchive</i>
                       <p>{{ __('Upgrade to PRO') }}</p>

@@ -20,8 +20,8 @@ class Authenticated
             return $next($request);
         } else if (auth()->user()->role == 2) {
             return $next($request);
-        }
-
-         return redirect('home')->with('error', "You have no proper authentication to access the area!");
+        } 
+        
+        return redirect('/')->with('error', "You have no proper authentication to access the area!");
     }
 }
