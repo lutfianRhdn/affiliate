@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -20,49 +21,52 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Auth::routes();
-Route::get('/admin/home', [HomeController::class, 'indexAdmin'])->name('admin.route')->middleware('auth');
-Route::get('/users/home', [UserController::class, 'index'])->name('user.route')->middleware('auth');
-
 Route::get('/konfirmasiemail/{email}/{ref_code}', [App\Http\Controllers\Auth\RegisterController::class, 'konfirmasiemail'])->name('konfirmasiemail');
 
-Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home')->middleware('auth');
+Auth::routes();
+
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Auth::routes();
+Route::get('/admin', [HomeController::class, 'index'])->name('admin.route')->middleware('auth');
+Route::get('/admin/user', [AdminUserController::class, 'index'])->name('admin.route')->middleware('auth');
+
+Route::get('/users/home', [UserController::class, 'index'])->name('user.route')->middleware('auth');
 
 
-Route::group(['middleware' => 'auth'], function () {
-	Route::get('table-list', function () {
-		return view('pages.table_list');
-	})->name('table');
 
-	Route::get('typography', function () {
-		return view('pages.typography');
-	})->name('typography');
+// Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home')->middleware('auth');
 
-	Route::get('icons', function () {
-		return view('pages.icons');
-	})->name('icons');
 
-	Route::get('map', function () {
-		return view('pages.map');
-	})->name('map');
+// Route::group(['middleware' => 'auth'], function () {
+// 	Route::get('table-list', function () {
+// 		return view('pages.table_list');
+// 	})->name('table');
 
-	Route::get('notifications', function () {
-		return view('pages.notifications');
-	})->name('notifications');
+// 	Route::get('typography', function () {
+// 		return view('pages.typography');
+// 	})->name('typography');
 
-	Route::get('rtl-support', function () {
-		return view('pages.language');
-	})->name('language');
+// 	Route::get('icons', function () {
+// 		return view('pages.icons');
+// 	})->name('icons');
 
-	Route::get('upgrade', function () {
-		return view('pages.upgrade');
-	})->name('upgrade');
-});
+// 	Route::get('map', function () {
+// 		return view('pages.map');
+// 	})->name('map');
+
+// 	Route::get('notifications', function () {
+// 		return view('pages.notifications');
+// 	})->name('notifications');
+
+// 	Route::get('rtl-support', function () {
+// 		return view('pages.language');
+// 	})->name('language');
+
+// 	Route::get('upgrade', function () {
+// 		return view('pages.upgrade');
+// 	})->name('upgrade');
+// });
 
 Route::group(['middleware' => 'auth'], function () {
 	Route::resource('user', 'App\Http\Controllers\UserController', ['except' => ['show']]);

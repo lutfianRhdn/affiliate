@@ -53,7 +53,7 @@ class LoginController extends Controller
             } elseif (auth()->user()->role == 2 && auth()->user()->register_status == 1) {
                 return redirect()->route('user.route');
             } else {
-                return redirect()->route('home');
+                return redirect()->route('/');
             } 
         }
         else
