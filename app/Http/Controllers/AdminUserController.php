@@ -11,4 +11,8 @@ class AdminUserController extends Controller
     {
         return view('admin.user', ['users' => $model->paginate(15)]);
     }
+
+    public function edit(User $user) {
+        return view('admin.user', compact('user'));
+    }
 }

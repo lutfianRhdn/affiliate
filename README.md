@@ -1,4 +1,4 @@
-# Affiliare
+# Affiliate
 
 Merupakan Project internship Smooeth
 

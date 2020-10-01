@@ -25,11 +25,14 @@ Route::get('/konfirmasiemail/{email}/{ref_code}', [App\Http\Controllers\Auth\Reg
 
 Auth::routes();
 
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Auth::routes();
 Route::get('/admin', [HomeController::class, 'index'])->name('admin.route')->middleware('auth');
 Route::get('/admin/user', [AdminUserController::class, 'index'])->name('admin.route')->middleware('auth');
+Route::get('/admin/{user}/edit', [AdminUserController::class, 'edit'])->name('admin.route')->middleware('auth');
+
+Route::get('/admin/product');
 
 Route::get('/users/home', [UserController::class, 'index'])->name('user.route')->middleware('auth');
 
