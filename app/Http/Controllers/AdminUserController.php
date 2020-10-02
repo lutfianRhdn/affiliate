@@ -22,7 +22,8 @@ class AdminUserController extends Controller
             ->update([
                 'name' => $request->name,
                 'email' => $request->email,
-                'phone' => $request->phone
+                'phone' => $request->phone,
+                'role' => $request->role
             ]);
 
         return redirect(route('admin.user'))->with('status', 'Berhasil update data '.$request->name);
