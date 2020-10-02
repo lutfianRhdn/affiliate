@@ -44,13 +44,13 @@
                                     <form action="/admin/product/{{$product->id}}" method="POST" class="d-inline">
                                             @method('delete')
                                             @csrf
-                                            <button rel="tooltip" class="btn btn-danger btn-link"
+                                            <button rel="tooltip" class="btn btn-danger btn-link mt-3"
                                                 data-placement="bottom" title="Erase">
                                                 <i class="material-icons">delete</i>
                                                 <div class="ripple-container"></div>
                                             </button>
                                         </form>
-                                        <a rel="tooltip" class="btn btn-primary btn-link" href="/admin/product/{{$product->id}}/edit"
+                                        <a rel="tooltip" class="btn btn-primary btn-link mt-3" href="/admin/product/{{$product->id}}/edit"
                                             data-original-title="" data-placement="bottom" title="Edit">
                                             <i class="material-icons">edit</i>
                                             <div class="ripple-container"></div>
