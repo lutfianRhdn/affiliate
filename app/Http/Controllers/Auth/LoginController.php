@@ -49,11 +49,11 @@ class LoginController extends Controller
         if (auth()->attempt(array('email' => $fieldData['email'], 'password' => $fieldData['password'])))
         {
             if (auth()->user()->role == 1 && auth()->user()->register_status == 1) {
-                return redirect()->route('admin.route');
+                return redirect()->route('admin');
             } elseif (auth()->user()->role == 2 && auth()->user()->register_status == 1) {
-                return redirect()->route('user.route');
+                return redirect()->route('reseller');
             } else {
-                return redirect()->route('/');
+                return redirect()->route('login');
             } 
         }
         else

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Reseller\ResellerController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Auth;
@@ -28,13 +29,15 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Auth::routes();
-Route::get('/admin', [HomeController::class, 'index'])->name('admin.route')->middleware('auth');
-Route::get('/admin/user', [AdminUserController::class, 'index'])->name('admin.route')->middleware('auth');
-Route::get('/admin/{user}/edit', [AdminUserController::class, 'edit'])->name('admin.route')->middleware('auth');
+Route::get('/admin', [HomeController::class, 'index'])->name('admin')->middleware('auth');
+Route::get('/admin/user', [AdminUserController::class, 'index'])->name('admin.user')->middleware('auth');
+Route::delete('/admin/{user}', [AdminUserController::class, 'destroy'])->middleware('auth');
+Route::get('/admin/{user}/edit', [AdminUserController::class, 'edit'])->middleware('auth');
+Route::patch('/admin/{user}', [AdminUserController::class, 'update'])->middleware('auth');
 
 Route::get('/admin/product');
 
-Route::get('/users/home', [UserController::class, 'index'])->name('user.route')->middleware('auth');
+Route::get('/reseller', [ResellerController::class, 'index'])->name('reseller');
 
 
 
