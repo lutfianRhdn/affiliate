@@ -48,7 +48,7 @@
         </a>
       </li>
       <li class="nav-item{{ $activePage == 'product' ? ' active' : '' }}">
-        <a class="nav-link" href="{{ url('table') }}">
+        <a class="nav-link" href="{{ url('/admin/product') }}">
           <i class="material-icons">content_paste</i>
             <p>{{ __('Product') }}</p>
         </a>
