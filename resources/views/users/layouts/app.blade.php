@@ -28,7 +28,7 @@
         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
             @csrf
         </form>
-        @include('users.layouts.auth')
+        @include('users.layouts.page_templates.auth')
     @endauth
     <!--   Core JS Files   -->
     <script src="{{ asset('material') }}/js/core/jquery.min.js"></script>

@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Reseller\ResellerController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Auth;
@@ -37,6 +38,7 @@ Route::get('/admin/{user}/edit', [AdminUserController::class, 'edit']);
 Route::patch('/admin/{user}', [AdminUserController::class, 'update'])->middleware('auth');
 
 Route::resource('/admin/product', ProductController::class);
+Route::resource('/admin/setting', SettingController::class);
 
 Route::get('/reseller', [ResellerController::class, 'index'])->name('reseller');
 

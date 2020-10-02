@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Reseller;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ResellerController extends Controller
+class SettingController extends Controller
 {
     public function __construct()
     {
@@ -19,6 +18,6 @@ class ResellerController extends Controller
      */
     public function index()
     {
-        return view('users.dashboard', ['auth' => $this->middleware('auth')]);
+        return view('admin.settingAdmin');
     }
 }

@@ -21,3 +21,16 @@ Migrasi tabel
 ```bash
 php artisan migrate
 ```
+
+## Login
+Gunakan akun berikut untuk login
+### Admin
+```bash
+Username : admin@admin.com
+Password : admin1234
+```
+### Reseller/User
+```bash
+Username : reseller@reseller.com
+Password : reseller1234
+```

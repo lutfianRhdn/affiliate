@@ -53,6 +53,12 @@
             <p>{{ __('Product') }}</p>
         </a>
       </li>
+      <li class="nav-item{{ $activePage == 'setting' ? ' active' : '' }}">
+        <a class="nav-link" href="/admin/setting">
+          <i class="material-icons">admin_panel_settings</i>
+            <p>{{ __('Settings') }}</p>
+        </a>
+      </li>
     </ul>
   </div>
 </div>
