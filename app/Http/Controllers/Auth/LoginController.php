@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Helpers\LogActivity;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -49,6 +50,7 @@ class LoginController extends Controller
         if (auth()->attempt(array('email' => $fieldData['email'], 'password' => $fieldData['password'])))
         {
             if (auth()->user()->role == 1 && auth()->user()->register_status == 1) {
+                LogActivity::addToLog("Login");
                 return redirect()->route('admin');
             } elseif (auth()->user()->role == 2 && auth()->user()->register_status == 1) {
                 return redirect()->route('reseller');

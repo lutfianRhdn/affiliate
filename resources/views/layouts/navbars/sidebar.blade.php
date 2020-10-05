@@ -42,7 +42,7 @@
         </div>
       </li> --}}
       <li class="nav-item{{ $activePage == 'user-management' ? ' active' : '' }}">
-        <a class="nav-link" href="{{ route('admin.user') }}">
+        <a class="nav-link" href="/admin/user">
           <i><span class="material-icons">perm_identity</span></i>
             <p>{{ __('User Management') }}</p>
         </a>
@@ -55,8 +55,14 @@
       </li>
       <li class="nav-item{{ $activePage == 'setting' ? ' active' : '' }}">
         <a class="nav-link" href="/admin/setting">
-          <i class="material-icons">admin_panel_settings</i>
+          <i class="material-icons">settings_applications</i>
             <p>{{ __('Settings') }}</p>
+        </a>
+      </li>
+      <li class="nav-item{{ $activePage == 'log' ? ' active' : '' }}">
+        <a class="nav-link" href="/admin/log">
+          <i class="material-icons">timeline</i>
+            <p>{{ __('Log Activity') }}</p>
         </a>
       </li>
     </ul>

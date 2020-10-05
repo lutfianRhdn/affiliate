@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->char('phone');
             $table->string('password');
-            $table->integer('product_id')->nullable();
+            $table->foreign('product_id')->references('id')->on('product');
             $table->integer('role')->nullable();
             $table->string('ref-code')->nullable();            
             $table->boolean('register_status')->default(0);

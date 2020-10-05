@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\LogActivity;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -40,8 +41,9 @@ class ProductController extends Controller
             'product_name' => 'required',
             'description' => 'required'
         ]);
-
+        
         Product::create($request->all());
+        LogActivity::addToLog("Menambahkan product ".$request->product_name);
         return redirect('/admin/product')->with('status', 'Data inserted successfully');
     }
 
@@ -85,7 +87,8 @@ class ProductController extends Controller
             'product_name' => $request->product_name,
             'description' => $request->description
         ]);
-
+        
+        LogActivity::addToLog("Mengedit produk id ".$product->id);
         return redirect('/admin/product')->with('status', 'Data updated successfully');
     }
 
@@ -98,6 +101,7 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         Product::destroy($product->id);
+        LogActivity::addToLog("Menghapus product ".$product->product_name);
         return redirect('/admin/product')->with('status', 'Data derased');
     }
 }
