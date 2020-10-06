@@ -59,7 +59,7 @@ class SettingController extends Controller
      */
     public function edit(Setting $setting)
     {
-        return view('admin.editSettingAdmin', compact('setting'));
+        // return view('admin.editSettingAdmin', compact('setting'));
     }
 
     /**

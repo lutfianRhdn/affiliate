@@ -117,7 +117,7 @@ Dashboard'), 'titlePage' => 'Registration'])
                             </div>
                             @endif
                         </div>
-                        <input type="hidden" name="role" value="1">
+                        <input type="hidden" name="role" value="2">
                         <div class="form-check mr-auto ml-3 mt-3">
                             <label class="form-check-label">
                                 <input class="form-check-input" type="checkbox" id="policy" name="policy"

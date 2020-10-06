@@ -17,7 +17,8 @@ class AdminUserController extends Controller
     public function index(User $model)
     {
         $users = $model->all();
-        return view('admin.user', ['users' => $users]);
+        $product = Product::all();
+        return view('admin.user', ['users' => $users, "products" => $product]);
     }
 
     public function create() {
@@ -29,19 +30,20 @@ class AdminUserController extends Controller
         $this->validate($request,[
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/', 'confirmed'],
+            'password' => ['required', 'string', 'min:8', 'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!$#%]).*$/', 'confirmed'],
             'phone' => ['required', 'min:9', 'max:14'],
-            'product_id' => ['required']
+            'productID' => ['required']
         ]);
-
+        
+        
         $user = User::create([
             'name' => $request['name'],
             'email' => $request['email'],
             'phone' => $request['phone'],
+            'product_id' => $request['productID'],
             'password' => Hash::make($request['password']),
             'role' => $request['role'],
-            'ref-code' => DB::getTablePrefix() . Str::random(6),
-            'product_id' => $request['product_id']
+            'ref-code' => DB::getTablePrefix() . Str::random(6)
         ]);
         $role = $request->role == '1' ? ' Admin' : 'Reseller';
         Mail::to($user['email'])->send(new KonfirmasiEmail($user));
