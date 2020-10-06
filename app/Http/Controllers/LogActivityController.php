@@ -21,13 +21,13 @@ class LogActivityController extends Controller
     public function index()
     {
         $logs = LogActivity::logActivityLists();
-        return view('admin.logActivity', compact('logs'));
+        return view('admin.logActivity', ["logs"=>$logs]);
     }
 
     public function destroy(ModelsLogActivity $log)
     {
         ModelsLogActivity::destroy($log->id);
-        return redirect('/admin/log');
+        return redirect('/admin/log')->with("status", "Log deleted successfully");
     }
 
 

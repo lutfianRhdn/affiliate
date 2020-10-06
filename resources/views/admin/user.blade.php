@@ -54,7 +54,7 @@
                                         <td class="td-actions text-right">
                                             <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round mr-2"
                                                 href="" data-placement="bottom" title="Delete" data-toggle="modal"
-                                                data-target="#deleteModal">
+                                                data-target="#deleteModal{{$user->id}}">
                                                 <i class="material-icons">delete</i>
                                                 <div class="ripple-container"></div>
                                             </a>
@@ -68,7 +68,7 @@
                                     </tr>
 
                                     {{-- modal delete --}}
-                                    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
+                                    <div class="modal fade" id="deleteModal{{$user->id}}" tabindex="-1" role="dialog"
                                         aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
