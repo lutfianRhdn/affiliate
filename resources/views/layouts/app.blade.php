@@ -21,8 +21,16 @@
         href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
 
     {{-- Data Tabels Material UI --}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/4.0.0/material-components-web.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/4.0.0/material-components-web.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.material.min.css">
+    
+    {{-- Bootstrap select --}}
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+
+    {{-- my style --}}
+    <link rel="stylesheet" href="{{ asset('mystyle.css') }}">
 
 </head>
 
@@ -61,61 +69,61 @@
                 <li class="active">
                     <a class="img-holder switch-trigger" href="javascript:void(0)">
                         <img src="{{ asset('material') }}/img/sidebar-1.jpg" alt="">
-                    </a>
-                </li>
-                <li>
-                    <a class="img-holder switch-trigger" href="javascript:void(0)">
-                        <img src="{{ asset('material') }}/img/sidebar-2.jpg" alt="">
-                    </a>
-                </li>
-                <li>
-                    <a class="img-holder switch-trigger" href="javascript:void(0)">
-                        <img src="{{ asset('material') }}/img/sidebar-3.jpg" alt="">
-                    </a>
-                </li>
-                <li>
-                    <a class="img-holder switch-trigger" href="javascript:void(0)">
-                        <img src="{{ asset('material') }}/img/sidebar-4.jpg" alt="">
-                    </a>
-                </li>
-                <li class="button-container">
-                    <a href="https://www.creative-tim.com/product/material-dashboard-laravel" target="_blank"
-                        class="btn btn-primary btn-block">Free Download</a>
-                </li>
-                <!-- <li class="header-title">Want more components?</li>
+    </a>
+    </li>
+    <li>
+        <a class="img-holder switch-trigger" href="javascript:void(0)">
+            <img src="{{ asset('material') }}/img/sidebar-2.jpg" alt="">
+        </a>
+    </li>
+    <li>
+        <a class="img-holder switch-trigger" href="javascript:void(0)">
+            <img src="{{ asset('material') }}/img/sidebar-3.jpg" alt="">
+        </a>
+    </li>
+    <li>
+        <a class="img-holder switch-trigger" href="javascript:void(0)">
+            <img src="{{ asset('material') }}/img/sidebar-4.jpg" alt="">
+        </a>
+    </li>
+    <li class="button-container">
+        <a href="https://www.creative-tim.com/product/material-dashboard-laravel" target="_blank"
+            class="btn btn-primary btn-block">Free Download</a>
+    </li>
+    <!-- <li class="header-title">Want more components?</li>
                   <li class="button-container">
                       <a href="https://www.creative-tim.com/product/material-dashboard-pro" target="_blank" class="btn btn-warning btn-block">
                         Get the pro version
                       </a>
                   </li> -->
-                <li class="button-container">
-                    <a href="https://material-dashboard-laravel.creative-tim.com/docs/getting-started/laravel-setup.html"
-                        target="_blank" class="btn btn-default btn-block">
-                        View Documentation
-                    </a>
-                </li>
-                <li class="button-container">
-                    <a href="https://www.creative-tim.com/product/material-dashboard-pro-laravel" target="_blank"
-                        class="btn btn-danger btn-block btn-round">
-                        Upgrade to PRO
-                    </a>
-                </li>
-                <li class="button-container github-star">
-                    <a class="github-button" href="https://github.com/creativetimofficial/material-dashboard-laravel"
-                        data-icon="octicon-star" data-size="large" data-show-count="true"
-                        aria-label="Star ntkme/github-buttons on GitHub">Star</a>
-                </li>
-                <li class="header-title">Thank you for 95 shares!</li>
-                <li class="button-container text-center">
-                    <button id="twitter" class="btn btn-round btn-twitter"><i class="fa fa-twitter"></i> &middot;
-                        45</button>
-                    <button id="facebook" class="btn btn-round btn-facebook"><i class="fa fa-facebook-f"></i> &middot;
-                        50</button>
-                    <br>
-                    <br>
-                </li>
-            </ul>
-        </div>
+    <li class="button-container">
+        <a href="https://material-dashboard-laravel.creative-tim.com/docs/getting-started/laravel-setup.html"
+            target="_blank" class="btn btn-default btn-block">
+            View Documentation
+        </a>
+    </li>
+    <li class="button-container">
+        <a href="https://www.creative-tim.com/product/material-dashboard-pro-laravel" target="_blank"
+            class="btn btn-danger btn-block btn-round">
+            Upgrade to PRO
+        </a>
+    </li>
+    <li class="button-container github-star">
+        <a class="github-button" href="https://github.com/creativetimofficial/material-dashboard-laravel"
+            data-icon="octicon-star" data-size="large" data-show-count="true"
+            aria-label="Star ntkme/github-buttons on GitHub">Star</a>
+    </li>
+    <li class="header-title">Thank you for 95 shares!</li>
+    <li class="button-container text-center">
+        <button id="twitter" class="btn btn-round btn-twitter"><i class="fa fa-twitter"></i> &middot;
+            45</button>
+        <button id="facebook" class="btn btn-round btn-facebook"><i class="fa fa-facebook-f"></i> &middot;
+            50</button>
+        <br>
+        <br>
+    </li>
+    </ul>
+    </div>
     </div> --}}
     @endif
     <!--   Core JS Files   -->
@@ -164,13 +172,11 @@
     <script src="{{ asset('material') }}/demo/demo.js"></script>
     <script src="{{ asset('material') }}/js/settings.js"></script>
     {{-- bootstrap select --}}
-    <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script>
 
-    {{-- my style --}}
-    <link rel="stylesheet" href="{{ asset('mystyle.css') }}">
+    {{-- show password --}}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-show-password/1.0.3/bootstrap-show-password.min.js"></script>
 
     @stack('js')
 </body>

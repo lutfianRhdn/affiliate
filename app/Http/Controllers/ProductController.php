@@ -102,6 +102,6 @@ class ProductController extends Controller
     {
         Product::destroy($product->id);
         LogActivity::addToLog("Menghapus product ".$product->product_name);
-        return redirect('/admin/product')->with('status', 'Data derased');
+        return redirect('/admin/product')->with('status', 'Item deleted successfully');
     }
 }

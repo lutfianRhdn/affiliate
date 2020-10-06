@@ -1,4 +1,4 @@
-@extends('layouts.app', ['class' => 'off-canvas-sidebar', 'activePage' => 'home', 'title' => __('Material Dashboard'), 'titlePage' => 'Welcome'])
+@extends('layouts.app', ['class' => 'off-canvas-sidebar', 'activePage' => '', 'title' => __('Affiliate Program'), 'titlePage' => 'Welcome'])
 
 @section('content')
 <div class="container" style="height: auto;">
@@ -12,7 +12,7 @@
                 </button>
             </div>
             @endif
-            <h1 class="text-white text-center">{{ __('Welcome to Affiliate Project.') }}</h1>
+            <h1 class="text-white text-center">{{ __('Welcome to Affiliate Program.') }}</h1>
         </div>
     </div>
 </div>

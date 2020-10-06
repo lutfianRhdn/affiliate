@@ -2,10 +2,11 @@
 
 @section('content')
 <div class="content">
-    <div class="row">
-        <div class="col-md-6">
-            <div class="container-fluid bg bg-white rounded pt-3 pb-3">
-                <form class="form" method="POST" action="/admin/user">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="container-fluid bg bg-white rounded pt-3 pb-3">
+                    <form class="form" method="POST" action="/admin/user">
                         @csrf
                         <div class="bmd-form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
                             <div class="input-group">
@@ -50,8 +51,30 @@
                                     placeholder="{{ __('081231923479...') }}" value="{{ old('phone') }}" required>
                             </div>
                             @if ($errors->has('phone'))
-                            <div id="email-error" class="error text-danger pl-3" for="email" style="display: block;">
-                                <strong>{{ $errors->first('email') }}</strong>
+                            <div id="phone-error" class="error text-danger pl-3" for="phone" style="display: block;">
+                                <strong>{{ $errors->first('phone') }}</strong>
+                            </div>
+                            @endif
+                        </div>
+                        <div class="bmd-form-group{{ $errors->has('product_id') ? ' has-danger' : '' }} mt-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="material-icons">content_paste</i>
+                                    </span>
+                                </div>
+                                <select class="selectpicker" data-style="btn btn-primary" name="product_id">
+                                    <option disabled selected>Kategory Product</option>
+                                    @foreach ($products as $product)
+                                    <option value="{{ $product->id }}">{{$product->product_name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            @if ($errors->has('product_id'))
+                            <div id="role-error" class="error text-danger pl-3" for="product_id"
+                                style="display: block;">
+                                <strong>{{ $errors->first('product_id') }}</strong>
                             </div>
                             @endif
                         </div>
@@ -111,10 +134,11 @@
                             @endif
                         </div>
                         <div class="modal-footer mt-3">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <a href="/admin/user" class="btn btn-secondary">Cancel</a>
                             <button type="submit" class="btn btn-primary">Regist</button>
                         </div>
                     </form>
+                </div>
             </div>
         </div>
     </div>

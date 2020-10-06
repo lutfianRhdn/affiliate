@@ -2,6 +2,7 @@
 
 use App\Helpers\LogActivity;
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LogActivityController;
 use App\Http\Controllers\ProductController;
@@ -26,6 +27,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/registrasi', [RegisterController::class, 'index']);
 Route::get('/konfirmasiemail/{email}/{ref_code}', [App\Http\Controllers\Auth\RegisterController::class, 'konfirmasiemail'])->name('konfirmasiemail');
 
 Auth::routes();
@@ -42,7 +45,7 @@ Route::get('/admin', [HomeController::class, 'index'])->name('admin')->middlewar
 Route::resource('/admin/user', AdminUserController::class);
 Route::resource('/admin/product', ProductController::class);
 Route::resource('/admin/setting', SettingController::class);
-Route::resource('admin/log', LogActivityController::class);
+Route::resource('/admin/log', LogActivityController::class);
 
 Route::get('/reseller', [ResellerController::class, 'index'])->name('reseller');
 
@@ -89,7 +92,4 @@ Route::group(['middleware' => 'auth'], function () {
 
 });
 
-Route::group(['middleware' => 'auth'], function() {
-	// Route::res
-});
 

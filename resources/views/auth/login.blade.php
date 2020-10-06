@@ -1,4 +1,5 @@
-@extends('layouts.app', ['class' => 'off-canvas-sidebar', 'activePage' => 'login', 'title' => __('Material Dashboard'), 'titlePage' => 'Login'])
+@extends('layouts.app', ['class' => 'off-canvas-sidebar', 'activePage' => 'login', 'title' => __('Material Dashboard'),
+'titlePage' => 'Login'])
 
 @section('content')
 <div class="container" style="height: auto;">
@@ -12,21 +13,10 @@
                 @csrf
 
                 <div class="card card-login card-hidden mb-3">
-                    <div class="card-header card-header-primary text-center">
+                    <div class="card-header card-header-primary text-center pt-4 pb-4">
                         <h4 class="card-title"><strong>{{ __('Login') }}</strong></h4>
-                        <div class="social-line">
-                            <a href="#pablo" class="btn btn-just-icon btn-link btn-white">
-                                <i class="fa fa-facebook-square"></i>
-                            </a>
-                            <a href="#pablo" class="btn btn-just-icon btn-link btn-white">
-                                <i class="fa fa-twitter"></i>
-                            </a>
-                            <a href="#pablo" class="btn btn-just-icon btn-link btn-white">
-                                <i class="fa fa-google-plus"></i>
-                            </a>
-                        </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body mt-3">
                         @if (session('regis-succ'))
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             {{session('regis-succ')}}
@@ -51,7 +41,7 @@
                             </div>
                             @endif
                         </div>
-                        <div class="bmd-form-group{{ $errors->has('password') ? ' has-danger' : '' }} mt-3">
+                        <div class="bmd-form-group{{ $errors->has('password') ? ' has-danger' : '' }} mt-4">
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">
@@ -59,8 +49,12 @@
                                     </span>
                                 </div>
                                 <input type="password" name="password" id="password" class="form-control"
-                                    placeholder="{{ __('Password...') }}"
-                                    value="" required>
+                                    placeholder="{{ __('Password...') }}" required>
+                                <div class="input-group-addon check-password" id="check">
+                                    <span class="form-check-sign">
+                                        <i class="fa fa-eye text-secondary" aria-hidden="true" id="icon-pass"></i>
+                                    </span>
+                                </div>
                             </div>
                             @if ($errors->has('password'))
                             <div id="password-error" class="error text-danger pl-3" for="password"
@@ -68,15 +62,6 @@
                                 <strong>{{ $errors->first('password') }}</strong>
                             </div>
                             @endif
-                        </div>
-                        <div class="form-check mr-auto ml-3 mt-3">
-                            <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox" name="remember"
-                                    {{ old('remember') ? 'checked' : '' }}> {{ __('Remember me') }}
-                                <span class="form-check-sign">
-                                    <span class="check"></span>
-                                </span>
-                            </label>
                         </div>
                     </div>
                     <div class="card-footer justify-content-center">
@@ -93,7 +78,7 @@
                     @endif
                 </div>
                 <div class="col-6 text-right">
-                    <a href="{{ route('register') }}" class="text-light">
+                    <a href="/registrasi" class="text-light">
                         <small>{{ __('Create new account') }}</small>
                     </a>
                 </div>
@@ -102,3 +87,22 @@
     </div>
 </div>
 @endsection
+
+@push('js')
+<script>
+    $(document).ready(function () {
+        $('#check').click(function () {
+            if ('password' == $('#password').attr('type')) {
+                $('#password').prop('type', 'text');
+                $('#icon-pass').removeClass("fa fa-eye");
+                $('#icon-pass').addClass("fa fa-eye-slash");
+            } else {
+                $('#password').prop('type', 'password');
+                $('#icon-pass').removeClass("fa fa-eye-slash");
+                $('#icon-pass').addClass("fa fa-eye");
+            }
+        });
+    });
+
+</script>
+@endpush

@@ -34,6 +34,7 @@
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>Phone</th>
+                                        <th>Product Type</th>
                                         <th>Role</th>
                                         <th class="text-right">Actions</th>
                                     </tr>
@@ -44,30 +45,57 @@
                                         <td>{{$user->name}}</td>
                                         <td>{{$user->email}}</td>
                                         <td>{{$user->phone}}</td>
+                                        <td>{{$user->product_id}}</td>
                                         <td>
                                             {{$user->role == '1' ? ' Admin' : 'Reseller'}}
                                             <span
                                                 class="ml-2 badge badge-{{$user->register_status == '1' ? 'success' : 'warning'}}">{{$user->register_status == '1' ? 'Activated' : 'Not Activated'}}</span>
                                         </td>
                                         <td class="td-actions text-right">
-                                            <form action="/admin/{{ $user->id }}" method="POST" class="d-inline">
-                                                @method('delete')
-                                                @csrf
-                                                <button rel="tooltip" class="btn btn-danger btn-link"
-                                                    data-original-title="" data-placement="bottom" title="Erase"
-                                                    id="delete-user">
-                                                    <i class="material-icons">delete</i>
-                                                    <div class="ripple-container"></div>
-                                                </button>
-                                            </form>
-                                            <a rel="tooltip" class="btn btn-primary btn-link"
-                                                href="user/{{ $user->id }}/edit" data-original-title=""
-                                                data-placement="bottom" title="Edit" id="edit-user">
+                                            <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round mr-2"
+                                                href="" data-placement="bottom" title="Delete" data-toggle="modal"
+                                                data-target="#deleteModal">
+                                                <i class="material-icons">delete</i>
+                                                <div class="ripple-container"></div>
+                                            </a>
+                                            <a rel="tooltip" class="btn btn-primary btn-fab btn-fab-mini btn-round"
+                                                href="/admin/user/{{$user->id}}/edit" data-original-title=""
+                                                data-placement="bottom" title="Edit">
                                                 <i class="material-icons">edit</i>
                                                 <div class="ripple-container"></div>
                                             </a>
                                         </td>
                                     </tr>
+
+                                    {{-- modal delete --}}
+                                    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <form action="/admin/user/{{$user->id}}" method="POST">
+                                                    @method('delete')
+                                                    @csrf
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Delete user</h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p class="h5">Are you sure want to permanently remove this user?
+                                                        </p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     @endforeach
                                 </tbody>
                             </table>

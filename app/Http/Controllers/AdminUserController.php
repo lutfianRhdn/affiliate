@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\LogActivity;
 use App\Mail\KonfirmasiEmail;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,21 +16,32 @@ class AdminUserController extends Controller
 {
     public function index(User $model)
     {
-        return view('admin.user', ['users' => $model->paginate(15)]);
+        $users = $model->all();
+        return view('admin.user', ['users' => $users]);
     }
 
     public function create() {
-        return view("admin.addUser");
+        $product = Product::all();
+        return view("admin.addUser", ["products" => $product]);
     }
 
     public function store(Request $request) {
+        $this->validate($request,[
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/', 'confirmed'],
+            'phone' => ['required', 'min:9', 'max:14'],
+            'product_id' => ['required']
+        ]);
+
         $user = User::create([
             'name' => $request['name'],
             'email' => $request['email'],
             'phone' => $request['phone'],
             'password' => Hash::make($request['password']),
             'role' => $request['role'],
-            'ref-code' => DB::getTablePrefix() . Str::random(6)
+            'ref-code' => DB::getTablePrefix() . Str::random(6),
+            'product_id' => $request['product_id']
         ]);
         $role = $request->role == '1' ? ' Admin' : 'Reseller';
         Mail::to($user['email'])->send(new KonfirmasiEmail($user));
@@ -43,7 +55,8 @@ class AdminUserController extends Controller
     }
 
     public function edit(User $user) {
-        return view('admin.edituser', compact('user'));
+        $product = Product::all();
+        return view('admin.edituser', ['user' => $user, 'products' => $product]);
     }
 
     public function update(Request $request, User $user)
@@ -53,7 +66,8 @@ class AdminUserController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'phone' => $request->phone,
-                'role' => $request->role
+                'role' => $request->role,
+                'product_id' => $request->product_id
             ]);
         $role = $request->role == '1' ? ' Admin' : 'Reseller';
         LogActivity::addToLog("Mengubah data " . $role . " " . $request->email);

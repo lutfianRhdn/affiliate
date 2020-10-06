@@ -57,6 +57,27 @@
                             </div>
                             @endif
                         </div>
+                        <div class="bmd-form-group{{ $errors->has('product_id') ? ' has-danger' : '' }} mt-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="material-icons">content_paste</i>
+                                    </span>
+                                </div>
+                                <select class="selectpicker" data-style="btn btn-primary" name="product_id">
+                                    <option disabled selected>Kategory Product</option>
+                                    @foreach ($products as $product)
+                                    <option value="{{ $product->id }}">{{$product->product_name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            @if ($errors->has('role'))
+                            <div id="role-error" class="error text-danger pl-3" for="role" style="display: block;">
+                                <strong>{{ $errors->first('role') }}</strong>
+                            </div>
+                            @endif
+                        </div>
                         <div class="bmd-form-group{{ $errors->has('role') ? ' has-danger' : '' }} mt-3">
                             <div class="input-group">
                                 <div class="input-group-prepend">
