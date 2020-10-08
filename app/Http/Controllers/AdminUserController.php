@@ -17,11 +17,10 @@ class AdminUserController extends Controller
     public function index()
     {
         $users = DB::table('users')
-            ->join('products', 'users.product_id', '=', 'products.id')
-            ->select('users.*', 'products.product_name')
+            ->where('role', 1)
             ->get();
         $product = Product::all();
-        return view('admin.user', ['users' => $users, "products" => $product]);
+        return view('admin.user', ['users' => $users]);
     }
 
     public function create() {
@@ -40,23 +39,22 @@ class AdminUserController extends Controller
                 'regex:/[0-9]/',
                 'regex:/[@$!%*#?&]/'],
             'phone' => ['required', 'min:9', 'max:14'],
-            'product_id' => ['required']
             ]);
             // dd($request->all());
-        $regex = DB::table('products')->select('products.regex')->where('products.id', $request->product_id)->get();
+        // $regex = DB::table('products')->select('products.regex')->where('products.id', $request->product_id)->get();
         
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
-            'product_id' => $request->product_id,
             'password' => Hash::make($request->password),
             'role' => $request->role,
-            'ref-code' => $regex[0]->regex
+            'ref-code' => '',
+            'register_status' => '1'
         ]);
 
         $role = $request->role == '1' ? ' Admin' : 'Reseller';
-        Mail::to($user['email'])->send(new KonfirmasiEmail($user));
+        // Mail::to($user['email'])->send(new KonfirmasiEmail($user));
         LogActivity::addToLog("Menambahkan ".$role." ".$request->email);
         return redirect("/admin/user")->with('status', 'Data berhasil ditambahkan');
     }
@@ -77,7 +75,6 @@ class AdminUserController extends Controller
         $this->validate($request, [
             'name' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'min:9', 'max:14'],
-            'product_id' => ['required'],
             'role' => ['required'],
         ]);
 
@@ -85,7 +82,6 @@ class AdminUserController extends Controller
             ->update([
                 'name' => $request->name,
                 'phone' => $request->phone,
-                'product_id' => $request->product_id,
                 'role' => $request->role,
             ]);
         $role = $request->role == '1' ? ' Admin' : 'Reseller';

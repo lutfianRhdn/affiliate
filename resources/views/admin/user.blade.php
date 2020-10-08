@@ -7,8 +7,8 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header card-header-primary">
-                        <h4 class="card-title ">Users</h4>
-                        <p class="card-category"> User management tabels</p>
+                        <h4 class="card-title ">Admin</h4>
+                        <p class="card-category"> Admin management tabels</p>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -24,8 +24,7 @@
                             </div>
                             <div class="col-12 text-right">
                                 <a href="" class="btn btn-sm btn-primary" data-toggle="modal"
-                                    data-target="#createUserModal">Add
-                                    user</a>
+                                    data-target="#createUserModal">Add new Admin</a>
                             </div>
                         </div>
                         <div class="">
@@ -108,7 +107,7 @@
                                                     @method('patch')
                                                     @csrf
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Add new user</h5>
+                                                        <h5 class="modal-title" id="exampleModalLabel">Edit Admin</h5>
                                                         <button type="button" class="close" data-dismiss="modal"
                                                             aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
@@ -153,7 +152,7 @@
                                                             </div>
                                                             @endif
                                                         </div>
-                                                        <div
+                                                        {{-- <div
                                                             class="bmd-form-group{{ $errors->has('product_id') ? ' has-danger' : '' }} mt-3 mb-3">
                                                             <div class="input-group">
                                                                 <div class="input-group-prepend">
@@ -179,9 +178,32 @@
                                                                 <strong>{{ $errors->first('product_id') }}</strong>
                                                             </div>
                                                             @endif
-                                                        </div>
+                                                        </div> --}}
                                                         <input type="hidden" name="role" value="1">
+                                                        {{-- <div
+                                                            class="bmd-form-group{{ $errors->has('role') ? ' has-danger' : '' }} mt-3 mb-3">
+                                                            <div class="input-group">
+                                                                <div class="input-group-prepend">
+                                                                    <span class="input-group-text">
+                                                                        <i class="material-icons">assignment_ind</i>
+                                                                    </span>
+                                                                </div>
+                                                                <select class="custom-select" id="selectpicker-productID"
+                                                                    data-style="btn btn-primary" name="role"
+                                                                    required>
+                                                                    <option disabled selected>Role</option>
+                                                                    <option value="1" {{$user->role == '1' ? 'selected' : ''}}>Admin</option>
+                                                                    <option value="1" {{$user->role == '2' ? 'selected' : ''}}>Reseller</option>
+                                                                </select>
+                                                            </div>
 
+                                                            @if ($errors->has('role'))
+                                                            <div id="role-error" class="error text-danger pl-3"
+                                                                for="role" style="display: block;">
+                                                                <strong>{{ $errors->first('role') }}</strong>
+                                                            </div>
+                                                            @endif
+                                                        </div> --}}
 
                                                         {{-- <p>{{$user->role}}</p>
                                                         @foreach ($products as $product)
@@ -269,28 +291,6 @@
                         @if ($errors->has('phone'))
                         <div id="phone-error" class="error text-danger pl-3" for="phone" style="display: block;">
                             <strong>{{ $errors->first('phone') }}</strong>
-                        </div>
-                        @endif
-                    </div>
-                    <div class="bmd-form-group{{ $errors->has('product_id') ? ' has-danger' : '' }} mt-3">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    <i class="material-icons">content_paste</i>
-                                </span>
-                            </div>
-                            <select class="selectpicker" data-style="btn btn-primary" name="product_id" required>
-                                <option disabled selected>Kategory Product</option>
-                                @foreach ($products as $product)
-                                <option value="{{$product->id}}">
-                                    {{$product->product_name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        @if ($errors->has('product_id'))
-                        <div id="role-error" class="error text-danger pl-3" for="product_id" style="display: block;">
-                            <strong>{{ $errors->first('product_id') }}</strong>
                         </div>
                         @endif
                     </div>
