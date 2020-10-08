@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'admin', 'titlePage' => __('User Management')])
+@extends('layouts.app', ['activePage' => 'reseller', 'titlePage' => __('Reseller Management')])
 
 @section('content')
 <div class="content">
@@ -7,8 +7,8 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header card-header-primary">
-                        <h4 class="card-title ">Users</h4>
-                        <p class="card-category"> User management tabels</p>
+                        <h4 class="card-title ">Reseller</h4>
+                        <p class="card-category"> Reseller management tabels</p>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -24,18 +24,18 @@
                             </div>
                             <div class="col-12 text-right">
                                 <a href="" class="btn btn-sm btn-primary" data-toggle="modal"
-                                    data-target="#createUserModal">Add
-                                    user</a>
+                                    data-target="#createUserModal">Add new Reseller</a>
                             </div>
                         </div>
                         <div class="">
-                            <table class="table" id="table_admin">
+                            <table class="table" id="">
                                 <thead class=" text-primary">
                                     <tr>
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>Phone</th>
-                                        <th>Role</th>
+                                        <th>Category Product</th>
+                                        <th>Status</th>
                                         <th>Create Date</th>
                                         <th class="text-right">Actions</th>
                                     </tr>
@@ -44,12 +44,18 @@
                                     @foreach ($users as $user)
                                     <tr>
                                         <td>{{$user->name}}</td>
-                                        <td>{{$user->email}}</td>
+                                        <td>{{$user->email}} <span
+                                                class="ml-2 badge badge-{{$user->register_status == '1' ? 'success' : 'warning'}}">{{$user->register_status == '1' ? 'Activated' : 'Not Activated'}}</span>
+                                        </td>
                                         <td>{{$user->phone}}</td>
+                                        <td>{{$user->product_name}}</td>
                                         <td>
-                                            {{$user->role == '1' ? ' Admin' : 'Reseller'}}
-                                            <span
-                                            class="ml-2 badge badge-{{$user->register_status == '1' ? 'success' : 'warning'}}">{{$user->register_status == '1' ? 'Activated' : 'Not Activated'}}</span>
+                                            <div class="togglebutton">
+                                                <label id="status">
+                                                    <input type="checkbox" {{ !empty($user->regex) ? 'checked' : ''}}>
+                                                    <span class="toggle"></span>
+                                                </label>
+                                            </div>
                                         </td>
                                         <td>{{$user->created_at}}</td>
                                         <td class="td-actions text-right">
@@ -75,7 +81,7 @@
                                         aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
-                                                <form action="/admin/user/{{$user->id}}" method="POST">
+                                                <form action="/admin/reseller/{{$user->id}}" method="POST">
                                                     @method('delete')
                                                     @csrf
                                                     <div class="modal-header">
@@ -104,9 +110,10 @@
                                         aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
-                                                <form action="/admin/user/{{ $user->id }}" method="POST">
+                                                <form action="/admin/reseller/{{$user->id}}" method="POST">
                                                     @method('patch')
                                                     @csrf
+                                                    <input type="hidden" name="id" value="{{$user->id}}">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="exampleModalLabel">Add new user</h5>
                                                         <button type="button" class="close" data-dismiss="modal"
@@ -161,7 +168,8 @@
                                                                         <i class="material-icons">content_paste</i>
                                                                     </span>
                                                                 </div>
-                                                                <select class="custom-select" id="selectpicker-productID"
+                                                                <select class="custom-select"
+                                                                    id="selectpicker-productID"
                                                                     data-style="btn btn-primary" name="product_id"
                                                                     required>
                                                                     <option disabled selected>Kategory Product</option>
@@ -180,7 +188,7 @@
                                                             </div>
                                                             @endif
                                                         </div>
-                                                        <input type="hidden" name="role" value="1">
+                                                        <input type="hidden" name="role" value="2">
 
 
                                                         {{-- <p>{{$user->role}}</p>
@@ -199,6 +207,7 @@
                                         </div>
                                     </div>
 
+
                                     @endforeach
                                 </tbody>
                             </table>
@@ -215,10 +224,10 @@
     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form action="/admin/user" method="POST">
+            <form action="/admin/reseller" method="POST">
                 @csrf
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add new Admin</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add New Reseller</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -327,7 +336,7 @@
                         </div>
                         @endif
                     </div>
-                    <input type="hidden" name="role" value="1">
+                    <input type="hidden" name="role" value="2">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -338,8 +347,6 @@
     </div>
 </div>
 
-
-
 @endsection
 
 @push('js')
@@ -347,12 +354,17 @@
     $(document).ready(function () {
         $('#table_admin').DataTable({
             'info': false,
-            'lengthMenu': [[5,10,25,50,100,-1],[5,10,25,50,100,"All"]]
+            'lengthMenu': [
+                [5, 10, 25, 50, 100, -1],
+                [5, 10, 25, 50, 100, "All"]
+            ]
         });
         $('#edit-user').tooltip(options);
         $('.selectpicker').selectpicker();
         $('#selectpicker-role').selectpicker();
         $('#selectpicker-productID').selectpicker();
+
+        $(".togglebutton").bootstrapSwitch();
     });
 
 </script>

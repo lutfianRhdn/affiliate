@@ -10,3 +10,7 @@ input[type=number] {
 .check-password {
     cursor: pointer;
 }
+
+.text-smooets {
+    color: #94d237 !important;
+}

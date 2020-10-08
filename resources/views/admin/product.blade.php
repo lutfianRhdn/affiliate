@@ -5,7 +5,7 @@
 <div class="content">
     <div class="container">
         <div class="row">
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <div class="card">
                     <div class="card-header card-header-primary">
                         <h4 class="card-title ">Products</h4>
@@ -32,7 +32,7 @@
                             <table class="table">
                                 <thead class=" text-primary">
                                     <tr>
-                                        <th>Product Type</th>
+                                        <th>Category Product</th>
                                         <th>Description</th>
                                         <th class="text-right">Actions</th>
                                     </tr>
@@ -43,7 +43,7 @@
                                         <td>{{$product->product_name}}</td>
                                         <td>{{$product->description}}</td>
                                         <td class="td-actions text-right">
-                                            <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round mr-2"
+                                            <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round"
                                                 href="" data-placement="bottom" title="Delete" data-toggle="modal"
                                                 data-target="#deleteModal{{$product->id}}">
                                                 <i class="material-icons">delete</i>
@@ -58,61 +58,7 @@
                                         </td>
                                     </tr>
 
-                                    {{-- modal create --}}
-                                    <div class="modal fade" id="createModal" tabindex="-1" role="dialog"
-                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <form action="/admin/product" method="POST">
-                                                    @csrf
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Delete items</h5>
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                            aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div
-                                                            class="bmd-form-group{{ $errors->has('product_name') ? ' has-danger' : '' }}">
-                                                            <div class="form-group pl-2">
-                                                                <label for="product_name">Product Type</label>
-                                                                <input type="text" class="form-control"
-                                                                    placeholder="nama product" name="product_name"
-                                                                    value="{{ old('product_name') }}">
-                                                            </div>
-                                                            @if ($errors->has('product_name'))
-                                                            <div id="product_name-error" class="error text-danger"
-                                                                for="product_name" style="display: block;">
-                                                                <strong>{{ $errors->first('product_name') }}</strong>
-                                                            </div>
-                                                            @endif
-                                                        </div>
-                                                        <div
-                                                            class="mt-2 bmd-form-group{{ $errors->has('desc') ? ' has-danger' : '' }}">
-                                                            <div class="form-group pl-2">
-                                                                <label for="desc">Description</label>
-                                                                <textarea class="form-control" id="desc" rows="3"
-                                                                    name="description"
-                                                                    value="{{ old('product_name') }}"></textarea>
-                                                            </div>
-                                                            @if ($errors->has('desc'))
-                                                            <div id="desc-error" class="error text-danger" for="desc"
-                                                                style="display: block;">
-                                                                <strong>{{ $errors->first('desc') }}</strong>
-                                                            </div>
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary"
-                                                            data-dismiss="modal">Close</button>
-                                                        <button type="submit" class="btn btn-primary">Save</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
+
 
                                     {{-- modal edit --}}
                                     <div class="modal fade" id="editModal{{$product->id}}" tabindex="-1" role="dialog"
@@ -210,6 +156,54 @@
     </div>
 </div>
 
+{{-- modal create --}}
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="/admin/product" method="POST">
+                @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Product</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="bmd-form-group{{ $errors->has('product_name') ? ' has-danger' : '' }}">
+                        <div class="form-group pl-2">
+                            <label for="product_name">Product Type</label>
+                            <input type="text" class="form-control" placeholder="nama product" name="product_name"
+                                value="{{ old('product_name') }}">
+                        </div>
+                        @if ($errors->has('product_name'))
+                        <div id="product_name-error" class="error text-danger" for="product_name"
+                            style="display: block;">
+                            <strong>{{ $errors->first('product_name') }}</strong>
+                        </div>
+                        @endif
+                    </div>
+                    <div class="mt-2 bmd-form-group{{ $errors->has('desc') ? ' has-danger' : '' }}">
+                        <div class="form-group pl-2">
+                            <label for="desc">Description</label>
+                            <textarea class="form-control" id="desc" rows="3" name="description"
+                                value="{{ old('product_name') }}"></textarea>
+                        </div>
+                        @if ($errors->has('desc'))
+                        <div id="desc-error" class="error text-danger" for="desc" style="display: block;">
+                            <strong>{{ $errors->first('desc') }}</strong>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 @endsection
 

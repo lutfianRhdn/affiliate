@@ -22,7 +22,7 @@
                             @endif
                         </div>
                         <div class="table-responsive">
-                            <table class="table">
+                            <table class="table" id="log_table">
                                 <thead class=" text-primary">
                                     <tr>
                                         <th>No.</th>
@@ -94,7 +94,7 @@
 <script>
     $(document).ready(function () {
 
-            }
+    });
 
 </script>
 @endpush

@@ -63,10 +63,10 @@
                                         <i class="material-icons">content_paste</i>
                                     </span>
                                 </div>
-                                <select class="selectpicker" data-style="btn btn-primary" name="product_id">
+                                <select class="selectpicker" data-style="btn btn-primary" name="product_id" required>
                                     <option disabled selected>Kategory Product</option>
                                     @foreach ($products as $product)
-                                    <option value="{{ $product->id }}">{{$product->product_name}}</option>
+                                <option value="{{$product->id}}">{{$product->product_name}}</option>
                                     @endforeach
                                 </select>
                             </div>

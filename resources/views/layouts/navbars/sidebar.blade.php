@@ -17,35 +17,29 @@
             <p>{{ __('Dashboard') }}</p>
         </a>
       </li>
-      {{-- <li class="nav-item {{ ($activePage == 'profile' || $activePage == 'user-management') ? ' active' : '' }}">
-        <a class="nav-link" data-toggle="collapse" href="#laravelExample" aria-expanded="true">
+      <li class="nav-item {{ ($activePage == 'reseller' || $activePage == 'admin') ? ' active' : '' }}">
+        <a class="nav-link" data-toggle="collapse" href="#adminService" aria-expanded="true">
           <i><span class="material-icons">perm_identity</span></i>
-          <p>{{ __('Admin Service') }}
+          <p>{{ __('User Management') }}
             <b class="caret"></b>
           </p>
         </a>
-        <div class="collapse show" id="laravelExample">
+        <div class="collapse show" id="adminService">
           <ul class="nav">
-            <li class="nav-item{{ $activePage == 'user-management' ? ' active' : '' }}">
-              <a class="nav-link" href="{{ route('admin.user') }}">
-                <span class="sidebar-mini"> UM </span>
-                <span class="sidebar-normal"> {{ __('User Management') }} </span>
+            <li class="nav-item{{ $activePage == 'admin' ? ' active' : '' }}">
+              <a class="nav-link" href="{{ url('/admin/user') }}">
+                <span class="sidebar-mini"> AD </span>
+                <span class="sidebar-normal"> {{ __('Admin') }} </span>
               </a>
             </li>
-            <li class="nav-item{{ $activePage == 'role-management' ? ' active' : '' }}">
-              <a class="nav-link" href="{{ url('profile.edit') }}">
-                <span class="sidebar-mini"> RM </span>
-                <span class="sidebar-normal">{{ __('Role Management') }} </span>
+            <li class="nav-item{{ $activePage == 'reseller' ? ' active' : '' }}">
+              <a class="nav-link" href="{{ url('/admin/reseller') }}">
+                <span class="sidebar-mini"> RS </span>
+                <span class="sidebar-normal">{{ __('Reseller') }} </span>
               </a>
             </li>
           </ul>
         </div>
-      </li> --}}
-      <li class="nav-item{{ $activePage == 'user-management' ? ' active' : '' }}">
-        <a class="nav-link" href="/admin/user">
-          <i><span class="material-icons">perm_identity</span></i>
-            <p>{{ __('User Management') }}</p>
-        </a>
       </li>
       <li class="nav-item{{ $activePage == 'product' ? ' active' : '' }}">
         <a class="nav-link" href="{{ url('/admin/product') }}">

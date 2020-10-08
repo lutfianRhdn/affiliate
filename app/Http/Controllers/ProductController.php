@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\LogActivity;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class ProductController extends Controller
 {
@@ -37,12 +38,17 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        
         $this->validate($request, [
             'product_name' => 'required',
             'description' => 'required'
         ]);
         
-        Product::create($request->all());
+        Product::create([
+            'product_name' => $request->product_name,
+            'description' => $request->description,
+            'regex' => Hash::make(time())
+        ]);
         LogActivity::addToLog("Menambahkan product ".$request->product_name);
         return redirect('/admin/product')->with('status', 'Data inserted successfully');
     }

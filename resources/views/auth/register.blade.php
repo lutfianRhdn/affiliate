@@ -8,18 +8,18 @@ Dashboard'), 'titlePage' => 'Registration'])
             <form class="form" method="POST" action="/register">
                 @csrf
                 <div class="card card-login card-hidden mb-3">
-                    <div class="card-header card-header-primary text-center">
+                    <div class="card-header card-header-primary text-center pb-4 pt-3">
                         <h4 class="card-title"><strong>{{ __('Register') }}</strong></h4>
                     </div>
                     <div class="card-body ">
-                        <div class="bmd-form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
+                        <div class="bmd-form-group{{ $errors->has('name') ? ' has-danger' : '' }} pl-3">
                             <div class="input-group">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text">
+                                    <span class="input-grounp-text">
                                         <i class="material-icons">face</i>
                                     </span>
                                 </div>
-                                <input type="text" name="name" class="form-control" placeholder="{{ __('Name...') }}"
+                                <input type="text" name="name" class="form-control ml-3" placeholder="{{ __('Name...') }}"
                                     value="{{ old('name') }}" required>
                             </div>
                             @if ($errors->has('name'))
@@ -95,7 +95,7 @@ Dashboard'), 'titlePage' => 'Registration'])
                             @if ($errors->has('password'))
                             <div id="password-error" class="error text-danger pl-3" for="password"
                                 style="display: block;">
-                                <strong>{{ $errors->first('password') }}</strong>
+                                <strong>Password must be contain 8 character, uppercase and lowercase letter, number and special character. Exp: Password23!</strong>
                             </div>
                             @endif
                         </div>
@@ -118,7 +118,7 @@ Dashboard'), 'titlePage' => 'Registration'])
                             @endif
                         </div>
                         <input type="hidden" name="role" value="2">
-                        <div class="form-check mr-auto ml-3 mt-3">
+                        <div class="form-check text-center mt-4">
                             <label class="form-check-label">
                                 <input class="form-check-input" type="checkbox" id="policy" name="policy"
                                     {{ old('policy') ? 'checked' : '' }}>
@@ -139,3 +139,5 @@ Dashboard'), 'titlePage' => 'Registration'])
     </div>
 </div>
 @endsection
+
+{{-- Password must be contain 8 character, uppercase and lowercase letter, number and special character. Exp: Password23! --}}

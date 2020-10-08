@@ -20,14 +20,17 @@
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
 
-    {{-- Data Tabels Material UI --}}
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/4.0.0/material-components-web.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.material.min.css">
-    
-    {{-- Bootstrap select --}}
+     {{-- Bootstrap select --}}
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+    
+    {{-- Data Tabels Material UI --}}
+    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.material.min.css"> --}}
+    {{-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/dataTables.material.min.css"> --}}
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/4.0.0/material-components-web.min.css">
+    
+    
+   
 
     {{-- my style --}}
     <link rel="stylesheet" href="{{ asset('mystyle.css') }}">
@@ -143,9 +146,7 @@
     <script src="{{ asset('material') }}/js/plugins/bootstrap-selectpicker.js"></script>
     <!--  Plugin for the DateTimePicker, full documentation here: https://eonasdan.github.io/bootstrap-datetimepicker/ -->
     <script src="{{ asset('material') }}/js/plugins/bootstrap-datetimepicker.min.js"></script>
-    <!--  DataTables.net Plugin, full documentation here: https://datatables.net/  -->
-    <script src="{{ asset('material') }}/js/plugins/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.22/js/dataTables.material.min.js"></script>
+    
     <!--	Plugin for Tags, full documentation here: https://github.com/bootstrap-tagsinput/bootstrap-tagsinputs  -->
     <script src="{{ asset('material') }}/js/plugins/bootstrap-tagsinput.js"></script>
     <!-- Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
@@ -175,9 +176,14 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script>
 
+    <!--  DataTables.net Plugin, full documentation here: https://datatables.net/  -->
+    <script src="{{ asset('material') }}/js/plugins/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('material') }}/js/plugins/dataTables.material.min.js"></script>
+
     {{-- show password --}}
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-show-password/1.0.3/bootstrap-show-password.min.js"></script>
 
+    
     @stack('js')
 </body>
 

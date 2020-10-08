@@ -1,6 +1,7 @@
 <?php
 
 use App\Helpers\LogActivity;
+use App\Http\Controllers\AdminResellerController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HomeController;
@@ -43,6 +44,7 @@ Route::get('/admin', [HomeController::class, 'index'])->name('admin')->middlewar
 // Route::get('/admin/{user}/edit', [AdminUserController::class, 'edit']);
 // Route::patch('/admin/{user}', [AdminUserController::class, 'update'])->middleware('auth');
 Route::resource('/admin/user', AdminUserController::class);
+Route::resource('/admin/reseller', AdminResellerController::class);
 Route::resource('/admin/product', ProductController::class);
 Route::resource('/admin/setting', SettingController::class);
 Route::resource('/admin/log', LogActivityController::class);
@@ -85,7 +87,7 @@ Route::get('/reseller', [ResellerController::class, 'index'])->name('reseller');
 // });
 
 Route::group(['middleware' => 'auth'], function () {
-	Route::resource('user', 'App\Http\Controllers\UserController', ['except' => ['show']]);
+	// Route::resource('user', 'App\Http\Controllers\UserController', ['except' => ['show']]);
 	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'App\Http\Controllers\ProfileController@edit']);
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'App\Http\Controllers\ProfileController@update']);
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'App\Http\Controllers\ProfileController@password']);
