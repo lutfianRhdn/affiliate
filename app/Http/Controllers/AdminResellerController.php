@@ -60,6 +60,8 @@ class AdminResellerController extends Controller
             'product_id' => ['required']
         ]);
 
+        $regex = DB::table('products')->select('products.regex')->where('products.id', $request->product_id)->get();
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -67,7 +69,7 @@ class AdminResellerController extends Controller
             'product_id' => $request->product_id,
             'password' => Hash::make($request->password),
             'role' => $request->role,
-            'ref-code' => DB::getTablePrefix() . Str::random(6)
+            'ref-code' => $regex[0]->regex
         ]);
         $role = $request->role == '1' ? ' Admin' : 'Reseller';
         Mail::to($user['email'])->send(new KonfirmasiEmail($user));
@@ -133,10 +135,10 @@ class AdminResellerController extends Controller
      * @return \Illuminate\Http\Response
      */
     
-    public function destroy(User $user)
+    public function destroy(Request $request)
     {
-        User::destroy($user->id);
-        LogActivity::addToLog("Menghapus akun" . $user->email);
+        User::destroy($request->id);
+        LogActivity::addToLog("Menghapus akun" . $request->email);
         return redirect("/admin/reseller")->with('status', 'Data berhasil dihapus');
     }
 }

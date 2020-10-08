@@ -19,7 +19,7 @@ class AdminUserController extends Controller
         $users = DB::table('users')
             ->join('products', 'users.product_id', '=', 'products.id')
             ->select('users.*', 'products.product_name')
-            ->where('users.role', 2)
+            ->where('users.role', 1)
             ->get();
         $product = Product::all();
         return view('admin.user', ['users' => $users, "products" => $product]);
@@ -44,7 +44,7 @@ class AdminUserController extends Controller
             'product_id' => ['required']
             ]);
             // dd($request->all());
-        
+        $regex = DB::table('products')->select('products.regex')->where('products.id', $request->product_id)->get();
         
         $user = User::create([
             'name' => $request->name,
@@ -53,8 +53,9 @@ class AdminUserController extends Controller
             'product_id' => $request->product_id,
             'password' => Hash::make($request->password),
             'role' => $request->role,
-            'ref-code' => DB::getTablePrefix() . Str::random(6)
+            'ref-code' => $regex[0]->regex
         ]);
+
         $role = $request->role == '1' ? ' Admin' : 'Reseller';
         Mail::to($user['email'])->send(new KonfirmasiEmail($user));
         LogActivity::addToLog("Menambahkan ".$role." ".$request->email);

@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
+
 
 class RegisterController extends Controller
 {
@@ -81,16 +81,19 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $regex = DB::table('products')->select('products.regex')->where('products.id', $data['product_id'])->get();
+        // dd($regex[0]->regex);
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'phone' => $data['phone'],
+            'product_id' => $data['product_id'],
             'password' => Hash::make($data['password']),
             'role' => $data['role'],
-            'ref-code' => DB::getTablePrefix() . Str::random(6)
+            'ref-code' => $regex[0]->regex
         ]);
-
-
+        
+        
         Mail::to($user['email'])->send(new KonfirmasiEmail($user));
         return $user;
     }

@@ -1,5 +1,5 @@
 <footer class="footer">
-  <div class="container-fluid">
+  <div class="container">
     <nav class="float-left">
       <ul>
         <li>
@@ -8,12 +8,12 @@
           </a>
         </li>
         <li>
-          <a href="https://creative-tim.com/presentation">
+          <a href="https://pagii.co/" target="_blank">
               {{ __('Pagii') }}
           </a>
         </li>
         <li>
-          <a href="http://blog.creative-tim.com">
+          <a href="https://marsscript.com/" target="_blank">
               {{ __('Mars') }}
           </a>
         </li>
@@ -24,7 +24,7 @@
       <script>
         document.write(new Date().getFullYear())
       </script>, Powered by
-      <a href="https://www.smooets.com/" target="_blank">Smooets</a>
+      <a href="https://www.smooets.com/" target="_blank" class="text-smooets">Smooets</a> <span>Internship</span>
     </div>
   </div>
 </footer>

@@ -84,6 +84,8 @@
                                                 <form action="/admin/reseller/{{$user->id}}" method="POST">
                                                     @method('delete')
                                                     @csrf
+                                                <input type="hidden" name="id" value="{{$user->id}}">
+                                                <input type="hidden" name="email" value="{{$user->email}}">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="exampleModalLabel">Delete user</h5>
                                                         <button type="button" class="close" data-dismiss="modal"
@@ -92,7 +94,8 @@
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <p class="h5">Are you sure want to permanently remove this user?
+                                                        <p class="h5">Are you sure want to permanently remove
+                                                            {{$user->name}}?
                                                         </p>
                                                     </div>
                                                     <div class="modal-footer">

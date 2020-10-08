@@ -1,4 +1,4 @@
-@extends('layouts.app', ['class' => 'off-canvas-sidebar', 'activePage' => 'login', 'title' => __('Material Dashboard'),
+@extends('layouts.app', ['class' => 'off-canvas-sidebar', 'activePage' => 'login', 'title' => __('Affiliate Program'),
 'titlePage' => 'Login'])
 
 @section('content')
@@ -50,11 +50,9 @@
                                 </div>
                                 <input type="password" name="password" id="password" class="form-control"
                                     placeholder="{{ __('Password...') }}" required>
-                                <div class="input-group-addon check-password" id="check">
-                                    <span class="form-check-sign">
-                                        <i class="fa fa-eye text-secondary" aria-hidden="true" id="icon-pass"></i>
-                                    </span>
-                                </div>
+                                <span class="form-check-sign" id="check">
+                                    <i class="fa fa-eye text-secondary" aria-hidden="true" id="icon-pass"></i>
+                                </span>
                             </div>
                             @if ($errors->has('password'))
                             <div id="password-error" class="error text-danger pl-3" for="password"
@@ -103,5 +101,6 @@
             }
         });
     });
+
 </script>
 @endpush

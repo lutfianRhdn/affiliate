@@ -7,6 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 
 class KonfirmasiEmail extends Mailable
 {
@@ -32,6 +33,12 @@ class KonfirmasiEmail extends Mailable
      */
     public function build()
     {
-        return $this->view('auth.emailTemplate');
+        $product = DB::table('users')
+        ->join('products', 'users.product_id', '=', 'products.id')
+        ->select('products.product_name')
+        ->where('users.id', $this->user->id)
+        ->get();
+
+        return $this->view('auth.emailTemplate', ["pp" => $this->user, "product" => $product]);
     }
 }
