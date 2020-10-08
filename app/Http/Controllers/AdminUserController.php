@@ -19,7 +19,6 @@ class AdminUserController extends Controller
         $users = DB::table('users')
             ->join('products', 'users.product_id', '=', 'products.id')
             ->select('users.*', 'products.product_name')
-            ->where('users.role', 1)
             ->get();
         $product = Product::all();
         return view('admin.user', ['users' => $users, "products" => $product]);
