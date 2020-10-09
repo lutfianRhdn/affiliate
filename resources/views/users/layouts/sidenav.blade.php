@@ -17,30 +17,6 @@
             <p>{{ __('Dashboard') }}</p>
         </a>
       </li>
-      <li class="nav-item {{ ($activePage == 'profile' || $activePage == 'user-management') ? ' active' : '' }}">
-        <a class="nav-link" data-toggle="collapse" href="#laravelExample" aria-expanded="true">
-          <i><span class="material-icons">perm_identity</span></i>
-          <p>{{ __('Admin Service') }}
-            <b class="caret"></b>
-          </p>
-        </a>
-        <div class="collapse show" id="laravelExample">
-          <ul class="nav">
-            <li class="nav-item{{ $activePage == 'user-management' ? ' active' : '' }}">
-              <a class="nav-link" href="">
-                <span class="sidebar-mini"> UM </span>
-                <span class="sidebar-normal"> {{ __('User Management') }} </span>
-              </a>
-            </li>
-            <li class="nav-item{{ $activePage == 'role-management' ? ' active' : '' }}">
-              <a class="nav-link" href="">
-                <span class="sidebar-mini"> RU </span>
-                <span class="sidebar-normal">{{ __('Role Management') }} </span>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </li>
     </ul>
   </div>
 </div>

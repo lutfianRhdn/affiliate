@@ -35,10 +35,9 @@ class KonfirmasiEmail extends Mailable
     {
         $product = DB::table('users')
         ->join('products', 'users.product_id', '=', 'products.id')
-        ->select('products.product_name')
+        ->select('products.product_name','products.regex')
         ->where('users.id', $this->user->id)
         ->get();
-
         return $this->view('auth.emailTemplate', ["pp" => $this->user, "product" => $product]);
     }
 }

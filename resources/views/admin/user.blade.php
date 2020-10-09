@@ -28,7 +28,7 @@
                             </div>
                         </div>
                         <div class="">
-                            <table class="table" id="table_admin">
+                            <table class="table">
                                 <thead class=" text-primary">
                                     <tr>
                                         <th>Name</th>
@@ -225,6 +225,7 @@
                                 </tbody>
                             </table>
                         </div>
+                        {{-- {{ $users->links() }} --}}
                     </div>
                 </div>
             </div>

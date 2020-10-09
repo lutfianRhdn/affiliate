@@ -67,7 +67,7 @@
                                     </span>
                                 </div>
                                 <select class="selectpicker" data-style="btn btn-primary" name="product_id">
-                                    <option disabled selected>Kategory Product</option>
+                                    <option disabled selected>Product Category</option>
                                     @foreach ($products as $product)
                                     <option value="{{ $product->id }}">{{$product->product_name}}</option>
                                     @endforeach
@@ -90,11 +90,12 @@
                                 </div>
                                 <input type="password" name="password" id="password" class="form-control"
                                     placeholder="{{ __('Password...') }}" required>
+                                    <small class="text-secondary ml-5 pl-2">Password must be contain 8 character, uppercase and lowercase letter, number and special character. Ex: Password23!</small>
                             </div>
                             @if ($errors->has('password'))
                             <div id="password-error" class="error text-danger pl-3" for="password"
                                 style="display: block;">
-                                <strong>Password must be contain 8 character, uppercase and lowercase letter, number and special character. Exp: Password23!</strong>
+                                <span></span>
                             </div>
                             @endif
                         </div>

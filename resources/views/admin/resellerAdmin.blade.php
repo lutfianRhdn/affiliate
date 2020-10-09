@@ -27,14 +27,15 @@
                                     data-target="#createUserModal">Add new Reseller</a>
                             </div>
                         </div>
-                        <div class="">
+                        <div class="table-responsive">
                             <table class="table" id="">
                                 <thead class=" text-primary">
                                     <tr>
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>Phone</th>
-                                        <th>Category Product</th>
+                                        <th class="text-center">Product Category</th>
+                                        <th>Refferal Code</th>
                                         <th>Status</th>
                                         <th>Create Date</th>
                                         <th class="text-right">Actions</th>
@@ -48,7 +49,8 @@
                                                 class="ml-2 badge badge-{{$user->register_status == '1' ? 'success' : 'warning'}}">{{$user->register_status == '1' ? 'Activated' : 'Not Activated'}}</span>
                                         </td>
                                         <td>{{$user->phone}}</td>
-                                        <td>{{$user->product_name}}</td>
+                                        <td class="text-center">{{$user->product_name}}</td>
+                                        <td>{{$user->ref_code }}</td>
                                         <td>
                                             <div class="togglebutton">
                                                 <label id="status">
@@ -57,7 +59,7 @@
                                                 </label>
                                             </div>
                                         </td>
-                                        <td>{{$user->created_at}}</td>
+                                        <td>{{  Carbon\Carbon::parse($user->created_at)->format('d-m-Y')}}</td>
                                         <td class="td-actions text-right">
                                             <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round"
                                                 href="" data-placement="bottom" title="Delete" data-toggle="modal"
@@ -175,7 +177,7 @@
                                                                     id="selectpicker-productID"
                                                                     data-style="btn btn-primary" name="product_id"
                                                                     required>
-                                                                    <option disabled selected>Kategory Product</option>
+                                                                    <option disabled selected>Product Category</option>
                                                                     @foreach ($products as $product)
                                                                     <option value="{{$product->id}}"
                                                                         {{$product->id == $user->product_id ? 'selected' : ''}}>
@@ -292,7 +294,7 @@
                                 </span>
                             </div>
                             <select class="selectpicker" data-style="btn btn-primary" name="product_id" required>
-                                <option disabled selected>Kategory Product</option>
+                                <option disabled selected>Product Category</option>
                                 @foreach ($products as $product)
                                 <option value="{{$product->id}}">
                                     {{$product->product_name}}</option>
@@ -318,7 +320,7 @@
                         </div>
                         @if ($errors->has('password'))
                         <div id="password-error" class="error text-danger pl-3" for="password" style="display: block;">
-                            <strong>{{ $errors->first('password') }}</strong>
+                            <strong>Password must be contain 8 character, uppercase and lowercase letter, number and special character. Ex: Password23!</strong>
                         </div>
                         @endif
                     </div>

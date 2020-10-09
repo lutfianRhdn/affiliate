@@ -32,8 +32,9 @@
                             <table class="table">
                                 <thead class=" text-primary">
                                     <tr>
-                                        <th>Category Product</th>
+                                        <th>Product Category</th>
                                         <th>Description</th>
+                                        <th>Regex</th>
                                         <th class="text-right">Actions</th>
                                     </tr>
                                 </thead>
@@ -42,6 +43,7 @@
                                     <tr>
                                         <td>{{$product->product_name}}</td>
                                         <td>{{$product->description}}</td>
+                                        <td>{{$product->regex}}</td>
                                         <td class="td-actions text-right">
                                             <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round"
                                                 href="" data-placement="bottom" title="Delete" data-toggle="modal"
@@ -79,7 +81,7 @@
                                                         <div
                                                             class="bmd-form-group{{ $errors->has('product_name') ? ' has-danger' : '' }}">
                                                             <div class="form-group pl-2">
-                                                                <label for="product_name">Product Type</label>
+                                                                <label for="product_name">Product Category</label>
                                                                 <input type="text" class="form-control"
                                                                     placeholder="nama product" name="product_name"
                                                                     value="{{ $product->product_name }}">
@@ -88,6 +90,21 @@
                                                             <div id="product_name-error" class="error text-danger pl-3"
                                                                 for="product_name" style="display: block;">
                                                                 <strong>{{ $errors->first('product_name') }}</strong>
+                                                            </div>
+                                                            @endif
+                                                        </div>
+                                                        <div
+                                                            class="bmd-form-group{{ $errors->has('regex') ? ' has-danger' : '' }}">
+                                                            <div class="form-group pl-2">
+                                                                <label for="regex">Product Category</label>
+                                                                <input type="text" class="form-control"
+                                                                    placeholder="nama product" name="regex"
+                                                                    value="{{ $product->regex }}">
+                                                            </div>
+                                                            @if ($errors->has('regex'))
+                                                            <div id="regex-error" class="error text-danger pl-3"
+                                                                for="regex" style="display: block;">
+                                                                <strong>{{ $errors->first('regex') }}</strong>
                                                             </div>
                                                             @endif
                                                         </div>
@@ -172,14 +189,27 @@
                 <div class="modal-body">
                     <div class="bmd-form-group{{ $errors->has('product_name') ? ' has-danger' : '' }}">
                         <div class="form-group pl-2">
-                            <label for="product_name">Product Type</label>
-                            <input type="text" class="form-control" placeholder="nama product" name="product_name"
+                            <label for="product_name">Product Category</label>
+                            <input type="text" class="form-control" placeholder="Pagii" name="product_name"
                                 value="{{ old('product_name') }}">
                         </div>
                         @if ($errors->has('product_name'))
                         <div id="product_name-error" class="error text-danger" for="product_name"
                             style="display: block;">
                             <strong>{{ $errors->first('product_name') }}</strong>
+                        </div>
+                        @endif
+                    </div>
+                    <div class="bmd-form-group{{ $errors->has('regex') ? ' has-danger' : '' }}">
+                        <div class="form-group pl-2">
+                            <label for="regex">Regex</label>
+                            <input type="text" class="form-control" placeholder="pagii" name="regex"
+                                value="{{ old('regex') }}">
+                        </div>
+                        @if ($errors->has('regex'))
+                        <div id="regex-error" class="error text-danger" for="regex"
+                            style="display: block;">
+                            <strong>{{ $errors->first('regex') }}</strong>
                         </div>
                         @endif
                     </div>

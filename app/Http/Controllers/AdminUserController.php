@@ -18,8 +18,7 @@ class AdminUserController extends Controller
     {
         $users = DB::table('users')
             ->where('role', 1)
-            ->get();
-        $product = Product::all();
+            ->paginate(5);
         return view('admin.user', ['users' => $users]);
     }
 

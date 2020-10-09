@@ -36,7 +36,7 @@
             </p>
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
-            <a class="dropdown-item" href="{{ url('profile.edit') }}">{{ __('Profile') }}</a>
+            <a class="dropdown-item" href="">{{ __('Profile') }}</a>
             <a class="dropdown-item" href="">{{ __('Settings') }}</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="{{ url('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">{{ __('Log out') }}</a>

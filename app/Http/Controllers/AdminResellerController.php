@@ -61,7 +61,6 @@ class AdminResellerController extends Controller
         ]);
 
         $regex = DB::table('products')->select('products.regex')->where('products.id', $request->product_id)->get();
-
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -69,8 +68,10 @@ class AdminResellerController extends Controller
             'product_id' => $request->product_id,
             'password' => Hash::make($request->password),
             'role' => $request->role,
-            'ref-code' => $regex[0]->regex
+            'ref_code' => $regex[0]->regex.time()
         ]);
+        
+        // dd($user);
         $role = $request->role == '1' ? ' Admin' : 'Reseller';
         Mail::to($user['email'])->send(new KonfirmasiEmail($user));
         LogActivity::addToLog("Menambahkan ".$role." ".$request->email);

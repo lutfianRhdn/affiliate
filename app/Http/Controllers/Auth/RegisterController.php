@@ -69,7 +69,8 @@ class RegisterController extends Controller
                 'regex:/[0-9]/',
                 'regex:/[@$!%*#?&]/'],
             'phone' => ['required', 'min:9', 'max:14'],
-            'product_id' => ['required']
+            'product_id' => ['required'],
+            'policy' => ['required']
         ]);
     }
 
@@ -82,7 +83,6 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $regex = DB::table('products')->select('products.regex')->where('products.id', $data['product_id'])->get();
-        // dd($regex[0]->regex);
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -90,7 +90,7 @@ class RegisterController extends Controller
             'product_id' => $data['product_id'],
             'password' => Hash::make($data['password']),
             'role' => $data['role'],
-            'ref-code' => $regex[0]->regex
+            'ref_code' => $regex[0]->regex.time()
         ]);
         
         
@@ -102,10 +102,10 @@ class RegisterController extends Controller
     {
         User::where([
             'email' => $email,
-            'ref-code' => $ref_code])
+            'ref_code' => $ref_code])
             ->update([
                 'register_status' => '1', 
-                'ref-code' => NULL]);
+                'ref_code' => NULL]);
                 
         return redirect('login')->with('regis-succ', 'Email activated!');
     }

@@ -40,14 +40,15 @@ class ProductController extends Controller
     {
         
         $this->validate($request, [
-            'product_name' => 'required',
-            'description' => 'required'
+            'product_name' => ['required'],
+            'description' => ['required'],
+            'regex' => ['required', 'unique:products'],
         ]);
         
         Product::create([
             'product_name' => $request->product_name,
             'description' => $request->description,
-            'regex' => time(). Str::random(6)
+            'regex' => $request->regex
         ]);
         LogActivity::addToLog("Menambahkan product ".$request->product_name);
         return redirect('/admin/product')->with('status', 'Data inserted successfully');
@@ -86,13 +87,15 @@ class ProductController extends Controller
     {
         $this->validate($request, [
             'product_name' => 'required',
-            'description' => 'required'
+            'description' => 'required',
+            'regex' => ['required', 'unique:products'],
         ]);
 
         Product::where('id', $product->id)->update([
             'product_name' => $request->product_name,
-            'description' => $request->description
-        ]);
+            'description' => $request->description,
+            'regex' => $request->regex,
+            ]);
         
         LogActivity::addToLog("Mengedit produk id ".$product->id);
         return redirect('/admin/product')->with('status', 'Data updated successfully');
