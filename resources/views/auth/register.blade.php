@@ -1,4 +1,5 @@
-@extends('layouts.app', ['class' => 'off-canvas-sidebar', 'activePage' => 'register', 'title' => __('Affiliate Program'), 'titlePage' => 'Registration'])
+@extends('layouts.app', ['class' => 'off-canvas-sidebar', 'activePage' => 'register', 'title' => __('Affiliate
+Program'), 'titlePage' => 'Registration'])
 
 @section('content')
 <div class="container" style="height: auto;">
@@ -18,8 +19,8 @@
                                         <i class="material-icons">face</i>
                                     </span>
                                 </div>
-                                <input type="text" name="name" class="form-control ml-3" placeholder="{{ __('Name...') }}"
-                                    value="{{ old('name') }}" required>
+                                <input type="text" name="name" class="form-control ml-3"
+                                    placeholder="{{ __('Full Name') }}" value="{{ old('name') }}" required>
                             </div>
                             @if ($errors->has('name'))
                             <div id="name-error" class="error text-danger pl-3" for="name" style="display: block;">
@@ -34,7 +35,7 @@
                                         <i class="material-icons">email</i>
                                     </span>
                                 </div>
-                                <input type="email" name="email" class="form-control" placeholder="{{ __('Email...') }}"
+                                <input type="email" name="email" class="form-control" placeholder="{{ __('name@example.com') }}"
                                     value="{{ old('email') }}" required>
                             </div>
                             @if ($errors->has('email'))
@@ -51,7 +52,7 @@
                                     </span>
                                 </div>
                                 <input type="number" name="phone" class="form-control"
-                                    placeholder="{{ __('081231923479...') }}" value="{{ old('phone') }}" required>
+                                    placeholder="{{ __('Phone Number') }}" value="{{ old('phone') }}" required>
                             </div>
                             @if ($errors->has('phone'))
                             <div id="email-error" class="error text-danger pl-3" for="email" style="display: block;">
@@ -89,8 +90,9 @@
                                     </span>
                                 </div>
                                 <input type="password" name="password" id="password" class="form-control"
-                                    placeholder="{{ __('Password...') }}" required>
-                                    <small class="text-secondary ml-5 pl-2">Password must be contain 8 character, uppercase and lowercase letter, number and special character. Ex: Password23!</small>
+                                    placeholder="{{ __('Password') }}" required>
+                                <small class="text-secondary ml-5 pl-2">Password must be contain 8 character, uppercase
+                                    and lowercase letter, number and special character. Ex: Password23!</small>
                             </div>
                             @if ($errors->has('password'))
                             <div id="password-error" class="error text-danger pl-3" for="password"
@@ -108,7 +110,7 @@
                                     </span>
                                 </div>
                                 <input type="password" name="password_confirmation" id="password_confirmation"
-                                    class="form-control" placeholder="{{ __('Confirm Password...') }}" required>
+                                    class="form-control" placeholder="{{ __('Confirm Password') }}" required>
                             </div>
                             @if ($errors->has('password_confirmation'))
                             <div id="password_confirmation-error" class="error text-danger pl-3"
@@ -125,7 +127,8 @@
                                 <span class="form-check-sign">
                                     <span class="check"></span>
                                 </span>
-                                {{ __('I agree with the ') }} <a href="#">{{ __('Privacy Policy') }}</a>
+                                {{ __('I agree with the ') }} <a href="#" data-toggle="modal"
+                                    data-target="#policyModal">{{ __('Privacy Policy') }}</a>
                             </label>
                         </div>
                     </div>
@@ -135,6 +138,47 @@
                     </div>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="policyModal" tabindex="-1" role="dialog" aria-labelledby="policyModalTitle"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-dark" id="policyModalTitle">Privacy and Policy</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class="material-icons">
+                        close
+                    </span>
+                </button>
+            </div>
+            <div class="modal-body text-secondary">
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab iusto illum delectus quia possimus
+                    provident repudiandae vel expedita ut atque? Cupiditate deserunt, magni minima quo facere magnam
+                    quia obcaecati praesentium!
+                    Officia dicta incidunt in deserunt eius. Culpa rem ut at, perspiciatis quis facilis doloribus
+                    nostrum ducimus iusto, dolore distinctio a corrupti fugiat, reprehenderit quasi totam unde similique
+                    aliquam cum doloremque!
+                    Inventore eligendi sint blanditiis perferendis delectus! Repudiandae nam labore, autem sapiente
+                    officiis accusantium consectetur doloribus aperiam iste dolor sit beatae eligendi! Velit cumque id
+                    incidunt inventore nostrum rem architecto officia!</p>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab iusto illum delectus quia possimus
+                    provident repudiandae vel expedita ut atque? Cupiditate deserunt, magni minima quo facere magnam
+                    quia obcaecati praesentium!
+                    Officia dicta incidunt in deserunt eius. Culpa rem ut at, perspiciatis quis facilis doloribus
+                    nostrum ducimus iusto, dolore distinctio a corrupti fugiat, reprehenderit quasi totam unde similique
+                    aliquam cum doloremque!
+                    Inventore eligendi sint blanditiis perferendis delectus! Repudiandae nam labore, autem sapiente
+                    officiis accusantium consectetur doloribus aperiam iste dolor sit beatae eligendi! Velit cumque id
+                    incidunt inventore nostrum rem architecto officia!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Agree</button>
+            </div>
         </div>
     </div>
 </div>
