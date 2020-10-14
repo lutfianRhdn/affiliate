@@ -48,7 +48,7 @@ class ProductController extends Controller
         Product::create([
             'product_name' => $request->product_name,
             'description' => $request->description,
-            'regex' => $request->regex
+            'regex' => $request->regex . "-"
         ]);
         LogActivity::addToLog("Menambahkan product ".$request->product_name);
         return redirect('/admin/product')->with('status', 'Data inserted successfully');
@@ -94,7 +94,7 @@ class ProductController extends Controller
         Product::where('id', $product->id)->update([
             'product_name' => $request->product_name,
             'description' => $request->description,
-            'regex' => $request->regex,
+            'regex' => $request->regex."-",
             ]);
         
         LogActivity::addToLog("Mengedit produk id ".$product->id);

@@ -4,137 +4,163 @@ Program'), 'titlePage' => 'Registration'])
 @section('content')
 <div class="container" style="height: auto;">
     <div class="row align-items-center">
-        <div class="col-lg-5 col-md-6 col-sm-8 ml-auto mr-auto">
-            <form class="form" method="POST" action="/registration">
+        <div class="col-lg-9 col-md-8 col-sm-8 ml-auto mr-auto">
+            <form class="form" method="POST" action="{{ route('register') }}">
                 @csrf
-                <div class="card card-login card-hidden mb-3">
-                    <div class="card-header card-header-primary text-center pb-4 pt-3">
+                <div class="card card-login card-hidden">
+                    <div class="card-header card-header-primary text-center pb-4 pt-4">
                         <h4 class="card-title"><strong>{{ __('Register') }}</strong></h4>
                     </div>
-                    <div class="card-body ">
-                        <div class="bmd-form-group{{ $errors->has('name') ? ' has-danger' : '' }} pl-3">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-grounp-text">
-                                        <i class="material-icons">face</i>
-                                    </span>
+                    <div class="card-body mt-3">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group {{ $errors->has('name') ? ' has-danger' : '' }}">
+                                    <label for="name">Name</label>
+                                    <input type="text" class="form-control pt-3" id="name" placeholder="Full Name"
+                                        name="name" value="{{ old('name') }}">
+                                    @if ($errors->has('name'))
+                                    <div id="name-error" class="error text-danger" for="name" style="display: block;">
+                                        <strong>{{ $errors->first('name') }}</strong>
+                                    </div>
+                                    @endif
                                 </div>
-                                <input type="text" name="name" class="form-control ml-3"
-                                    placeholder="{{ __('Full Name') }}" value="{{ old('name') }}" required>
-                            </div>
-                            @if ($errors->has('name'))
-                            <div id="name-error" class="error text-danger pl-3" for="name" style="display: block;">
-                                <strong>{{ $errors->first('name') }}</strong>
-                            </div>
-                            @endif
-                        </div>
-                        <div class="bmd-form-group{{ $errors->has('email') ? ' has-danger' : '' }} mt-3">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <i class="material-icons">email</i>
-                                    </span>
+                                <div class="form-group mt-2 {{ $errors->has('email') ? ' has-danger' : '' }}">
+                                    <label for="email">Email Address</label>
+                                    <input type="text" class="form-control pt-3" id="email"
+                                        placeholder="email@example.com" name="email" value="{{ old('email') }}">
+                                    @if ($errors->has('email'))
+                                    <div id="email-error" class="error text-danger" for="email" style="display: block;">
+                                        <strong>{{ $errors->first('email') }}</strong>
+                                    </div>
+                                    @endif
                                 </div>
-                                <input type="email" name="email" class="form-control" placeholder="{{ __('name@example.com') }}"
-                                    value="{{ old('email') }}" required>
-                            </div>
-                            @if ($errors->has('email'))
-                            <div id="email-error" class="error text-danger pl-3" for="email" style="display: block;">
-                                <strong>{{ $errors->first('email') }}</strong>
-                            </div>
-                            @endif
-                        </div>
-                        <div class="bmd-form-group{{ $errors->has('phone') ? ' has-danger' : '' }} mt-3">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <i class="material-icons">phone</i>
-                                    </span>
+                                <div class="form-group mt-2 {{ $errors->has('phone') ? ' has-danger' : '' }}">
+                                    <label for="phone">Phone Number</label>
+                                    <input type="number" oninput="this.value=this.value.replace(/[^0-9]/g,'');"
+                                        class="form-control pt-3" id="phone" placeholder="081xxx" name="phone"
+                                        value="{{ old('phone') }}">
+                                    @if ($errors->has('phone'))
+                                    <div id="phone-error" class="error text-danger" for="phone" style="display: block;">
+                                        <strong>{{ $errors->first('phone') }}</strong>
+                                    </div>
+                                    @endif
                                 </div>
-                                <input type="number" name="phone" class="form-control"
-                                    placeholder="{{ __('Phone Number') }}" value="{{ old('phone') }}" required>
-                            </div>
-                            @if ($errors->has('phone'))
-                            <div id="email-error" class="error text-danger pl-3" for="email" style="display: block;">
-                                <strong>{{ $errors->first('email') }}</strong>
-                            </div>
-                            @endif
-                        </div>
-                        <div class="bmd-form-group{{ $errors->has('product_id') ? ' has-danger' : '' }} mt-3">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <i class="material-icons">content_paste</i>
-                                    </span>
+                                <div class="form-group mt-2 {{ $errors->has('country') ? ' has-danger' : '' }}">
+                                    <label for="country">Country</label>
+                                    <select class="form-control" data-style="btn btn-link" id="country" name="country">
+                                        <option selected value="Indonesia">Indonesia</option>
+                                    </select>
+                                    @if ($errors->has('country'))
+                                    <div id="country-error" class="error text-danger" for="country"
+                                        style="display: block;">
+                                        <strong>{{ $errors->first('country') }}</strong>
+                                    </div>
+                                    @endif
                                 </div>
-                                <select class="selectpicker" data-style="btn btn-primary" name="product_id">
-                                    <option disabled selected>Product Category</option>
-                                    @foreach ($products as $product)
-                                    <option value="{{ $product->id }}">{{$product->product_name}}</option>
-                                    @endforeach
-                                </select>
+                                <div class="row ml-1">
+                                <div class="col-6" style="margin-left: -1rem">
+                                    <div class="form-group mt-2 {{ $errors->has('state') ? ' has-danger' : '' }}">
+                                        <label for="state">State/Province</label>
+                                        <select class="form-control" data-style="btn btn-link" id="state" name="state">
+                                            @foreach ($provinces as $prov)
+                                            <option value="{{$prov->name}}">{{$prov->name}}</option>
+                                            @endforeach
+                                        </select>
+                                        @if ($errors->has('state'))
+                                        <div id="state-error" class="error text-danger" for="state"
+                                            style="display: block;">
+                                            <strong>{{ $errors->first('state') }}</strong>
+                                        </div>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group {{ $errors->has('city') ? ' has-danger' : '' }}">
+                                        <label for="city">City</label>
+                                        <select class="form-control" data-style="btn btn-link" id="city" name="city">
+                                            <option value="Bandung">Bandung</option>
+                                        </select>
+                                        @if ($errors->has('city'))
+                                        <div id="city-error" class="error text-danger" for="city"
+                                            style="display: block;">
+                                            <strong>{{ $errors->first('city') }}</strong>
+                                        </div>
+                                        @endif
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group mt-2 {{ $errors->has('address') ? ' has-danger' : '' }}">
+                                    <label for="address">Address</label>
+                                    <textarea class="form-control" id="address" rows="2" value="{{ old('address') }}"
+                                        placeholder="jl.xxx no xxx" name="address"></textarea>
+                                    @if ($errors->has('address'))
+                                    <div id="address-error" class="error text-danger" for="address"
+                                        style="display: block;">
+                                        <strong>{{ $errors->first('address') }}</strong>
+                                    </div>
+                                    @endif
+                                </div>
+                                <div class="form-group mt-2 {{ $errors->has('product_id') ? ' has-danger' : '' }}">
+                                    <label for="product_id">Category Product</label>
+                                    <select class="form-control custom-select" data-style="btn btn-link" id="product_id"
+                                        name="product_id">
+                                        @foreach ($products as $product)
+                                        <option value="{{ $product->id }}">{{$product->product_name}}</option>
+                                        @endforeach
+                                    </select>
+                                    @if ($errors->has('product_id'))
+                                    <div id="product_id-error" class="error text-danger" for="product_id"
+                                        style="display: block;">
+                                        <strong>{{ $errors->first('product_id') }}</strong>
+                                    </div>
+                                    @endif
+                                </div>
+                                <div class="form-group mt-2 {{ $errors->has('password') ? ' has-danger' : '' }}">
+                                    <label for="password">Password</label>
+                                    <input type="password" class="form-control pt-3" id="password"
+                                        placeholder="Password123!" name="password">
+                                    <small class="text-danger">Password must be contain 8 character, uppercase
+                                        and lowercase letter, number and special character. Ex: Password23!</small>
+                                    @if ($errors->has('password'))
+                                    <div id="password-error" class="error text-danger" for="password"
+                                        style="display: block;">
+                                        <strong>{{ $errors->first('password') }}</strong>
+                                    </div>
+                                    @endif
+                                </div>
+                                <div
+                                    class="form-group mt-3 {{ $errors->has('password_confirmation') ? ' has-danger' : '' }}">
+                                    <label for="password">Password Confirmation</label>
+                                    <input type="password" class="form-control pt-3" id="password"
+                                        placeholder="Password123!" name="password_confirmation">
+                                    @if ($errors->has('password_confirmation'))
+                                    <div id="password-error" class="error text-danger" for="password_confirmation"
+                                        style="display: block;">
+                                        <strong>{{ $errors->first('password_confirmation') }}</strong>
+                                    </div>
+                                    @endif
+                                </div>
+
+                                <input type="hidden" name="role" value="2">
                             </div>
 
-                            @if ($errors->has('product_id'))
-                            <div id="role-error" class="error text-danger pl-3" for="product_id"
-                                style="display: block;">
-                                <strong>{{ $errors->first('product_id') }}</strong>
-                            </div>
-                            @endif
-                        </div>
-                        <div class="bmd-form-group{{ $errors->has('password') ? ' has-danger' : '' }} mt-3">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <i class="material-icons">lock_outline</i>
+                            <div class="form-check mt-4 ml-auto mr-auto">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" id="policy" name="policy"
+                                        {{ old('policy') ? 'checked' : '' }}>
+                                    <span class="form-check-sign">
+                                        <span class="check"></span>
                                     </span>
-                                </div>
-                                <input type="password" name="password" id="password" class="form-control"
-                                    placeholder="{{ __('Password') }}" required>
-                                <small class="text-secondary ml-5 pl-2">Password must be contain 8 character, uppercase
-                                    and lowercase letter, number and special character. Ex: Password23!</small>
+                                    {{ __('I agree with the ') }} <a href="#" data-toggle="modal"
+                                        data-target="#policyModal">{{ __('Privacy Policy') }}</a>
+                                </label>
                             </div>
-                            @if ($errors->has('password'))
-                            <div id="password-error" class="error text-danger pl-3" for="password"
-                                style="display: block;">
-                                <span></span>
-                            </div>
-                            @endif
-                        </div>
-                        <div
-                            class="bmd-form-group{{ $errors->has('password_confirmation') ? ' has-danger' : '' }} mt-3">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <i class="material-icons">lock_outline</i>
-                                    </span>
-                                </div>
-                                <input type="password" name="password_confirmation" id="password_confirmation"
-                                    class="form-control" placeholder="{{ __('Confirm Password') }}" required>
-                            </div>
-                            @if ($errors->has('password_confirmation'))
-                            <div id="password_confirmation-error" class="error text-danger pl-3"
-                                for="password_confirmation" style="display: block;">
-                                <strong>{{ $errors->first('password_confirmation') }}</strong>
-                            </div>
-                            @endif
-                        </div>
-                        <input type="hidden" name="role" value="2">
-                        <div class="form-check text-center mt-4">
-                            <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox" id="policy" name="policy"
-                                    {{ old('policy') ? 'checked' : '' }}>
-                                <span class="form-check-sign">
-                                    <span class="check"></span>
-                                </span>
-                                {{ __('I agree with the ') }} <a href="#" data-toggle="modal"
-                                    data-target="#policyModal">{{ __('Privacy Policy') }}</a>
-                            </label>
                         </div>
                     </div>
                     <div class="card-footer justify-content-center">
-                        <button type="submit"
-                            class="btn btn-primary btn-link btn-lg">{{ __('Create account') }}</button>
+                        <button type="submit" class="btn btn-primary btn-link btn-lg">Create account</button>
                     </div>
                 </div>
             </form>
@@ -185,3 +211,25 @@ Program'), 'titlePage' => 'Registration'])
 @endsection
 
 {{-- Password must be contain 8 character, uppercase and lowercase letter, number and special character. Exp: Password23! --}}
+
+@push('js')
+<script>
+    $(document).ready(function () {
+
+    });
+
+</script>
+@endpush
+
+{{-- 
+$('#state').on('change', function () {
+             axios.post('{{ route('registrations.store') }}', {id: $(this).val()})
+.then(function (response) {
+$('#city').empty();
+
+$.each(response.data, function (id, name) {
+$('#city').append(new Option(name, id))
+})
+});
+});
+--}}

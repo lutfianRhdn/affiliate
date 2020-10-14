@@ -98,7 +98,7 @@
                                                             <div class="form-group pl-2">
                                                                 <label for="regex">Product Category</label>
                                                                 <input type="text" class="form-control"
-                                                                    placeholder="nama product" name="regex"
+                                                                    placeholder="nama product" name="regex" oninput="this.value = this.value.toUpperCase()"
                                                                     value="{{ $product->regex }}">
                                                             </div>
                                                             @if ($errors->has('regex'))
@@ -154,8 +154,8 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary"
-                                                            data-dismiss="modal">Close</button>
-                                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                                            data-dismiss="modal">No</button>
+                                                        <button type="submit" class="btn btn-danger">Yes</button>
                                                     </div>
                                                 </form>
                                             </div>
@@ -204,7 +204,7 @@
                         <div class="form-group pl-2">
                             <label for="regex">Regex</label>
                             <input type="text" class="form-control" placeholder="pagii" name="regex"
-                                value="{{ old('regex') }}">
+                                value="{{ old('regex') }}" oninput="this.value = this.value.toUpperCase()">
                         </div>
                         @if ($errors->has('regex'))
                         <div id="regex-error" class="error text-danger" for="regex"

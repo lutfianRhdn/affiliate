@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 
 class RegisterController extends Controller
@@ -54,7 +55,7 @@ class RegisterController extends Controller
     public function index() {
         $product = Product::all();
         $provinces = Province::all();
-        return view("auth.register2", ['products' => $product, 'provinces' => $provinces]);
+        return view("auth.register", ['products' => $product, 'provinces' => $provinces]);
     }
 
     /**
@@ -88,8 +89,15 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\Models\User
      */
+    private function generateRandomRegex($regex) {
+        do {
+            $randToken = strtoupper(Str::random(6));
+        } while((DB::table('users')->select('regex')->where('users.regex', '=', $regex.$randToken)->get())[0]->regex);
+    }
+
     protected function create(array $data)
     {
+
         $regex = DB::table('products')->select('products.regex')->where('products.id', $data['product_id'])->get();
         $user = User::create([
             'name' => $data['name'],
@@ -98,7 +106,11 @@ class RegisterController extends Controller
             'product_id' => $data['product_id'],
             'password' => Hash::make($data['password']),
             'role' => $data['role'],
-            'ref_code' => $regex[0]->regex.time()
+            'ref_code' => $regex[0]->regex . strtoupper(Str::random(6)),
+            'country' => $data['country'],
+            'state' => $data['state'],
+            'region' => $data['city'],
+            'address' => $data['address'],
         ]);
         
         
