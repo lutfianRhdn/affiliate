@@ -29,8 +29,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/registrasi', [RegisterController::class, 'index']);
-Route::get('/konfirmasiemail/{email}/{ref_code}', [App\Http\Controllers\Auth\RegisterController::class, 'konfirmasiemail'])->name('konfirmasiemail');
+Route::get('/registration', [RegisterController::class, 'index']);
+// Route::get('/registration', [RegisterController::class, 'store'])->name('registrations.store');
+Route::get('/confirmation/{email}/{ref_code}', [App\Http\Controllers\Auth\RegisterController::class, 'konfirmasiemail'])->name('konfirmasiemail');
 
 Auth::routes();
 

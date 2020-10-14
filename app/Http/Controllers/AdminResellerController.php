@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\LogActivity;
 use App\Mail\KonfirmasiEmail;
 use App\Models\Product;
+use App\Models\Province;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -27,7 +28,8 @@ class AdminResellerController extends Controller
                     ->where('users.role', 2)
                     ->get();
         $products = Product::all();
-        return view('admin.resellerAdmin', ['users' => $users, 'products' => $products]);
+        $provinces = Province::all();
+        return view('admin.resellerAdmin', ['users' => $users, 'products' => $products, 'provinces' => $provinces]);
     }
 
     /**
@@ -48,6 +50,7 @@ class AdminResellerController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request);
         $this->validate($request, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -57,21 +60,30 @@ class AdminResellerController extends Controller
             'regex:/[0-9]/',
             'regex:/[@$!%*#?&]/'],
             'phone' => ['required', 'min:9', 'max:14'],
-            'product_id' => ['required']
+            'product_id' => ['required'],
+            'country' => ['required'],
+            'state' => ['required'],
+            'city' => ['required'],
+            'address' => ['required']
         ]);
+        
 
         $regex = DB::table('products')->select('products.regex')->where('products.id', $request->product_id)->get();
+        
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
+            'country' => $request->country,
             'product_id' => $request->product_id,
             'password' => Hash::make($request->password),
             'role' => $request->role,
-            'ref_code' => $regex[0]->regex.time()
+            'ref_code' => $regex[0]->regex. strtoupper(Str::random(6)),
+            'state' => $request->state,
+            'region' => $request->city,
+            'address' => $request->address
         ]);
-        
-        // dd($user);
+
         $role = $request->role == '1' ? ' Admin' : 'Reseller';
         Mail::to($user['email'])->send(new KonfirmasiEmail($user));
         LogActivity::addToLog("Menambahkan ".$role." ".$request->email);

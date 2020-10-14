@@ -12,7 +12,7 @@
                 </button>
             </div>
             @endif
-            <h1 class="text-white text-center">{{ __('Welcome to Affiliate Program.') }}</h1>
+            <h1 class="text-white text-center">{{ __('Welcome to Affiliate.') }}</h1>
         </div>
     </div>
 </div>

@@ -6,9 +6,13 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Mail\KonfirmasiEmail;
 use App\Models\Product;
+use App\Models\Province;
+use App\Models\Regency;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use Doctrine\DBAL\Schema\Table;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -49,7 +53,8 @@ class RegisterController extends Controller
 
     public function index() {
         $product = Product::all();
-        return view("auth.register", ['products' => $product]);
+        $provinces = Province::all();
+        return view("auth.register2", ['products' => $product, 'provinces' => $provinces]);
     }
 
     /**
@@ -70,6 +75,9 @@ class RegisterController extends Controller
                 'regex:/[@$!%*#?&]/'],
             'phone' => ['required', 'min:9', 'max:14'],
             'product_id' => ['required'],
+            'country' => ['required'],
+            'state' => ['required'],
+            'address' => ['required'],
             'policy' => ['required']
         ]);
     }
@@ -108,5 +116,12 @@ class RegisterController extends Controller
                 'ref_code' => NULL]);
                 
         return redirect('login')->with('regis-succ', 'Email activated!');
+    }
+
+    public function store(Request $request)
+    {
+        $region = DB::table('indoregion_regencies')->select('indoregion_regencies.id', 'indoregion_regencies.name')->where('indoregion_regencies.province_id', $request->id)->get();
+
+        return response()->json($region);
     }
 }

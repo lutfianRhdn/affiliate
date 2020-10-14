@@ -5,7 +5,7 @@ Program'), 'titlePage' => 'Registration'])
 <div class="container" style="height: auto;">
     <div class="row align-items-center">
         <div class="col-lg-5 col-md-6 col-sm-8 ml-auto mr-auto">
-            <form class="form" method="POST" action="/register">
+            <form class="form" method="POST" action="/registration">
                 @csrf
                 <div class="card card-login card-hidden mb-3">
                     <div class="card-header card-header-primary text-center pb-4 pt-3">

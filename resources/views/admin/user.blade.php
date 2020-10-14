@@ -50,7 +50,7 @@
                                             <span
                                             class="ml-2 badge badge-{{$user->register_status == '1' ? 'success' : 'warning'}}">{{$user->register_status == '1' ? 'Activated' : 'Not Activated'}}</span>
                                         </td>
-                                        <td>{{$user->created_at}}</td>
+                                        <td>{{  Carbon\Carbon::parse($user->created_at)->format('d-m-Y')}}</td>
                                         <td class="td-actions text-right">
                                             <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round"
                                                 href="" data-placement="bottom" title="Delete" data-toggle="modal"
@@ -351,9 +351,9 @@
             'lengthMenu': [[5,10,25,50,100,-1],[5,10,25,50,100,"All"]]
         });
         $('#edit-user').tooltip(options);
-        $('.selectpicker').selectpicker();
-        $('#selectpicker-role').selectpicker();
-        $('#selectpicker-productID').selectpicker();
+        // $('.selectpicker').selectpicker();
+        // $('#selectpicker-role').selectpicker();
+        // $('#selectpicker-productID').selectpicker();
     });
 
 </script>

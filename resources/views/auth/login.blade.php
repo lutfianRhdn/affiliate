@@ -2,7 +2,7 @@
 'titlePage' => 'Login'])
 
 @section('content')
-<div class="container" style="height: auto;">
+<div class="container">
     <div class="row align-items-center">
         <div class="col-md-9 ml-auto mr-auto mb-3 text-center">
             <h3>Welcome to Affiliate</h3>
@@ -76,7 +76,7 @@
                     @endif
                 </div> --}}
                 <div class="col-12 text-center">
-                    <a href="/registrasi" class="text-light">
+                    <a href="/registration" class="text-light">
                         <small>{{ __('Create new account') }}</small>
                     </a>
                 </div>

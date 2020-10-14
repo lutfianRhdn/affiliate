@@ -24,7 +24,11 @@ class User extends Authenticatable
         'ref_code',
         'role',
         'product_id',
-        'register_status'
+        'register_status',
+        'country',
+        'state',
+        'region',
+        'address',
     ];
 
     /**
