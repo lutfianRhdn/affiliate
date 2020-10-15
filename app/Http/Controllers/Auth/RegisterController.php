@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\KonfirmasiEmail;
 use App\Models\Product;
 use App\Models\Province;
+use App\Models\City;
 use App\Models\Regency;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
@@ -54,7 +55,7 @@ class RegisterController extends Controller
 
     public function index() {
         $product = Product::all();
-        $provinces = Province::all();
+        $provinces = Province::orderBy('province_name')->get();
         return view("auth.register", ['products' => $product, 'provinces' => $provinces]);
     }
 
@@ -97,24 +98,32 @@ class RegisterController extends Controller
 
     protected function create(array $data)
     {
+        $permitted_chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $random = substr(str_shuffle($permitted_chars), 0, 6);
+        $regex = DB::table('products')->select('products.regex')->where('products.id', $data['product_id'])->first();
+        do{
+            $ref_code = $regex->regex.$random;
+            $check = User::where('ref_code', $ref_code)->first();
+        }while($check != null);
 
-        $regex = DB::table('products')->select('products.regex')->where('products.id', $data['product_id'])->get();
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'phone' => $data['phone'],
-            'product_id' => $data['product_id'],
-            'password' => Hash::make($data['password']),
-            'role' => $data['role'],
-            'ref_code' => $regex[0]->regex . strtoupper(Str::random(6)),
-            'country' => $data['country'],
-            'state' => $data['state'],
-            'region' => $data['city'],
-            'address' => $data['address'],
-        ]);
+        if($check == null){
+            $user = User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'phone' => $data['phone'],
+                'product_id' => $data['product_id'],
+                'password' => Hash::make($data['password']),
+                'role' => $data['role'],
+                'ref_code' => $ref_code,
+                'country' => $data['country'],
+                'state' => $data['state'],
+                'region' => $data['city'],
+                'address' => $data['address'],
+            ]);
+        }
+        $pass = $data['password'];
         
-        
-        Mail::to($user['email'])->send(new KonfirmasiEmail($user));
+        Mail::to($user['email'])->send(new KonfirmasiEmail($user->id, $pass));
         return $user;
     }
 
@@ -124,8 +133,7 @@ class RegisterController extends Controller
             'email' => $email,
             'ref_code' => $ref_code])
             ->update([
-                'register_status' => '1', 
-                'ref_code' => NULL]);
+                'register_status' => '1']);
                 
         return redirect('login')->with('regis-succ', 'Email activated!');
     }
@@ -135,5 +143,18 @@ class RegisterController extends Controller
         $region = DB::table('indoregion_regencies')->select('indoregion_regencies.id', 'indoregion_regencies.name')->where('indoregion_regencies.province_id', $request->id)->get();
 
         return response()->json($region);
+    }
+
+    public function getCity(Request $request)
+    {
+        $cities = City::select('city_id','city_name_full')->where('province_id', $request->province)
+            ->orderBy('city_id')
+            ->groupBy('city_id','city_name_full')->get();
+        $result = array();
+        foreach ($cities as $key => $value) {
+            array_push($result, ['id'=>$value->city_id, 'text'=>$value->city_name_full]);
+        }
+        
+        return ['results' => $result];
     }
 }

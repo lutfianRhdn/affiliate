@@ -30,6 +30,7 @@ Route::get('/', function () {
 });
 
 Route::get('/registration', [RegisterController::class, 'index']);
+Route::get('/registration/get-city', [RegisterController::class, 'getCity']);
 // Route::get('/registration/create', [RegisterController::class, 'create'])->name('registration.create');
 // Route::get('/registration', [RegisterController::class, 'store'])->name('registrations.store');
 Route::get('/confirmation/{email}/{ref_code}', [App\Http\Controllers\Auth\RegisterController::class, 'konfirmasiemail'])->name('konfirmasiemail');

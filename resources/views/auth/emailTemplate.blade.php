@@ -1,15 +1,21 @@
-<p>Dear <i>{{$user->name}}</i>,</p>
+<p>Dear <i>{{$user['name']}}</i>,</p>
 
-<p>Your account has been created. Welcome to the Affiliate program for the
-    <strong>{{$product[0]->product_name}}</strong>
-    product!</p>
-<p>This your referral code <strong>{{$user['ref_code']}}</strong> to share with your customer when do register.</p>
+<p>Your account has been created. Welcome to the Affiliate program for the <strong>{{$user['product_name']}}</strong> product!</p>
+<p>Here is your account detail : </p>
 
-From now on, please log in to your account using your email address and your password.
-Please activate your account before login with click this <a href="
-    {{ route('konfirmasiemail', ['email' => $user['email'], 'ref_code' => $user['ref_code']]) }}"
-    class="text-info">Link</a>.
+Full Name : {{$user['name']}}
+Email : {{$user['email']}}
+Phone : {{$user['phone']}}
+Product : {{$user['product_name']}}
+Address : {{$user['address']}}, {{$user['city_name_full']}}, {{$user['province_name']}}
+Password : {{$pass}}
+
+Please click the link below to activate your account.
+
+Thank you,
+
+<p></p>
+<p><a href="{{ route('konfirmasiemail', ['email' => $user['email'], 'ref_code' => $user['ref_code']]) }}"
+    class="text-info">Link</a>.</p>
 <p></p>
 <p></p>
-<p></p>
-<p><i>Thankyou</i></p>
