@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
@@ -51,6 +52,31 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getRefCode($data)
+    {
+        $data = User::where('ref_code', $data)->first();
+        return $data;
+    }
+
+    public function createUser($data, $ref_code)
+    {
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'phone' => $data['phone'],
+            'product_id' => $data['product_id'],
+            'password' => Hash::make($data['password']),
+            'role' => $data['role'],
+            'ref_code' => $ref_code,
+            'country' => $data['country'],
+            'state' => $data['state'],
+            'region' => $data['city'],
+            'address' => $data['address'],
+        ]);
+
+        return $user;
+    }
 
     public function getDataEmail($id)
     {

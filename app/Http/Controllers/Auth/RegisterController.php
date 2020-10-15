@@ -54,8 +54,10 @@ class RegisterController extends Controller
     }
 
     public function index() {
-        $product = Product::all();
-        $provinces = Province::orderBy('province_name')->get();
+        $model_product = new Product;
+        $product = $model_product->getData();
+        $model_province = new Province;
+        $provinces = $model_province->getData();
         return view("auth.register", ['products' => $product, 'provinces' => $provinces]);
     }
 
@@ -100,26 +102,16 @@ class RegisterController extends Controller
     {
         $permitted_chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $random = substr(str_shuffle($permitted_chars), 0, 6);
-        $regex = DB::table('products')->select('products.regex')->where('products.id', $data['product_id'])->first();
+        $model_user = new User;
+        $product = new Product;
+        $regex = $product->getRegex($data['product_id']);
         do{
             $ref_code = $regex->regex.$random;
-            $check = User::where('ref_code', $ref_code)->first();
+            $check = $model_user->getRefCode($ref_code);
         }while($check != null);
 
         if($check == null){
-            $user = User::create([
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'phone' => $data['phone'],
-                'product_id' => $data['product_id'],
-                'password' => Hash::make($data['password']),
-                'role' => $data['role'],
-                'ref_code' => $ref_code,
-                'country' => $data['country'],
-                'state' => $data['state'],
-                'region' => $data['city'],
-                'address' => $data['address'],
-            ]);
+            $user = $model_user->createUser($data, $ref_code);
         }
         $pass = $data['password'];
         

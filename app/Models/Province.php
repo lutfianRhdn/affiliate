@@ -33,4 +33,10 @@ class Province extends Model
     {
         return $this->hasMany('App\Model\City','province_id');
     }
+    
+    public function getData()
+    {
+        $provinces = Province::orderBy('province_name')->get();
+        return $provinces;
+    }
 }

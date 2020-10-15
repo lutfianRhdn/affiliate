@@ -61,10 +61,10 @@ Program'), 'titlePage' => 'Registration'])
                                 <div class="col-6" style="margin-left: -1rem">
                                     <div class="form-group mt-2 {{ $errors->has('state') ? ' has-danger' : '' }}">
                                         <label for="state">State/Province</label>
-                                        <select class="form-control" data-style="btn btn-link" id="province" name="state">
+                                        <select class="form-control" data-style="btn btn-link" id="province" name="state" value="{{ old('province') }}">
                                             <option value="" selected disabled>Select your province</option>
                                             @foreach ($provinces as $province)
-                                                <option value="{{$province->province_id}}">{{$province->province_name}}</option> 
+                                                <option value="{{$province->id}}">{{$province->province_name}}</option> 
                                             @endforeach
                                         </select>
                                         @if ($errors->has('state'))
@@ -78,7 +78,7 @@ Program'), 'titlePage' => 'Registration'])
                                 <div class="col-6">
                                     <div class="form-group {{ $errors->has('city') ? ' has-danger' : '' }}">
                                         <label for="city">City</label>
-                                        <select class="form-control" data-style="btn btn-link" id="city" name="city">
+                                        <select class="form-control" data-style="btn btn-link" id="city" name="city" value="{{ old('city') }}">
                                             <option value="" selected disabled>Select your city</option>
                                         </select>
                                         @if ($errors->has('city'))
@@ -220,9 +220,20 @@ Program'), 'titlePage' => 'Registration'])
 <script>
     $(document).ready(function () {
         
+        $('#product_id').select2();
         $('#country').select2();
-        $('#city').select2();
         $('#province').select2();
+        $('#city').select2({
+            placeholder: "Select City",
+            ajax: {
+                url: '/registration/get-city',
+                dataType: 'json',
+                type : 'GET',
+                data: {
+                    province: $('#province').val()
+                },
+            },
+        });
         //field phone just numbers
         $("#phone").on("keypress keyup blur",function (event) {    
            $(this).val($(this).val().replace(/[^\d].+/, ""));
