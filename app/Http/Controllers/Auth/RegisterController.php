@@ -89,11 +89,6 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\Models\User
      */
-    private function generateRandomRegex($regex) {
-        do {
-            $randToken = strtoupper(Str::random(6));
-        } while((DB::table('users')->select('regex')->where('users.regex', '=', $regex.$randToken)->get())[0]->regex);
-    }
 
     protected function create(array $data)
     {
@@ -106,7 +101,7 @@ class RegisterController extends Controller
             'product_id' => $data['product_id'],
             'password' => Hash::make($data['password']),
             'role' => $data['role'],
-            'ref_code' => $regex[0]->regex . strtoupper(Str::random(6)),
+            'ref_code' => $regex[0]->regex. strtoupper(Str::random(6)),
             'country' => $data['country'],
             'state' => $data['state'],
             'region' => $data['city'],

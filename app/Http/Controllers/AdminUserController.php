@@ -49,13 +49,17 @@ class AdminUserController extends Controller
             'password' => Hash::make($request->password),
             'role' => $request->role,
             'ref-code' => '',
-            'register_status' => '1'
+            'register_status' => '1',
+            'country' => 'Indonesia',
+            'state' => 'JAWA BARAT',
+            'region' => 'Kota Bandung',
+            'address' => 'Jl. Holis Regency No.37A, Babakan, Babakan Ciparay'
         ]);
 
         $role = $request->role == '1' ? ' Admin' : 'Reseller';
         // Mail::to($user['email'])->send(new KonfirmasiEmail($user));
         LogActivity::addToLog("Menambahkan ".$role." ".$request->email);
-        return redirect("/admin/user")->with('status', 'Data berhasil ditambahkan');
+        return redirect("/admin/user")->with('status', 'Admin successfully added');
     }
 
     public function show(User $user)
@@ -90,8 +94,11 @@ class AdminUserController extends Controller
 
     public function destroy(User $user)
     {
-        User::destroy($user->id);
-        LogActivity::addToLog("Menghapus akun".$user->email);
-        return redirect("/admin/user")->with('status', 'Data berhasil dihapus');
+        if($user->email != 'admin@admin.com'){
+            User::destroy($user->id);
+            LogActivity::addToLog("Delete account " . $user->email);
+            return redirect("/admin/user")->with('status', 'Data deleted successfully');
+        }
+        return redirect("/admin/user")->with('statusAdmin', 'Admin cannot be deleted');
     }
 }

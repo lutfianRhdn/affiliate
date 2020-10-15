@@ -21,6 +21,14 @@
                                     </button>
                                 </div>
                                 @endif
+                                @if (session('statusAdmin'))
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    {{session('statusAdmin')}}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                @endif
                             </div>
                             <div class="col-12 text-right">
                                 <a href="" class="btn btn-sm btn-primary" data-toggle="modal"
@@ -48,7 +56,7 @@
                                         <td>
                                             {{$user->role == '1' ? ' Admin' : 'Reseller'}}
                                             <span
-                                            class="ml-2 badge badge-{{$user->register_status == '1' ? 'success' : 'warning'}}">{{$user->register_status == '1' ? 'Activated' : 'Not Activated'}}</span>
+                                                class="ml-2 badge badge-{{$user->register_status == '1' ? 'success' : 'warning'}}">{{$user->register_status == '1' ? 'Activated' : 'Not Activated'}}</span>
                                         </td>
                                         <td>{{  Carbon\Carbon::parse($user->created_at)->format('d-m-Y')}}</td>
                                         <td class="td-actions text-right">
@@ -90,8 +98,8 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary"
-                                                            data-dismiss="modal">Cancel</button>
-                                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                                            data-dismiss="modal">No</button>
+                                                        <button type="submit" class="btn btn-danger">Yes</button>
                                                     </div>
                                                 </form>
                                             </div>
@@ -152,64 +160,8 @@
                                                             </div>
                                                             @endif
                                                         </div>
-                                                        {{-- <div
-                                                            class="bmd-form-group{{ $errors->has('product_id') ? ' has-danger' : '' }} mt-3 mb-3">
-                                                            <div class="input-group">
-                                                                <div class="input-group-prepend">
-                                                                    <span class="input-group-text">
-                                                                        <i class="material-icons">content_paste</i>
-                                                                    </span>
-                                                                </div>
-                                                                <select class="custom-select" id="selectpicker-productID"
-                                                                    data-style="btn btn-primary" name="product_id"
-                                                                    required>
-                                                                    <option disabled selected>Kategory Product</option>
-                                                                    @foreach ($products as $product)
-                                                                    <option value="{{$product->id}}"
-                                                                        {{$product->id == $user->product_id ? 'selected' : ''}}>
-                                                                        {{$product->product_name}}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-
-                                                            @if ($errors->has('product_id'))
-                                                            <div id="role-error" class="error text-danger pl-3"
-                                                                for="product_id" style="display: block;">
-                                                                <strong>{{ $errors->first('product_id') }}</strong>
-                                                            </div>
-                                                            @endif
-                                                        </div> --}}
                                                         <input type="hidden" name="role" value="1">
-                                                        {{-- <div
-                                                            class="bmd-form-group{{ $errors->has('role') ? ' has-danger' : '' }} mt-3 mb-3">
-                                                            <div class="input-group">
-                                                                <div class="input-group-prepend">
-                                                                    <span class="input-group-text">
-                                                                        <i class="material-icons">assignment_ind</i>
-                                                                    </span>
-                                                                </div>
-                                                                <select class="custom-select" id="selectpicker-productID"
-                                                                    data-style="btn btn-primary" name="role"
-                                                                    required>
-                                                                    <option disabled selected>Role</option>
-                                                                    <option value="1" {{$user->role == '1' ? 'selected' : ''}}>Admin</option>
-                                                                    <option value="1" {{$user->role == '2' ? 'selected' : ''}}>Reseller</option>
-                                                                </select>
-                                                            </div>
 
-                                                            @if ($errors->has('role'))
-                                                            <div id="role-error" class="error text-danger pl-3"
-                                                                for="role" style="display: block;">
-                                                                <strong>{{ $errors->first('role') }}</strong>
-                                                            </div>
-                                                            @endif
-                                                        </div> --}}
-
-                                                        {{-- <p>{{$user->role}}</p>
-                                                        @foreach ($products as $product)
-                                                        <p>{{$product->id == $user->product_id ? $product->product_name : ''}}
-                                                        </p>
-                                                        @endforeach --}}
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary"
@@ -286,8 +238,8 @@
                                     <i class="material-icons">phone</i>
                                 </span>
                             </div>
-                            <input type="number" name="phone" class="form-control"
-                                placeholder="{{ __('081231923479...') }}" value="{{ old('phone') }}" required>
+                            <input type="number" name="phone" class="form-control" placeholder="{{ __('08123456789') }}"
+                                value="{{ old('phone') }}" required>
                         </div>
                         @if ($errors->has('phone'))
                         <div id="phone-error" class="error text-danger pl-3" for="phone" style="display: block;">
@@ -303,7 +255,7 @@
                                 </span>
                             </div>
                             <input type="password" name="password" id="password" class="form-control"
-                                placeholder="{{ __('Password...') }}" required>
+                                placeholder="{{ __('Password') }}" required>
                         </div>
                         @if ($errors->has('password'))
                         <div id="password-error" class="error text-danger pl-3" for="password" style="display: block;">
@@ -348,12 +300,16 @@
     $(document).ready(function () {
         $('#table_admin').DataTable({
             'info': false,
-            'lengthMenu': [[5,10,25,50,100,-1],[5,10,25,50,100,"All"]]
+            'lengthMenu': [
+                [5, 10, 25, 50, 100, -1],
+                [5, 10, 25, 50, 100, "All"]
+            ]
         });
         $('#edit-user').tooltip(options);
-        // $('.selectpicker').selectpicker();
-        // $('#selectpicker-role').selectpicker();
-        // $('#selectpicker-productID').selectpicker();
+
+        $(".modal").on("hidden.bs.modal", function () {
+            $("#createUserModal").html("");
+        });
     });
 
 </script>
