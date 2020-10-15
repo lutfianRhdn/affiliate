@@ -19,7 +19,7 @@
     <link href="{{ asset('material') }}/css/material-dashboard.css?v=2.1.1" rel="stylesheet" />
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
-        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet" />
 
      {{-- Bootstrap select --}}
     <link rel="stylesheet"
@@ -181,7 +181,7 @@
     <script src="{{ asset('material') }}/js/plugins/jquery.dataTables.min.js"></script>
     <script src="{{ asset('material') }}/js/plugins/dataTables.material.min.js"></script>
     <!-- select 2 -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <script src="{{ asset('js/select2.min.js') }}"></script>
 
     {{-- show password --}}
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-show-password/1.0.3/bootstrap-show-password.min.js"></script>

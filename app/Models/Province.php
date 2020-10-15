@@ -20,14 +20,14 @@ class Province extends Model
     public $timestamps = false;
     
     protected $casts = [
-        'province_id' => 'integer',
+        'id' => 'integer',
         'province_lat' => 'float',
         'province_lon' => 'float',
         'province_capital_city_id' => 'integer',
         'timezone' => 'integer',
     ];
 
-    protected $primaryKey = 'province_id';
+    protected $primaryKey = 'id';
     
     public function cities()
     {

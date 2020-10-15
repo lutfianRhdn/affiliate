@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 
 use App\Http\Controllers\Controller;
-use App\Mail\KonfirmasiEmail;
+use App\Mail\EmailConfirmation;
 use App\Models\Product;
 use App\Models\Province;
 use App\Models\City;
@@ -123,11 +123,11 @@ class RegisterController extends Controller
         }
         $pass = $data['password'];
         
-        Mail::to($user['email'])->send(new KonfirmasiEmail($user->id, $pass));
+        Mail::to($user['email'])->send(new emailConfirmation($user->id, $pass));
         return $user;
     }
 
-    public function konfirmasiemail($email, $ref_code)
+    public function emailConfirmation($email, $ref_code)
     {
         User::where([
             'email' => $email,
@@ -147,12 +147,12 @@ class RegisterController extends Controller
 
     public function getCity(Request $request)
     {
-        $cities = City::select('city_id','city_name_full')->where('province_id', $request->province)
-            ->orderBy('city_id')
-            ->groupBy('city_id','city_name_full')->get();
+        $cities = new City;
+        $cities = $cities->getCity($request->province);
+        
         $result = array();
         foreach ($cities as $key => $value) {
-            array_push($result, ['id'=>$value->city_id, 'text'=>$value->city_name_full]);
+            array_push($result, ['id'=>$value->id, 'text'=>$value->city_name_full]);
         }
         
         return ['results' => $result];
