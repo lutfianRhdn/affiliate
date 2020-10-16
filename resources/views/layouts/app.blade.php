@@ -19,6 +19,7 @@
     <link href="{{ asset('material') }}/css/material-dashboard.css?v=2.1.1" rel="stylesheet" />
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+    <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet" />
 
      {{-- Bootstrap select --}}
     <link rel="stylesheet"
@@ -162,7 +163,7 @@
     <!-- Library for adding dinamically elements -->
     <script src="{{ asset('material') }}/js/plugins/arrive.min.js"></script>
     <!--  Google Maps Plugin    -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE'"></script>
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE'"></script> -->
     <!-- Chartist JS -->
     <script src="{{ asset('material') }}/js/plugins/chartist.min.js"></script>
     <!--  Notifications Plugin    -->
@@ -174,11 +175,13 @@
     <script src="{{ asset('material') }}/js/settings.js"></script>
     {{-- bootstrap select --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script> -->
 
     <!--  DataTables.net Plugin, full documentation here: https://datatables.net/  -->
     <script src="{{ asset('material') }}/js/plugins/jquery.dataTables.min.js"></script>
     <script src="{{ asset('material') }}/js/plugins/dataTables.material.min.js"></script>
+    <!-- select 2 -->
+    <script src="{{ asset('js/select2.min.js') }}"></script>
 
     {{-- show password --}}
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-show-password/1.0.3/bootstrap-show-password.min.js"></script>

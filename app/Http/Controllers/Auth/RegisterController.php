@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Auth;
 
 
 use App\Http\Controllers\Controller;
-use App\Mail\KonfirmasiEmail;
+use App\Mail\EmailConfirmation;
 use App\Models\Product;
 use App\Models\Province;
+use App\Models\City;
 use App\Models\Regency;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
@@ -53,8 +54,10 @@ class RegisterController extends Controller
     }
 
     public function index() {
-        $product = Product::all();
-        $provinces = Province::all();
+        $model_product = new Product;
+        $product = $model_product->getData();
+        $model_province = new Province;
+        $provinces = $model_province->getData();
         return view("auth.register", ['products' => $product, 'provinces' => $provinces]);
     }
 
@@ -97,35 +100,32 @@ class RegisterController extends Controller
 
     protected function create(array $data)
     {
+        $permitted_chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $random = substr(str_shuffle($permitted_chars), 0, 6);
+        $model_user = new User;
+        $product = new Product;
+        $regex = $product->getRegex($data['product_id']);
+        do{
+            $ref_code = $regex->regex.$random;
+            $check = $model_user->getRefCode($ref_code);
+        }while($check != null);
 
-        $regex = DB::table('products')->select('products.regex')->where('products.id', $data['product_id'])->get();
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'phone' => $data['phone'],
-            'product_id' => $data['product_id'],
-            'password' => Hash::make($data['password']),
-            'role' => $data['role'],
-            'ref_code' => $regex[0]->regex . strtoupper(Str::random(6)),
-            'country' => $data['country'],
-            'state' => $data['state'],
-            'region' => $data['city'],
-            'address' => $data['address'],
-        ]);
+        if($check == null){
+            $user = $model_user->createUser($data, $ref_code);
+        }
+        $pass = $data['password'];
         
-        
-        Mail::to($user['email'])->send(new KonfirmasiEmail($user));
+        Mail::to($user['email'])->send(new emailConfirmation($user->id, $pass));
         return $user;
     }
 
-    public function konfirmasiemail($email, $ref_code)
+    public function emailConfirmation($email, $ref_code)
     {
         User::where([
             'email' => $email,
             'ref_code' => $ref_code])
             ->update([
-                'register_status' => '1', 
-                'ref_code' => NULL]);
+                'register_status' => '1']);
                 
         return redirect('login')->with('regis-succ', 'Email activated!');
     }
@@ -135,5 +135,18 @@ class RegisterController extends Controller
         $region = DB::table('indoregion_regencies')->select('indoregion_regencies.id', 'indoregion_regencies.name')->where('indoregion_regencies.province_id', $request->id)->get();
 
         return response()->json($region);
+    }
+
+    public function getCity(Request $request)
+    {
+        $cities = new City;
+        $cities = $cities->getCity($request->province);
+        
+        $result = array();
+        foreach ($cities as $key => $value) {
+            array_push($result, ['id'=>$value->id, 'text'=>$value->city_name_full]);
+        }
+        
+        return ['results' => $result];
     }
 }
