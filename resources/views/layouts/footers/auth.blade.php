@@ -24,7 +24,7 @@
       <script>
         document.write(new Date().getFullYear())
       </script>, Powered by
-      <a href="https://www.smooets.com/" target="_blank" class="text-smooets">Smooets</a> <span>Internship</span>
+      <a href="https://www.smooets.com/" target="_blank" class="text-smooets">Smooets</a>
     </div>
   </div>
 </footer>
