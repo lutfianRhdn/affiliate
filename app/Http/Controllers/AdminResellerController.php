@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\LogActivity;
 use App\Mail\KonfirmasiEmail;
+use App\Mail\EmailApproval;
 use App\Models\Product;
 use App\Models\Province;
 use App\Models\User;
@@ -22,13 +23,12 @@ class AdminResellerController extends Controller
      */
     public function index()
     {
-        $users = DB::table('users')
-                    ->join('products', 'users.product_id', '=', 'products.id')
-                    ->select('users.*', 'products.product_name', 'products.regex')
-                    ->where('users.role', 2)
-                    ->get();
-        $products = Product::all();
-        $provinces = Province::all();
+        $product = new Product;
+        $products = $product->getData();
+        $province = new Province;
+        $provinces = $province->getData();
+        $user = new User;
+        $users = $user->getResellerData();
         return view('admin.resellerAdmin', ['users' => $users, 'products' => $products, 'provinces' => $provinces]);
     }
 
@@ -153,5 +153,19 @@ class AdminResellerController extends Controller
         User::destroy($request->id);
         LogActivity::addToLog("Menghapus akun" . $request->email);
         return redirect("/admin/reseller")->with('status', 'Data berhasil dihapus');
+    }
+
+    public function getApproval(Request $request)
+    {
+        $user = new User;
+        $approval = empty($request->approve_note) ? $user->getApproval($request->id) : $user->getEjectApproval($request->id, $request->approve_note);
+        if($approval){
+            $data = $user->getUser($request->id);
+            Mail::to($data->email)->send(new emailApproval($data->id));
+            $note = empty($request->approve_note) ? " is approved" : " is ejected";
+        }else{
+            $note = "Something wrong";
+        }
+        return ['success' => $data->name . $note];
     }
 }

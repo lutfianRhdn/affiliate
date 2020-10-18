@@ -30,6 +30,8 @@ class User extends Authenticatable
         'state',
         'region',
         'address',
+        'approve',
+        'approve_note',
     ];
 
     /**
@@ -52,6 +54,17 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    
+    public function role()
+    {
+        return $this->belongsTo('App\Model\Role','role_id');
+    }
+
+    public function getUser($id)
+    {
+        $user = User::find($id);
+        return $user;
+    }
 
     public function getRefCode($data)
     {
@@ -61,10 +74,11 @@ class User extends Authenticatable
 
     public function createUser($data, $ref_code)
     {
+        $phone = str_replace("-", "", $data['phone']);
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'phone' => $data['phone'],
+            'phone' => $phone,
             'product_id' => $data['product_id'],
             'password' => Hash::make($data['password']),
             'role' => $data['role'],
@@ -88,5 +102,43 @@ class User extends Authenticatable
             ->join('provinces','provinces.id','=','users.state')->first();
 
         return $data;
+    }
+
+    public function getDataEmailConfirmation($id)
+    {
+        $data = User::select('name','ref_code','approve','approve_note')
+            ->where('users.id', $id)->first();
+
+        return $data;
+    }
+
+    public function emailConfirmation($email, $ref_code)
+    {
+        $data = User::where(['email' => $email, 'ref_code' => $ref_code])
+        ->update(['register_status' => '1']);
+        return $data;
+    }
+
+    public function getResellerData()
+    {
+        $data = User::select('users.*', 'products.product_name', 'products.regex')
+                ->join('products', 'users.product_id', '=', 'products.id')
+                ->where('users.role', 2)
+                ->get();
+        return $data;
+    }
+
+    public function getApproval($id)
+    {
+        $data = User::find($id);
+        $result = $data->update(array('approve' => 1));
+        return $result;
+    }
+
+    public function getEjectApproval($id, $approve_note)
+    {
+        $data = User::find($id);
+        $result = $data->update(array('approve' => 0, 'approve_note' => $approve_note));
+        return $result;
     }
 }

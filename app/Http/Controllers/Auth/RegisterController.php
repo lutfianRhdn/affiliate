@@ -77,12 +77,14 @@ class RegisterController extends Controller
                 'regex:/[A-Z]/',
                 'regex:/[0-9]/',
                 'regex:/[@$!%*#?&]/'],
+            'password_confirmation' => ['required_with:password','same:password'],
             'phone' => ['required', 'min:9', 'max:14'],
             'product_id' => ['required'],
             'country' => ['required'],
             'state' => ['required'],
+            'city' => ['required'],
             'address' => ['required'],
-            'policy' => ['required']
+            'policy' => ['in:on']
         ]);
     }
 
@@ -116,18 +118,17 @@ class RegisterController extends Controller
         $pass = $data['password'];
         
         Mail::to($user['email'])->send(new emailConfirmation($user->id, $pass));
-        return $user;
+        return redirect('login')->with('regis-succ', 'Your account has been created. Check your email to activate your account.');
     }
 
     public function emailConfirmation($email, $ref_code)
     {
-        User::where([
-            'email' => $email,
-            'ref_code' => $ref_code])
-            ->update([
-                'register_status' => '1']);
-                
-        return redirect('login')->with('regis-succ', 'Email activated!');
+        $user = new User;
+        if($user->emailConfirmation($email, $ref_code)){
+            return redirect('login')->with('regis-succ', 'Your account has been successfully activated, now you have to wait for admin approval.');
+        }else{
+            return redirect('login')->with('error', 'Something went wrong.');
+        }
     }
 
     public function store(Request $request)
