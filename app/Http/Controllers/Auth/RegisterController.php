@@ -113,7 +113,7 @@ class RegisterController extends Controller
         $pass = $data['password'];
         
         Mail::to($user['email'])->send(new emailConfirmation($user->id, $pass));
-        return redirect('login')->with('regis-succ', 'Your account has been created. Check your email to activate your account.');
+        return $user;
     }
 
     public function emailConfirmation($email, $ref_code)
