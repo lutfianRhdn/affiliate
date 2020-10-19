@@ -229,8 +229,11 @@ Program'), 'titlePage' => 'Registration'])
                 url: '/registration/get-city',
                 dataType: 'json',
                 type : 'GET',
-                data: {
-                    province: $('#province').val()
+                data: function (term) {
+                    return {
+                        term: term,
+                        province: $('#province').val(),
+                    };
                 },
             },
         });
@@ -248,8 +251,11 @@ Program'), 'titlePage' => 'Registration'])
                     url: '/registration/get-city',
                     dataType: 'json',
                     type : 'GET',
-                    data: {
-                        province: $('#province').val()
+                    data: function (term) {
+                        return {
+                            term: term,
+                            province: $('#province').val(),
+                        };
                     },
                 },
             });

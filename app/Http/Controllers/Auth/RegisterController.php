@@ -134,9 +134,10 @@ class RegisterController extends Controller
     }
 
     public function getCity(Request $request)
-    {
+    {   
+        $term = empty($request->term['term']) ? '' : ($request->term['term']);
         $cities = new City;
-        $cities = $cities->getCity($request->province);
+        $cities = $cities->getCity($request->province, $term);
         
         $result = array();
         foreach ($cities as $key => $value) {
