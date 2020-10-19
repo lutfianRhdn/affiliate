@@ -5,7 +5,7 @@ Program'), 'titlePage' => 'Registration'])
 <div class="container" style="height: auto;">
     <div class="row align-items-center">
         <div class="col-lg-9 col-md-8 col-sm-8 ml-auto mr-auto">
-            <form class="form" method="POST" action="{{ route('register') }}">
+            <form class="form" method="POST" action="{{ route('register') }}" id="register-form">
                 @csrf
                 <div class="card card-login card-hidden">
                     <div class="card-header card-header-primary text-center pb-4 pt-4">
@@ -15,7 +15,7 @@ Program'), 'titlePage' => 'Registration'])
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group {{ $errors->has('name') ? ' has-danger' : '' }}">
-                                    <label for="name">Name</label>
+                                    <label for="name">Name <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control pt-3" id="name" placeholder="Full Name"
                                         name="name" value="{{ old('name') }}">
                                     @if ($errors->has('name'))
@@ -25,7 +25,7 @@ Program'), 'titlePage' => 'Registration'])
                                     @endif
                                 </div>
                                 <div class="form-group mt-2 {{ $errors->has('email') ? ' has-danger' : '' }}">
-                                    <label for="email">Email Address</label>
+                                    <label for="email">Email Address <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control pt-3" id="email"
                                         placeholder="email@example.com" name="email" value="{{ old('email') }}">
                                     @if ($errors->has('email'))
@@ -36,7 +36,7 @@ Program'), 'titlePage' => 'Registration'])
                                 </div>
                                 <div class="form-group mt-2 {{ $errors->has('phone') ? ' has-danger' : '' }}">
                                     <label for="phone">Phone Number</label>
-                                    <input type="number" oninput="this.value=this.value.replace(/[^0-9]/g,'');"
+                                    <input type="text" oninput="this.value=this.value.replace(/[^0-9]/g,'');"
                                         class="form-control pt-3" id="phone" placeholder="081xxx" name="phone"
                                         value="{{ old('phone') }}">
                                     @if ($errors->has('phone'))
@@ -46,7 +46,7 @@ Program'), 'titlePage' => 'Registration'])
                                     @endif
                                 </div>
                                 <div class="form-group mt-2 {{ $errors->has('country') ? ' has-danger' : '' }}">
-                                    <label for="country">Country</label>
+                                    <label for="country">Country <span class="text-danger">*</span></label>
                                     <select class="form-control" data-style="btn btn-link" id="country" name="country">
                                         <option selected value="Indonesia">Indonesia</option>
                                     </select>
@@ -60,7 +60,7 @@ Program'), 'titlePage' => 'Registration'])
                                 <div class="row ml-1">
                                 <div class="col-6" style="margin-left: -1rem">
                                     <div class="form-group mt-2 {{ $errors->has('state') ? ' has-danger' : '' }}">
-                                        <label for="state">State/Province</label>
+                                        <label for="state">State/Province <span class="text-danger">*</span></label>
                                         <select class="form-control" data-style="btn btn-link" id="province" name="state" value="{{ old('province') }}">
                                             <option value="" selected disabled>Select your province</option>
                                             @foreach ($provinces as $province)
@@ -77,7 +77,7 @@ Program'), 'titlePage' => 'Registration'])
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group {{ $errors->has('city') ? ' has-danger' : '' }}">
-                                        <label for="city">City</label>
+                                        <label for="city">City <span class="text-danger">*</span></label>
                                         <select class="form-control" data-style="btn btn-link" id="city" name="city" value="{{ old('city') }}">
                                             <option value="" selected disabled>Select your city</option>
                                         </select>
@@ -93,7 +93,7 @@ Program'), 'titlePage' => 'Registration'])
                             </div>
                             <div class="col-6">
                                 <div class="form-group mt-2 {{ $errors->has('address') ? ' has-danger' : '' }}">
-                                    <label for="address">Address</label>
+                                    <label for="address">Address <span class="text-danger">*</span></label>
                                     <textarea class="form-control" id="address" rows="2" value="{{ old('address') }}"
                                         placeholder="jl.xxx no xxx" name="address"></textarea>
                                     @if ($errors->has('address'))
@@ -104,9 +104,10 @@ Program'), 'titlePage' => 'Registration'])
                                     @endif
                                 </div>
                                 <div class="form-group mt-2 {{ $errors->has('product_id') ? ' has-danger' : '' }}">
-                                    <label for="product_id">Category Product</label>
+                                    <label for="product_id">Category Product <span class="text-danger">*</span></label>
                                     <select class="form-control custom-select" data-style="btn btn-link" id="product_id"
                                         name="product_id">
+                                        <option value="" selected disabled>Select Product</option>
                                         @foreach ($products as $product)
                                         <option value="{{ $product->id }}">{{$product->product_name}}</option>
                                         @endforeach
@@ -119,9 +120,9 @@ Program'), 'titlePage' => 'Registration'])
                                     @endif
                                 </div>
                                 <div class="form-group mt-2 {{ $errors->has('password') ? ' has-danger' : '' }}">
-                                    <label for="password">Password</label>
+                                    <label for="password">Password <span class="text-danger">*</span></label>
                                     <input type="password" class="form-control pt-3" id="password"
-                                        placeholder="Password123!" name="password">
+                                        placeholder="********" name="password">
                                 <span class="form-check-sign" id="check">
                                     <i class="fa fa-eye text-secondary" aria-hidden="true" id="icon-pass"></i>
                                 </span>
@@ -134,9 +135,9 @@ Program'), 'titlePage' => 'Registration'])
                                 </div>
                                 <div
                                     class="form-group mt-3 {{ $errors->has('password_confirmation') ? ' has-danger' : '' }}">
-                                    <label for="password">Password Confirmation</label>
+                                    <label for="password">Password Confirmation <span class="text-danger">*</span></label>
                                     <input type="password" class="form-control pt-3" id="password_confirmation"
-                                        placeholder="Password123!" name="password_confirmation">
+                                        placeholder="********" name="password_confirmation">
                                         <span id="check2"><i class="fa fa-eye text-secondary" aria-hidden="true" id="icon-pass2"></i></span>
                                         <span id="confirm-message2" class="confirm-message"></span>
                                     @if ($errors->has('password_confirmation'))
@@ -207,7 +208,6 @@ Program'), 'titlePage' => 'Registration'])
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Agree</button>
             </div>
         </div>
     </div>
@@ -229,17 +229,17 @@ Program'), 'titlePage' => 'Registration'])
                 url: '/registration/get-city',
                 dataType: 'json',
                 type : 'GET',
-                data: {
-                    province: $('#province').val()
+                data: function (term) {
+                    return {
+                        term: term,
+                        province: $('#province').val(),
+                    };
                 },
             },
         });
         //field phone just numbers
-        $("#phone").on("keypress keyup blur",function (event) {    
-           $(this).val($(this).val().replace(/[^\d].+/, ""));
-            if (event.which > 31 && (event.which < 48 || event.which > 57)) {
-                event.preventDefault();
-            }
+        $("#phone").on("keypress keyup blur",function (event) {  
+            $(this).val($(this).val().replace(/(\d{4})\-?(\d{4})\-?(\d{4})/,'$1-$2-$3'));
         });
 
 
@@ -251,8 +251,11 @@ Program'), 'titlePage' => 'Registration'])
                     url: '/registration/get-city',
                     dataType: 'json',
                     type : 'GET',
-                    data: {
-                        province: $('#province').val()
+                    data: function (term) {
+                        return {
+                            term: term,
+                            province: $('#province').val(),
+                        };
                     },
                 },
             });

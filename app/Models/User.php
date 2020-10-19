@@ -30,6 +30,8 @@ class User extends Authenticatable
         'state',
         'region',
         'address',
+        'approve',
+        'approve_note',
     ];
 
     /**
@@ -52,19 +54,31 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    
+    public function role()
+    {
+        return $this->belongsTo('App\Model\Role','role_id');
+    }
+
+    public function getUser($id)
+    {
+        $user = User::find($id);
+        return $user;
+    }
 
     public function getRefCode($data)
     {
-        $data = User::where('ref_code', $data)->first();
+        $data = User::select('id')->where('ref_code', $data)->first();
         return $data;
     }
 
     public function createUser($data, $ref_code)
     {
+        $phone = str_replace("-", "", $data['phone']);
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'phone' => $data['phone'],
+            'phone' => $phone,
             'product_id' => $data['product_id'],
             'password' => Hash::make($data['password']),
             'role' => $data['role'],
@@ -88,5 +102,50 @@ class User extends Authenticatable
             ->join('provinces','provinces.id','=','users.state')->first();
 
         return $data;
+    }
+
+    public function getDataEmailConfirmation($id)
+    {
+        $data = User::select('name','ref_code','approve','approve_note')
+            ->where('users.id', $id)->first();
+
+        return $data;
+    }
+
+    public function emailConfirmation($email, $ref_code)
+    {
+        $data = User::select('id','email','name','phone','address','provinces.province_name as state', 'cities.city_name_full as region', 'products.product_name', 'products.regex')
+        ->where(['email' => $email, 'ref_code' => $ref_code])
+        ->update(['register_status' => '1'])
+        ->join('products', 'products.id', '=', 'users.product_id')
+        ->join('provinces', 'provinces.id', '=', 'users.state')
+        ->join('cities', 'cities.id', '=', 'users.region');
+        return $data;
+    }
+
+    public function getResellerData()
+    {
+        $data = User::select('users.id', 'users.name', 'users.phone', 'users.id', 'users.ref_code', 'users.id', 'users.role', 'users.id', 'users.approve', 'users.approve_note', 
+                'users.created_at', 'users.email', 'users.address', 'users.country', 'provinces.province_name as state', 'cities.city_name_full as region', 'products.product_name', 'products.regex')
+                ->join('products', 'products.id', '=', 'users.product_id')
+                ->join('provinces', 'provinces.id', '=', 'users.state')
+                ->join('cities', 'cities.id', '=', 'users.region')
+                ->where('users.role', 2)
+                ->get();
+        return $data;
+    }
+
+    public function getApproval($id)
+    {
+        $data = User::find($id);
+        $result = $data->update(array('approve' => 1));
+        return $result;
+    }
+
+    public function getEjectApproval($id, $approve_note)
+    {
+        $data = User::find($id);
+        $result = $data->update(array('approve' => 0, 'approve_note' => $approve_note));
+        return $result;
     }
 }
