@@ -37,26 +37,28 @@ class AdminUserController extends Controller
                 'regex:/[A-Z]/',
                 'regex:/[0-9]/',
                 'regex:/[@$!%*#?&]/'],
+            'password_confirmation' => ['required_with:password','same:password'],
             'phone' => ['required', 'min:9', 'max:14'],
-            ]);
-            // dd($request->all());
-        // $regex = DB::table('products')->select('products.regex')->where('products.id', $request->product_id)->get();
-        
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'password' => Hash::make($request->password),
-            'role' => $request->role,
-            'ref-code' => '',
-            'register_status' => '1',
-            'country' => 'Indonesia',
-            'state' => 'JAWA BARAT',
-            'region' => 'Kota Bandung',
-            'address' => 'Jl. Holis Regency No.37A, Babakan, Babakan Ciparay'
+            'product_id' => ['required'],
+            'country' => ['required'],
+            'state' => ['required'],
+            'city' => ['required'],
+            'address' => ['required']
         ]);
 
-        $role = $request->role == '1' ? ' Admin' : 'Reseller';
+            $permitted_chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $random = substr(str_shuffle($permitted_chars), 0, 6);
+            $model_user = new User;
+            $product = new Product;
+            $regex = $product->getRegex($request->product_id);
+            do{
+                $ref_code = $regex->regex.$random;
+                $check = $model_user->getRefCode($ref_code);
+            }while($check != null);
+    
+            if($check == null){
+                $user = $model_user->createUser($request->all(), $ref_code);
+            }
         // Mail::to($user['email'])->send(new KonfirmasiEmail($user));
         LogActivity::addToLog("Menambahkan ".$role." ".$request->email);
         return redirect("/admin/user")->with('status', 'Admin successfully added');
