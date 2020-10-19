@@ -114,12 +114,8 @@ class User extends Authenticatable
 
     public function emailConfirmation($email, $ref_code)
     {
-        $data = User::select('id','email','name','phone','address','provinces.province_name as state', 'cities.city_name_full as region', 'products.product_name', 'products.regex')
-        ->where(['email' => $email, 'ref_code' => $ref_code])
-        ->update(['register_status' => '1'])
-        ->join('products', 'products.id', '=', 'users.product_id')
-        ->join('provinces', 'provinces.id', '=', 'users.state')
-        ->join('cities', 'cities.id', '=', 'users.region');
+        $data = User::where(['email' => $email, 'ref_code' => $ref_code])
+        ->update(['register_status' => '1']);
         return $data;
     }
 
