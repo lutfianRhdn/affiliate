@@ -36,7 +36,7 @@ class Province extends Model
     
     public function getData()
     {
-        $provinces = Province::orderBy('province_name')->get();
+        $provinces = Province::select('id','province_name')->orderBy('province_name')->get();
         return $provinces;
     }
 }

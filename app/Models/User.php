@@ -68,7 +68,7 @@ class User extends Authenticatable
 
     public function getRefCode($data)
     {
-        $data = User::where('ref_code', $data)->first();
+        $data = User::select('id')->where('ref_code', $data)->first();
         return $data;
     }
 
@@ -114,15 +114,22 @@ class User extends Authenticatable
 
     public function emailConfirmation($email, $ref_code)
     {
-        $data = User::where(['email' => $email, 'ref_code' => $ref_code])
-        ->update(['register_status' => '1']);
+        $data = User::select('id','email','name','phone','address','provinces.province_name as state', 'cities.city_name_full as region', 'products.product_name', 'products.regex')
+        ->where(['email' => $email, 'ref_code' => $ref_code])
+        ->update(['register_status' => '1'])
+        ->join('products', 'products.id', '=', 'users.product_id')
+        ->join('provinces', 'provinces.id', '=', 'users.state')
+        ->join('cities', 'cities.id', '=', 'users.region');
         return $data;
     }
 
     public function getResellerData()
     {
-        $data = User::select('users.*', 'products.product_name', 'products.regex')
-                ->join('products', 'users.product_id', '=', 'products.id')
+        $data = User::select('users.id', 'users.name', 'users.phone', 'users.id', 'users.ref_code', 'users.id', 'users.role', 'users.id', 'users.approve', 'users.approve_note', 
+                'users.created_at', 'users.email', 'users.address', 'users.country', 'provinces.province_name as state', 'cities.city_name_full as region', 'products.product_name', 'products.regex')
+                ->join('products', 'products.id', '=', 'users.product_id')
+                ->join('provinces', 'provinces.id', '=', 'users.state')
+                ->join('cities', 'cities.id', '=', 'users.region')
                 ->where('users.role', 2)
                 ->get();
         return $data;
