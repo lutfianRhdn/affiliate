@@ -5,7 +5,7 @@ Program'), 'titlePage' => 'Registration'])
 <div class="container" style="height: auto;">
     <div class="row align-items-center">
         <div class="col-lg-9 col-md-8 col-sm-8 ml-auto mr-auto">
-            <form class="form" method="POST" action="{{ route('register') }}" id="register-form">
+            <form class="form" method="POST" action="{{ route('register') }}" id="register-form" onsubmit="return checkForm(this);">
                 @csrf
                 <div class="card card-login card-hidden">
                     <div class="card-header card-header-primary text-center pb-4 pt-4">
@@ -37,7 +37,7 @@ Program'), 'titlePage' => 'Registration'])
                                 <div class="form-group mt-2 {{ $errors->has('phone') ? ' has-danger' : '' }}">
                                     <label for="phone">Phone Number</label>
                                     <input type="text" oninput="this.value=this.value.replace(/[^0-9]/g,'');"
-                                        class="form-control pt-3" id="phone" placeholder="081xxx" name="phone"
+                                        class="form-control pt-3" id="phone" placeholder="08xx-xxxx-xxxxx" name="phone"
                                         value="{{ old('phone') }}">
                                     @if ($errors->has('phone'))
                                     <div id="phone-error" class="error text-danger" for="phone" style="display: block;">
@@ -64,7 +64,7 @@ Program'), 'titlePage' => 'Registration'])
                                         <select class="form-control" data-style="btn btn-link" id="province" name="state" value="{{ old('province') }}">
                                             <option value="" selected disabled>Select your province</option>
                                             @foreach ($provinces as $province)
-                                                <option value="{{$province->id}}">{{$province->province_name}}</option> 
+                                                <option value="{{$province->id}}" {{ old('province') == $province->id ? selected : '' }}>{{$province->province_name}}</option> 
                                             @endforeach
                                         </select>
                                         @if ($errors->has('state'))
@@ -94,8 +94,8 @@ Program'), 'titlePage' => 'Registration'])
                             <div class="col-6">
                                 <div class="form-group mt-2 {{ $errors->has('address') ? ' has-danger' : '' }}">
                                     <label for="address">Address <span class="text-danger">*</span></label>
-                                    <textarea class="form-control" id="address" rows="2" value="{{ old('address') }}"
-                                        placeholder="jl.xxx no xxx" name="address"></textarea>
+                                    <textarea class="form-control" id="address" rows="2"
+                                        placeholder="jl.xxx no xxx" name="address">{{ old('address') }}</textarea>
                                     @if ($errors->has('address'))
                                     <div id="address-error" class="error text-danger" for="address"
                                         style="display: block;">
@@ -123,9 +123,11 @@ Program'), 'titlePage' => 'Registration'])
                                     <label for="password">Password <span class="text-danger">*</span></label>
                                     <input type="password" class="form-control pt-3" id="password"
                                         placeholder="********" name="password">
-                                <span class="form-check-sign" id="check">
-                                    <i class="fa fa-eye text-secondary" aria-hidden="true" id="icon-pass"></i>
-                                </span>
+                                    <span class="form-check-sign" id="check">
+                                        <i class="fa fa-eye text-secondary" aria-hidden="true" id="icon-pass"></i>
+                                    </span>
+                                    <small class="text-danger" id="hint">Password must be contain 8 character, uppercase
+                                        and lowercase letter, number and special character. Ex: Password23!</small>
                                     @if ($errors->has('password'))
                                     <div id="password-error" class="error text-danger" for="password"
                                         style="display: block;">
@@ -161,6 +163,9 @@ Program'), 'titlePage' => 'Registration'])
                                     {{ __('I agree with the ') }} <a href="#" data-toggle="modal"
                                         data-target="#policyModal">{{ __('Privacy Policy') }}</a>
                                 </label>
+                                <div id="agree-required" class="error text-danger" for="policy"
+                                    style="display: block; text-align: center">Privacy Policy is required
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -219,7 +224,14 @@ Program'), 'titlePage' => 'Registration'])
 @push('js')
 <script>
     $(document).ready(function () {
-        
+        $("#hint").hide();
+        $("#agree-required").hide();
+        $("#password").focus(function() {
+            $("#hint").show();
+        });
+        $("#password").blur(function() {
+            $("#hint").hide();
+        });
         $('#product_id').select2();
         $('#country').select2();
         $('#province').select2();
@@ -313,6 +325,15 @@ Program'), 'titlePage' => 'Registration'])
             }
         });
     });
+    function checkForm(form)
+    {
+        if(!form.policy.checked) {
+            $("#agree-required").show();
+            form.policy.focus();
+            return false;
+            }
+        return true;
+    }
 
 </script>
 @endpush

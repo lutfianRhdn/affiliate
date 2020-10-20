@@ -83,8 +83,7 @@ class RegisterController extends Controller
             'country' => ['required'],
             'state' => ['required'],
             'city' => ['required'],
-            'address' => ['required'],
-            'policy' => ['in:on']
+            'address' => ['required']
         ]);
     }
 

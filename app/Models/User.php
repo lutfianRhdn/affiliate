@@ -121,7 +121,7 @@ class User extends Authenticatable
 
     public function getResellerData()
     {
-        $data = User::select('users.id', 'users.name', 'users.phone', 'users.id', 'users.ref_code', 'users.id', 'users.role', 'users.id', 'users.approve', 'users.approve_note', 
+        $data = User::select('users.id', 'users.name', 'users.phone', 'users.register_status', 'users.ref_code', 'users.id', 'users.role', 'users.id', 'users.approve', 'users.approve_note', 
                 'users.created_at', 'users.email', 'users.address', 'users.country', 'provinces.province_name as state', 'cities.city_name_full as region', 'products.product_name', 'products.regex')
                 ->join('products', 'products.id', '=', 'users.product_id')
                 ->join('provinces', 'provinces.id', '=', 'users.state')
