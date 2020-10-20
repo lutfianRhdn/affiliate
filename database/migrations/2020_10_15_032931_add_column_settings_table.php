@@ -15,7 +15,6 @@ class AddColumnSettingsTable extends Migration
     {
         Schema::table('settings', function (Blueprint $table){
             $table->string('product_name')->after('value')->nullable();
-            $table->renameColumn('orginazation_id', 'organization_id');
         });
     }
 
@@ -28,7 +27,6 @@ class AddColumnSettingsTable extends Migration
     {
         Schema::table('settings', function (Blueprint $table) {
             $table->dropColumn('product_name');
-            $table->renameColumn('organization_id', 'orginazation_id');
         });
     }
 }
