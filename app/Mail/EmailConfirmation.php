@@ -34,6 +34,6 @@ class EmailConfirmation extends Mailable
         $user = new User;
         $data = $user->getDataEmail($this->user);
 
-        return $this->view('auth.emailTemplate', ["user" => $data, "pass" => $this->pass]);
+        return $this->view('auth.emailConfirmation', ["user" => $data, "pass" => $this->pass]);
     }
 }
