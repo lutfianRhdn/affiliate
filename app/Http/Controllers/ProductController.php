@@ -51,7 +51,7 @@ class ProductController extends Controller
             'regex' => $request->regex . "-"
         ]);
         LogActivity::addToLog("Menambahkan product ".$request->product_name);
-        return redirect('/admin/product')->with('status', 'Data inserted successfully');
+        return redirect(route('admin.product.index'))->with('status', 'Data inserted successfully');
     }
 
     /**
@@ -73,7 +73,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        return view('admin.editProduct', compact('product'));
+        // 
     }
 
     /**
@@ -97,8 +97,8 @@ class ProductController extends Controller
             'regex' => $request->regex."-",
             ]);
         
-        LogActivity::addToLog("Mengedit produk id ".$product->id);
-        return redirect('/admin/product')->with('status', 'Data updated successfully');
+        LogActivity::addToLog("Edit product id ".$product->id);
+        return redirect(route('admin.product.index'))->with('status', 'Data updated successfully');
     }
 
     /**
@@ -110,7 +110,7 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         Product::destroy($product->id);
-        LogActivity::addToLog("Menghapus product ".$product->product_name);
-        return redirect('/admin/product')->with('status', 'Item deleted successfully');
+        LogActivity::addToLog("Delete product ".$product->product_name);
+        return redirect(route('admin.product.index'))->with('status', 'Item deleted successfully');
     }
 }

@@ -40,7 +40,7 @@ class RoleController extends Controller
         $this->validate($request, ['name' => ['required']]);
         Role::create(['name' => $request->name]);
         LogActivity::addToLog("Add Role " . $request->name);
-        return redirect('/admin/role');
+        return redirect(route('admin.role.index'));
 
     }
 
@@ -78,7 +78,7 @@ class RoleController extends Controller
         $this->validate($request, ['name' => ['required']]);
         Role::where('id', $role->id)->update(['name' => $request->name]);
         LogActivity::addToLog("Add Role " . $request->name);
-        return redirect('/admin/role');
+        return redirect(route('admin.role.index'));
     }
 
     /**
@@ -91,6 +91,6 @@ class RoleController extends Controller
     {
         Role::destroy($role->id);
         LogActivity::addToLog('Delete role ' . $role->name);
-        return redirect('/admin/role');
+        return redirect(route('admin.role.index'));
     }
 }
