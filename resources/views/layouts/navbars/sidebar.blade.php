@@ -24,16 +24,16 @@
             <b class="caret"></b>
           </p>
         </a>
-        <div class="collapse show" id="adminService">
+        <div class="collapse {{ ($activePage == 'reseller' || $activePage == 'admin') ? ' show' : '' }}" id="adminService">
           <ul class="nav">
             <li class="nav-item{{ $activePage == 'admin' ? ' active' : '' }}">
-              <a class="nav-link" href="{{ url('/admin/user') }}">
+              <a class="nav-link" href="{{ route('admin.user.index') }}">
                 <span class="sidebar-mini"> AD </span>
                 <span class="sidebar-normal"> {{ __('Admin') }} </span>
               </a>
             </li>
             <li class="nav-item{{ $activePage == 'reseller' ? ' active' : '' }}">
-              <a class="nav-link" href="{{ url('/admin/reseller') }}">
+              <a class="nav-link" href="{{ route('admin.reseller.index') }}">
                 <span class="sidebar-mini"> RS </span>
                 <span class="sidebar-normal">{{ __('Reseller') }} </span>
               </a>
@@ -42,25 +42,25 @@
         </div>
       </li>
       <li class="nav-item{{ $activePage == 'role' ? ' active' : '' }}">
-        <a class="nav-link" href="">
-          <i class="material-icons">content_paste</i>
+        <a class="nav-link" href="{{ route('admin.role.index') }}">
+          <i class="material-icons">admin_panel_settings</i>
             <p>{{ __('Role Management') }}</p>
         </a>
       </li>
       <li class="nav-item{{ $activePage == 'product' ? ' active' : '' }}">
-        <a class="nav-link" href="{{ url('/admin/product') }}">
+        <a class="nav-link" href="{{ route('admin.product.index') }}">
           <i class="material-icons">content_paste</i>
             <p>{{ __('Product') }}</p>
         </a>
       </li>
       <li class="nav-item{{ $activePage == 'setting' ? ' active' : '' }}">
-        <a class="nav-link" href="/admin/setting">
+        <a class="nav-link" href="{{ route('admin.setting.index')}}">
           <i class="material-icons">settings_applications</i>
             <p>{{ __('Settings') }}</p>
         </a>
       </li>
       <li class="nav-item{{ $activePage == 'log' ? ' active' : '' }}">
-        <a class="nav-link" href="/admin/log">
+        <a class="nav-link" href="{{ route('admin.log.index')}}">
           <i class="material-icons">timeline</i>
             <p>{{ __('Log Activity') }}</p>
         </a>
