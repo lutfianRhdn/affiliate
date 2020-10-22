@@ -55,7 +55,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
     
-    public function authorizeRoles($role)
+    public function authorizeRoles($roles)
     {
         if (is_array($roles)) {
             return $this->hasAnyRole($roles) || abort(401, 'This action is unauthorized.');
@@ -74,7 +74,7 @@ class User extends Authenticatable
     
     public function role()
     {
-        return $this->belongsTo('App\Model\Role','role_id');
+        return $this->belongsTo('App\Models\Role','role');
     }
 
     public function getUser($id)
