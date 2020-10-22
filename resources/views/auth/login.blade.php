@@ -51,7 +51,8 @@
                                 <input type="password" name="password" id="password" class="form-control"
                                     placeholder="{{ __('Password...') }}" required>
                                 <span class="form-check-sign" id="check">
-                                    <i class="fa fa-eye text-secondary" aria-hidden="true" id="icon-pass"></i>
+                                    <i class="material-icons password-icon text-secondary" aria-hidden="true"
+                                        id="icon-pass">remove_red_eye</i>
                                 </span>
                             </div>
                             @if ($errors->has('password'))
@@ -71,33 +72,35 @@
                 {{-- <div class="col-6">
                     @if (Route::has('password.request'))
                     <a href="{{ route('password.request') }}" class="text-light">
-                        <small>{{ __('Forgot password?') }}</small>
-                    </a>
-                    @endif
-                </div> --}}
-                <div class="col-12 text-center">
-                    <a href="/registration" class="text-light">
-                        <small>{{ __('Create new account') }}</small>
-                    </a>
-                </div>
+                <small>{{ __('Forgot password?') }}</small>
+                </a>
+                @endif
+            </div> --}}
+            <div class="col-12 text-center">
+                <a href="/registration" class="text-light">
+                    <small>{{ __('Create new account') }}</small>
+                </a>
             </div>
         </div>
     </div>
+</div>
 </div>
 @endsection
 
 @push('js')
 <script>
     $(document).ready(function () {
-        $('#check').click(function () {
-            if ('password' == $('#password').attr('type')) {
-                $('#password').prop('type', 'text');
-                $('#icon-pass').removeClass("fa fa-eye");
-                $('#icon-pass').addClass("fa fa-eye-slash");
+        $('#check').click(function (){
+            input = '#password';
+            icon = '#icon-pass';
+            if ($(input).attr('type') == 'password') {
+                $(input).prop('type', 'text');
+                $(icon).removeClass('text-secondary')
+                $(icon).addClass('text-info');
             } else {
-                $('#password').prop('type', 'password');
-                $('#icon-pass').removeClass("fa fa-eye-slash");
-                $('#icon-pass').addClass("fa fa-eye");
+                $(icon).removeClass('text-info');
+                $(icon).addClass('text-secondary');
+                $(input).prop('type', 'password');
             }
         });
     });

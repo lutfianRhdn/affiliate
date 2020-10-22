@@ -16,9 +16,7 @@ class AdminUserController extends Controller
 {
     public function index()
     {
-        $users = DB::table('users')
-            ->where('role', 1)
-            ->paginate(5);
+        $users = User::where('role', 1)->get();
         return view('admin.user', ['users' => $users]);
     }
 
@@ -60,8 +58,8 @@ class AdminUserController extends Controller
                 $user = $model_user->createUser($request->all(), $ref_code);
             }
         // Mail::to($user['email'])->send(new KonfirmasiEmail($user));
-        LogActivity::addToLog("Menambahkan ".$role." ".$request->email);
-        return redirect("/admin/user")->with('status', 'Admin successfully added');
+        LogActivity::addToLog("Menambahkan Adminn".$request->email);
+        return redirect(route('admin.user.index'))->with('status', 'Admin successfully added');
     }
 
     public function show(User $user)
@@ -76,7 +74,6 @@ class AdminUserController extends Controller
 
     public function update(Request $request, User $user)
     {
-        // dd($request->all());
         $this->validate($request, [
             'name' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'min:9', 'max:14'],
@@ -91,7 +88,7 @@ class AdminUserController extends Controller
             ]);
         $role = $request->role == '1' ? ' Admin' : 'Reseller';
         LogActivity::addToLog("Mengubah data " . $role . " " . $request->email);
-        return redirect("/admin/user")->with('status', 'Berhasil update data '.$request->name);
+        return redirect(route('admin.user.index'))->with('status', 'Berhasil update data '.$request->name);
     }
 
     public function destroy(User $user)
@@ -99,8 +96,8 @@ class AdminUserController extends Controller
         if($user->email != 'admin@admin.com'){
             User::destroy($user->id);
             LogActivity::addToLog("Delete account " . $user->email);
-            return redirect("/admin/user")->with('status', 'Data deleted successfully');
+            return redirect(route('admin.user.index'))->with('status', 'Data deleted successfully');
         }
-        return redirect("/admin/user")->with('statusAdmin', 'Admin cannot be deleted');
+        return redirect(route('admin.user.index'))->with('statusAdmin', 'Admin cannot be deleted');
     }
 }

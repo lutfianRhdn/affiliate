@@ -21,6 +21,8 @@
         href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link href="{{ asset('material') }}/demo/demo.css" rel="stylesheet" />
+    {{-- my style --}}
+    <link rel="stylesheet" href="{{ asset('mystyle.css') }}">
 </head>
 
 <body class="{{ $class ?? '' }}">
@@ -79,9 +81,6 @@
         href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script>
-
-    {{-- my style --}}
-    <link rel="stylesheet" href="{{ asset('mystyle.css') }}">
 
     @stack('js')
 </body>

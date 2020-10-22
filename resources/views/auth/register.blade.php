@@ -5,7 +5,8 @@ Program'), 'titlePage' => 'Registration'])
 <div class="container" style="height: auto;">
     <div class="row align-items-center">
         <div class="col-lg-9 col-md-8 col-sm-8 ml-auto mr-auto">
-            <form class="form" method="POST" action="{{ route('register') }}" id="register-form" onsubmit="return checkForm(this);">
+            <form class="form" method="POST" action="{{ route('register') }}" id="register-form"
+                onsubmit="return checkForm(this);">
                 @csrf
                 <div class="card card-login card-hidden">
                     <div class="card-header card-header-primary text-center pb-4 pt-4">
@@ -58,44 +59,48 @@ Program'), 'titlePage' => 'Registration'])
                                     @endif
                                 </div>
                                 <div class="row ml-1">
-                                <div class="col-6" style="margin-left: -1rem">
-                                    <div class="form-group mt-2 {{ $errors->has('state') ? ' has-danger' : '' }}">
-                                        <label for="state">State/Province <span class="text-danger">*</span></label>
-                                        <select class="form-control" data-style="btn btn-link" id="province" name="state" value="{{ old('province') }}">
-                                            <option value="" selected disabled>Select your province</option>
-                                            @foreach ($provinces as $province)
-                                                <option value="{{$province->id}}" {{ old('province') == $province->id ? selected : '' }}>{{$province->province_name}}</option> 
-                                            @endforeach
-                                        </select>
-                                        @if ($errors->has('state'))
-                                        <div id="state-error" class="error text-danger" for="state"
-                                            style="display: block;">
-                                            <strong>{{ $errors->first('state') }}</strong>
+                                    <div class="col-6" style="margin-left: -1rem">
+                                        <div class="form-group mt-2 {{ $errors->has('state') ? ' has-danger' : '' }}">
+                                            <label for="state">State/Province <span class="text-danger">*</span></label>
+                                            <select class="form-control" data-style="btn btn-link" id="province"
+                                                name="state" value="{{ old('province') }}">
+                                                <option value="" selected disabled>Select your province</option>
+                                                @foreach ($provinces as $province)
+                                                <option value="{{$province->id}}"
+                                                    {{ old('province') == $province->id ? selected : '' }}>
+                                                    {{$province->province_name}}</option>
+                                                @endforeach
+                                            </select>
+                                            @if ($errors->has('state'))
+                                            <div id="state-error" class="error text-danger" for="state"
+                                                style="display: block;">
+                                                <strong>{{ $errors->first('state') }}</strong>
+                                            </div>
+                                            @endif
                                         </div>
-                                        @endif
                                     </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-group {{ $errors->has('city') ? ' has-danger' : '' }}">
-                                        <label for="city">City <span class="text-danger">*</span></label>
-                                        <select class="form-control" data-style="btn btn-link" id="city" name="city" value="{{ old('city') }}">
-                                            <option value="" selected disabled>Select your city</option>
-                                        </select>
-                                        @if ($errors->has('city'))
-                                        <div id="city-error" class="error text-danger" for="city"
-                                            style="display: block;">
-                                            <strong>{{ $errors->first('city') }}</strong>
+                                    <div class="col-6">
+                                        <div class="form-group {{ $errors->has('city') ? ' has-danger' : '' }}">
+                                            <label for="city">City <span class="text-danger">*</span></label>
+                                            <select class="form-control" data-style="btn btn-link" id="city" name="city"
+                                                value="{{ old('city') }}">
+                                                <option value="" selected disabled>Select your city</option>
+                                            </select>
+                                            @if ($errors->has('city'))
+                                            <div id="city-error" class="error text-danger" for="city"
+                                                style="display: block;">
+                                                <strong>{{ $errors->first('city') }}</strong>
+                                            </div>
+                                            @endif
                                         </div>
-                                        @endif
                                     </div>
-                                </div>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="form-group mt-2 {{ $errors->has('address') ? ' has-danger' : '' }}">
                                     <label for="address">Address <span class="text-danger">*</span></label>
-                                    <textarea class="form-control" id="address" rows="2"
-                                        placeholder="jl.xxx no xxx" name="address">{{ old('address') }}</textarea>
+                                    <textarea class="form-control" id="address" rows="2" placeholder="jl.xxx no xxx"
+                                        name="address">{{ old('address') }}</textarea>
                                     @if ($errors->has('address'))
                                     <div id="address-error" class="error text-danger" for="address"
                                         style="display: block;">
@@ -123,8 +128,9 @@ Program'), 'titlePage' => 'Registration'])
                                     <label for="password">Password <span class="text-danger">*</span></label>
                                     <input type="password" class="form-control pt-3" id="password"
                                         placeholder="********" name="password">
-                                    <span class="form-check-sign" id="check">
-                                        <i class="fa fa-eye text-secondary" aria-hidden="true" id="icon-pass"></i>
+                                    <span class="form-check-sign-register" id="check">
+                                        <i class="material-icons password-icon text-secondary" aria-hidden="true"
+                                            id="icon-pass">remove_red_eye</i>
                                     </span>
                                     <small class="text-danger" id="hint">Password must be contain 8 character, uppercase
                                         and lowercase letter, number and special character. Ex: Password23!</small>
@@ -137,11 +143,15 @@ Program'), 'titlePage' => 'Registration'])
                                 </div>
                                 <div
                                     class="form-group mt-3 {{ $errors->has('password_confirmation') ? ' has-danger' : '' }}">
-                                    <label for="password">Password Confirmation <span class="text-danger">*</span></label>
+                                    <label for="password">Password Confirmation <span
+                                            class="text-danger">*</span></label>
                                     <input type="password" class="form-control pt-3" id="password_confirmation"
                                         placeholder="********" name="password_confirmation">
-                                        <span id="check2"><i class="fa fa-eye text-secondary" aria-hidden="true" id="icon-pass2"></i></span>
-                                        <span id="confirm-message2" class="confirm-message"></span>
+                                    <span class="form-check-sign-register" id="check2">
+                                        <i class="material-icons password-icon text-secondary" aria-hidden="true"
+                                            id="icon-pass2">remove_red_eye</i>
+                                    </span>
+                                    <span id="confirm-message2" class="confirm-message"></span>
                                     @if ($errors->has('password_confirmation'))
                                     <div id="password-error" class="error text-danger" for="password_confirmation"
                                         style="display: block;">
@@ -226,10 +236,10 @@ Program'), 'titlePage' => 'Registration'])
     $(document).ready(function () {
         $("#hint").hide();
         $("#agree-required").hide();
-        $("#password").focus(function() {
+        $("#password").focus(function () {
             $("#hint").show();
         });
-        $("#password").blur(function() {
+        $("#password").blur(function () {
             $("#hint").hide();
         });
         $('#product_id').select2();
@@ -240,7 +250,7 @@ Program'), 'titlePage' => 'Registration'])
             ajax: {
                 url: '/registration/get-city',
                 dataType: 'json',
-                type : 'GET',
+                type: 'GET',
                 data: function (term) {
                     return {
                         term: term,
@@ -250,19 +260,19 @@ Program'), 'titlePage' => 'Registration'])
             },
         });
         //field phone just numbers
-        $("#phone").on("keypress keyup blur",function (event) {  
-            $(this).val($(this).val().replace(/(\d{4})\-?(\d{4})\-?(\d{4})/,'$1-$2-$3'));
+        $("#phone").on("keypress keyup blur", function (event) {
+            $(this).val($(this).val().replace(/(\d{4})\-?(\d{4})\-?(\d{4})/, '$1-$2-$3'));
         });
 
 
         //function to chained city
-        $('#province').on('change',function(){
+        $('#province').on('change', function () {
             $('#city').select2({
                 placeholder: "Select City",
                 ajax: {
                     url: '/registration/get-city',
                     dataType: 'json',
-                    type : 'GET',
+                    type: 'GET',
                     data: function (term) {
                         return {
                             term: term,
@@ -272,66 +282,69 @@ Program'), 'titlePage' => 'Registration'])
                 },
             });
         })
-        
-        $('#check').click(function () {
-            if ('password' == $('#password').attr('type')) {
-                $('#password').prop('type', 'text');
-                $('#icon-pass').removeClass("fa fa-eye");
-                $('#icon-pass').addClass("fa fa-eye-slash");
+
+        $('#check').click(function (){
+            input = '#password';
+            icon = '#icon-pass';
+            if ($(input).attr('type') == 'password') {
+                $(input).prop('type', 'text');
+                $(icon).removeClass('text-secondary')
+                $(icon).addClass('text-info');
             } else {
-                $('#password').prop('type', 'password');
-                $('#icon-pass').removeClass("fa fa-eye-slash");
-                $('#icon-pass').addClass("fa fa-eye");
+                $(icon).removeClass('text-info');
+                $(icon).addClass('text-secondary');
+                $(input).prop('type', 'password');
             }
-        });
-        
-        $('#check2').click(function () {
-            if ('password' == $('#password_confirmation').attr('type')) {
-                $('#password_confirmation').prop('type', 'text');
-                $('#icon-pass2').removeClass("fa fa-eye");
-                $('#icon-pass2').addClass("fa fa-eye-slash");
+        }); 
+        $('#check2').click(function (){
+            input = '#password_confirmation';
+            icon = '#icon-pass2';
+            if ($(input).attr('type') == 'password') {
+                $(input).prop('type', 'text');
+                $(icon).removeClass('text-secondary')
+                $(icon).addClass('text-info');
             } else {
-                $('#password_confirmation').prop('type', 'password');
-                $('#icon-pass2').removeClass("fa fa-eye-slash");
-                $('#icon-pass2').addClass("fa fa-eye");
+                $(icon).removeClass('text-info');
+                $(icon).addClass('text-secondary');
+                $(input).prop('type', 'password');
             }
         });
 
         //function for check password confirmation
-        $("#password_confirmation").on("keyup", function(){
+        $("#password_confirmation").on("keyup", function () {
             //Store the password field objects into variables ...
             var password = document.getElementById('password');
-            var confirm  = document.getElementById('password_confirmation');
+            var confirm = document.getElementById('password_confirmation');
             var message = document.getElementById('confirm-message2');
             //Set the colors we will be using ...
             var good_color = "#66cc66";
-            var bad_color  = "#ff6666";
+            var bad_color = "#ff6666";
             //Compare the values in the password field 
             //and the confirmation field
-            if(password.value == confirm.value){
+            if (password.value == confirm.value) {
                 //The passwords match. 
                 //Set the color to the good color and inform
                 //the user that they have entered the correct password 
-                confirm.style.borderColor   = good_color;
-                message.style.color         = good_color;
-                message.innerHTML           = 'Match <i class="fa fa-check"></i>';
-            }else{
+                confirm.style.borderColor = good_color;
+                message.style.color = good_color;
+                message.innerHTML = 'Match <i class="fa fa-check"></i>';
+            } else {
                 //The passwords do not match.
                 //Set the color to the bad color and
                 //notify the user.
-                confirm.style.borderColor   = bad_color;
-                message.style.color         = bad_color;
-                message.innerHTML           = 'Not Match <i class="fa fa-close"></i>';
+                confirm.style.borderColor = bad_color;
+                message.style.color = bad_color;
+                message.innerHTML = 'Not Match <i class="fa fa-close"></i>';
             }
         });
     });
-    function checkForm(form)
-    {
-        if(!form.policy.checked) {
+
+    function checkForm(form) {
+        if (!form.policy.checked) {
             $("#agree-required").show();
             form.policy.focus();
             return false;
-            }
+        }
         return true;
     }
 
