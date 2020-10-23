@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\LogActivity;
+use App\Models\Product;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 
@@ -15,8 +16,9 @@ class SettingController extends Controller
      */
     public function index()
     {
-        $setting = Setting::all();
-        return view('admin.settingAdmin', compact('setting'));
+        $setting = Setting::all()->groupBy('product_id');
+        $products = Product::all();
+        return view('admin.settingAdmin', ['setting' => $setting, 'products' => $products]);
     }
 
     /**
@@ -75,16 +77,18 @@ class SettingController extends Controller
             'key' => 'required',
             'value' => 'required',
             'label' => 'required',
+            'product_id' => 'required'
         ]);
 
         Setting::where('id', $setting->id)->update([
             'key' => $request->key,
             'label' => $request->label,
-            'value' => $request->value
+            'value' => $request->value,
+            'product_id' => $request->product_id
         ]);
         
         LogActivity::addToLog('Merubah settingan Id '. $setting->id);
-        return redirect('/admin/setting');
+        return redirect(route('admin.setting.index'));
     }
 
     /**

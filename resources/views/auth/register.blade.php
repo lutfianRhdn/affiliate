@@ -4,7 +4,7 @@ Program'), 'titlePage' => 'Registration'])
 @section('content')
 <div class="container" style="height: auto;">
     <div class="row align-items-center">
-        <div class="col-lg-9 col-md-8 col-sm-8 ml-auto mr-auto">
+        <div class="col-lg-9 col-sm-12 ml-auto mr-auto">
             <form class="form" method="POST" action="{{ route('register') }}" id="register-form"
                 onsubmit="return checkForm(this);">
                 @csrf
@@ -59,7 +59,7 @@ Program'), 'titlePage' => 'Registration'])
                                     @endif
                                 </div>
                                 <div class="row ml-1">
-                                    <div class="col-6" style="margin-left: -1rem">
+                                    <div class="col-lg-6 col-sm-12" style="margin-left: -1rem">
                                         <div class="form-group mt-2 {{ $errors->has('state') ? ' has-danger' : '' }}">
                                             <label for="state">State/Province <span class="text-danger">*</span></label>
                                             <select class="form-control" data-style="btn btn-link" id="province"
@@ -79,7 +79,7 @@ Program'), 'titlePage' => 'Registration'])
                                             @endif
                                         </div>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-lg-6 col-sm-12">
                                         <div class="form-group {{ $errors->has('city') ? ' has-danger' : '' }}">
                                             <label for="city">City <span class="text-danger">*</span></label>
                                             <select class="form-control" data-style="btn btn-link" id="city" name="city"
@@ -163,19 +163,22 @@ Program'), 'titlePage' => 'Registration'])
                                 <input type="hidden" name="role" value="2">
                             </div>
 
-                            <div class="form-check mt-4 ml-auto mr-auto">
+                            <div class="form-check mt-4 ml-auto mr-auto {{ $errors->has('policy') ? ' has-danger' : '' }}">
                                 <label class="form-check-label">
                                     <input class="form-check-input" type="checkbox" id="policy" name="policy"
                                         {{ old('policy') ? 'checked' : '' }}>
                                     <span class="form-check-sign">
                                         <span class="check"></span>
                                     </span>
-                                    {{ __('I agree with the ') }} <a href="#" data-toggle="modal"
-                                        data-target="#policyModal">{{ __('Privacy Policy') }}</a>
+                                    {{ __('I agree with the ') }}
                                 </label>
-                                <div id="agree-required" class="error text-danger" for="policy"
-                                    style="display: block; text-align: center">Privacy Policy is required
+                                <a href="#" data-toggle="modal"
+                                    data-target="#policyModal">{{ __('Privacy Policy') }}</a>
+                                @if ($errors->has('policy'))
+                                <div id="policy-error" class="error text-danger ml-4" for="policy" style="display: block;">
+                                    <strong>Provacy Policy is required</strong>
                                 </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -283,7 +286,7 @@ Program'), 'titlePage' => 'Registration'])
             });
         })
 
-        $('#check').click(function (){
+        $('#check').click(function () {
             input = '#password';
             icon = '#icon-pass';
             if ($(input).attr('type') == 'password') {
@@ -295,8 +298,8 @@ Program'), 'titlePage' => 'Registration'])
                 $(icon).addClass('text-secondary');
                 $(input).prop('type', 'password');
             }
-        }); 
-        $('#check2').click(function (){
+        });
+        $('#check2').click(function () {
             input = '#password_confirmation';
             icon = '#icon-pass2';
             if ($(input).attr('type') == 'password') {
@@ -341,7 +344,7 @@ Program'), 'titlePage' => 'Registration'])
 
     function checkForm(form) {
         if (!form.policy.checked) {
-            $("#agree-required").show();
+            $("#policy-error").show();
             form.policy.focus();
             return false;
         }
