@@ -39,3 +39,13 @@ input[type=number] {
 .form-check-sign-register .password-icon {
     font-size: 1.2em;
 }
+
+.vertical-center {
+    min-height: 72%;
+    /* Fallback for browsers do NOT support vh unit */
+    min-height: 72vh;
+    /* These two lines are counted as one :-)       */
+
+    display: flex;
+    align-items: center;
+}
