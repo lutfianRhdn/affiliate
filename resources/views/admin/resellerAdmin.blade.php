@@ -57,8 +57,8 @@
                                         <td>
                                             <div class="togglebutton">
                                                 <label id="status">
-                                                    <input type="checkbox" {{ !empty($user->regex) ? 'checked' : ''}}>
-                                                    <span class="toggle"></span>
+                                                    <input type="checkbox" data-id="{{$user->id}}" id="change-status" {{ ($user->status == 1) ? 'checked' : ''}}>
+                                                    <span class="toggle" ></span>
                                                 </label>
                                             </div>
                                         </td>
@@ -76,7 +76,7 @@
                                                     <i class="material-icons">disabled_by_default</i>
                                                     <div class="ripple-container"></div>
                                                 </a>
-                                            @else
+                                            @elseif($user->status == 0 && $user->approve == 0 && empty($user->approve_note))
                                             <a rel="tooltip" class="btn btn-warning btn-fab btn-fab-mini btn-round approvalForm"
                                                 href="" data-id="{{$user->id}}" data-placement="bottom" title="Approval" data-toggle="modal"
                                                 data-target="#approvalModal{{$user->id}}">
@@ -439,6 +439,26 @@
         $('.selectpicker').selectpicker();
         $('#selectpicker-role').selectpicker();
         $('#selectpicker-productID').selectpicker();
+        
+        $('#change-status').change(function(){
+            $.ajax({
+                url : '{{route("getStatus")}}',
+                type : 'GET',
+                data : {
+                    id : $(this).attr("data-id"),
+                },
+                dataType : 'json',
+                success : function(data){
+                    $('.alert-approval').append('<div class="alert alert-success alert-dismissible fade show" role="alert">'+data.success+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+                },
+                error : function (xhr, status){
+                    console.log(status);
+                },
+                complete : function(){
+                    alreadyloading = false;
+                }
+            });
+        });
 
         // $(".togglebutton").bootstrapSwitch();
         $('.approvalForm').click(function(){

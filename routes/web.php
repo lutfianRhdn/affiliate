@@ -50,6 +50,7 @@ Route::group(['middleware' => ['auth','role:admin']], function () {
 	// Route::patch('/admin/{user}', [AdminUserController::class, 'update'])->middleware('auth');
 	Route::resource('/admin/user', AdminUserController::class, ["as" => "admin"]);
 	Route::post('/admin/approval', [AdminResellerController::class, 'getApproval'])->name('getApproval');
+	Route::get('/admin/status', [AdminResellerController::class, 'getStatus'])->name('getStatus');
 	Route::resource('/admin/reseller', AdminResellerController::class, ["as" => "admin"]);
 	Route::resource('/admin/role', RoleController::class, ["as" => "admin"]);
 	Route::resource('/admin/product', ProductController::class, ["as" => "admin"]);

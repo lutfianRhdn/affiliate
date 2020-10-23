@@ -32,6 +32,7 @@ class User extends Authenticatable
         'address',
         'approve',
         'approve_note',
+        'status',
     ];
 
     /**
@@ -138,7 +139,7 @@ class User extends Authenticatable
 
     public function getResellerData()
     {
-        $data = User::select('users.id', 'users.name', 'users.phone', 'users.register_status', 'users.ref_code', 'users.id', 'users.role', 'users.id', 'users.approve', 'users.approve_note', 
+        $data = User::select('users.id', 'users.name', 'users.phone', 'users.register_status', 'users.status', 'users.ref_code', 'users.id', 'users.role', 'users.id', 'users.approve', 'users.approve_note', 
                 'users.created_at', 'users.email', 'users.address', 'users.country', 'provinces.province_name as state', 'cities.city_name_full as region', 'products.product_name', 'products.regex')
                 ->join('products', 'products.id', '=', 'users.product_id')
                 ->join('provinces', 'provinces.id', '=', 'users.state')
@@ -151,7 +152,7 @@ class User extends Authenticatable
     public function getApproval($id)
     {
         $data = User::find($id);
-        $result = $data->update(array('approve' => 1));
+        $result = $data->update(array('status' => 1, 'approve' => 1));
         return $result;
     }
 
@@ -159,6 +160,13 @@ class User extends Authenticatable
     {
         $data = User::find($id);
         $result = $data->update(array('approve' => 0, 'approve_note' => $approve_note));
+        return $result;
+    }
+
+    public function getStatus($id)
+    {
+        $data = User::find($id);
+        $result = $data->status == 0 ? $data->update(array('status' => 1)) : $data->update(array('status' => 0));
         return $result;
     }
 }
