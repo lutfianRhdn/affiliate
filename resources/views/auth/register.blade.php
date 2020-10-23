@@ -344,7 +344,7 @@ Program'), 'titlePage' => 'Registration'])
 
     function checkForm(form) {
         if (!form.policy.checked) {
-            $("#agree-required").show();
+            $("#policy-error").show();
             form.policy.focus();
             return false;
         }
