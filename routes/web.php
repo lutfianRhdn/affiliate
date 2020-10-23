@@ -41,21 +41,26 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Auth::routes();
-Route::get('/admin', [HomeController::class, 'index'])->name('admin')->middleware('auth');
-// Route::get('/admin/user', [AdminUserController::class, 'index'])->name('admin.user')->middleware('auth');
-// Route::get('/admin/user/create', [AdminUserController::class, 'create']);
-// Route::delete('/admin/{user}', [AdminUserController::class, 'destroy'])->middleware('auth');
-// Route::get('/admin/{user}/edit', [AdminUserController::class, 'edit']);
-// Route::patch('/admin/{user}', [AdminUserController::class, 'update'])->middleware('auth');
-Route::resource('/admin/user', AdminUserController::class, ["as" => "admin"]);
-Route::post('/admin/approval', [AdminResellerController::class, 'getApproval'])->name('getApproval');
-Route::resource('/admin/reseller', AdminResellerController::class, ["as" => "admin"]);
-Route::resource('/admin/role', RoleController::class, ["as" => "admin"]);
-Route::resource('/admin/product', ProductController::class, ["as" => "admin"]);
-Route::resource('/admin/setting', SettingController::class, ["as" => "admin"]);
-Route::resource('/admin/log', LogActivityController::class, ["as" => "admin"]);
+Route::group(['middleware' => ['auth','role:admin']], function () {
+	Route::get('/admin', [HomeController::class, 'index'])->name('admin');
+	// Route::get('/admin/user', [AdminUserController::class, 'index'])->name('admin.user')->middleware('auth');
+	// Route::get('/admin/user/create', [AdminUserController::class, 'create']);
+	// Route::delete('/admin/{user}', [AdminUserController::class, 'destroy'])->middleware('auth');
+	// Route::get('/admin/{user}/edit', [AdminUserController::class, 'edit']);
+	// Route::patch('/admin/{user}', [AdminUserController::class, 'update'])->middleware('auth');
+	Route::resource('/admin/user', AdminUserController::class, ["as" => "admin"]);
+	Route::post('/admin/approval', [AdminResellerController::class, 'getApproval'])->name('getApproval');
+	Route::get('/admin/status', [AdminResellerController::class, 'getStatus'])->name('getStatus');
+	Route::resource('/admin/reseller', AdminResellerController::class, ["as" => "admin"]);
+	Route::resource('/admin/role', RoleController::class, ["as" => "admin"]);
+	Route::resource('/admin/product', ProductController::class, ["as" => "admin"]);
+	Route::resource('/admin/setting', SettingController::class, ["as" => "admin"]);
+	Route::resource('/admin/log', LogActivityController::class, ["as" => "admin"]);
+});
 
-Route::get('/reseller', [ResellerController::class, 'index'])->name('reseller');
+Route::group(['middleware' => ['auth','role:reseller']], function () {
+	Route::get('/reseller', [ResellerController::class, 'index'])->name('reseller');
+});
 
 
 

@@ -168,4 +168,13 @@ class AdminResellerController extends Controller
         }
         return ['success' => $data->name . $note];
     }
+
+    public function getStatus(Request $request)
+    {
+        $user = new User;
+        $data = $user->getStatus($request->id);
+        $data = $user->getUser($request->id);
+        $note = $data->status == 1 ? " is enabled" : " is disabled";
+        return ['success' => $data->name . $note];
+    }
 }

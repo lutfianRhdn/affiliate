@@ -52,7 +52,7 @@ class LoginController extends Controller
             if (auth()->user()->role == 1 && auth()->user()->register_status == 1) {
                 LogActivity::addToLog("Login");
                 return redirect()->route('admin');
-            } elseif (auth()->user()->role == 2 && auth()->user()->register_status == 1) {
+            } elseif (auth()->user()->role == 2 && auth()->user()->approve == 1 && auth()->user()->status == 1) {
                 return redirect()->route('reseller');
             } else {
                 return redirect()->route('login');
