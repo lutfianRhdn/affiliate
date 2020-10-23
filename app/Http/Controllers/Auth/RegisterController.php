@@ -50,7 +50,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        // $this->middleware('guest');
+        $this->middleware('guest')->except('logout'); 
     }
 
     public function index() {
@@ -77,12 +77,13 @@ class RegisterController extends Controller
                 'regex:/[A-Z]/',
                 'regex:/[0-9]/',
                 'regex:/[@$!%*#?&]/'],
+            'password_confirmation' => ['required_with:password','same:password'],
             'phone' => ['required', 'min:9', 'max:14'],
             'product_id' => ['required'],
             'country' => ['required'],
             'state' => ['required'],
-            'address' => ['required'],
-            'policy' => ['required']
+            'city' => ['required'],
+            'address' => ['required']
         ]);
     }
 
@@ -116,13 +117,12 @@ class RegisterController extends Controller
 
     public function emailConfirmation($email, $ref_code)
     {
-        User::where([
-            'email' => $email,
-            'ref_code' => $ref_code])
-            ->update([
-                'register_status' => '1']);
-                
-        return redirect('login')->with('regis-succ', 'Email activated!');
+        $user = new User;
+        if($user->emailConfirmation($email, $ref_code)){
+            return redirect('login')->with('regis-succ', 'Your account has been successfully activated, now you have to wait for admin approval.');
+        }else{
+            return redirect('login')->with('error', 'Something went wrong.');
+        }
     }
 
     public function store(Request $request)
@@ -133,9 +133,10 @@ class RegisterController extends Controller
     }
 
     public function getCity(Request $request)
-    {
+    {   
+        $term = empty($request->term['term']) ? '' : ($request->term['term']);
         $cities = new City;
-        $cities = $cities->getCity($request->province);
+        $cities = $cities->getCity($request->province, $term);
         
         $result = array();
         foreach ($cities as $key => $value) {

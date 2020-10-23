@@ -8,7 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use App\Models\User;
 
-class EmailConfirmation extends Mailable
+class EmailApproval extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -17,11 +17,9 @@ class EmailConfirmation extends Mailable
      *
      * @return void
      */
-
-    public function __construct($user, $pass)
+    public function __construct($user)
     {
         $this->user = $user;
-        $this->pass = $pass;
     }
 
     /**
@@ -30,10 +28,10 @@ class EmailConfirmation extends Mailable
      * @return $this
      */
     public function build()
-    {   
+    {
         $user = new User;
-        $data = $user->getDataEmail($this->user);
+        $data = $user->getDataEmailConfirmation($this->user);
 
-        return $this->view('auth.emailConfirmation', ["user" => $data, "pass" => $this->pass]);
+        return $this->view('auth.emailApproval', ["user" => $data]);
     }
 }

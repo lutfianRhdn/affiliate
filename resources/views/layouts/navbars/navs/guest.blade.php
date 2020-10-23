@@ -12,6 +12,19 @@
     </button>
     <div class="collapse navbar-collapse justify-content-end">
       <ul class="navbar-nav">
+    @auth
+        <li class="nav-item{{ $activePage == 'logout' ? ' active' : '' }}">
+          <a class="nav-link" href="{{ url('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+            <i class="material-icons">fingerprint</i> {{ __('Logout') }}
+          </a>
+        </li>
+        <li class="nav-item{{ $activePage == 'dashboard' ? ' active' : '' }}">
+          <a class="nav-link" href="{{ auth()->user()->role == 1 ? route('admin') : route('reseller')}}">
+            <i class="material-icons">book</i> {{ __('Dashboard') }}
+          </a>
+        </li>
+    @endauth
+    @guest
         <li class="nav-item{{ $activePage == 'register' ? ' active' : '' }}">
           <a href="/registration" class="nav-link">
             <i class="material-icons">person_add</i> {{ __('Register') }}
@@ -22,6 +35,7 @@
             <i class="material-icons">fingerprint</i> {{ __('Login') }}
           </a>
         </li>
+    @endguest
       </ul>
     </div>
   </div>

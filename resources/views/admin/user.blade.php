@@ -31,8 +31,8 @@
                                 @endif
                             </div>
                             <div class="col-12 text-right">
-                                <a href="" class="btn btn-sm btn-primary" data-toggle="modal"
-                                    data-target="#createUserModal">Add new Admin</a>
+                                <!-- <a href="" class="btn btn-sm btn-primary" data-toggle="modal"
+                                    data-target="#createUserModal">Add new Admin</a> -->
                             </div>
                         </div>
                         <div class="">

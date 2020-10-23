@@ -15,12 +15,18 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         DB::table('users')->insert([
-            'name' => 'Admin Admin',
-            'email' => 'admin@material.com',
-            'role' => '1',
-            'password' => Hash::make('secret'),
-            'created_at' => now(),
-            'updated_at' => now()
+        'name' => 'Admin Affiliate',
+        'email' => 'admin@affiliate.com',
+        'role' => '1',
+        'phone' => '08123456789',
+        'register_status' => '1',
+        'country' => 'Indonesia',
+        'state' => '32',
+        'region' => '3204',
+        'address' => 'Jl. Holis Regency No.37A, Babakan, Babakan Ciparay',
+        'password' => Hash::make('admin1234'),
+        'created_at' => now(),
+
         ]);
     }
 }

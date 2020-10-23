@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnSettingsTable extends Migration
+class CreateRolesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class AddColumnSettingsTable extends Migration
      */
     public function up()
     {
-        Schema::table('settings', function (Blueprint $table){
-            $table->string('product_name')->after('value')->nullable();
+        Schema::create('roles', function (Blueprint $table) {
+            $table->id();
+            $table->string('slug')->nullable();
+            $table->string('name');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ class AddColumnSettingsTable extends Migration
      */
     public function down()
     {
-        Schema::table('settings', function (Blueprint $table) {
-            $table->dropColumn('product_name');
-        });
+        Schema::dropIfExists('roles');
     }
 }

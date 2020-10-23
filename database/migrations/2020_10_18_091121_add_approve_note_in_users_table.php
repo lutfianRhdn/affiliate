@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnSettingsTable extends Migration
+class AddApproveNoteInUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddColumnSettingsTable extends Migration
      */
     public function up()
     {
-        Schema::table('settings', function (Blueprint $table){
-            $table->string('product_name')->after('value')->nullable();
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('approve_note')->nullable();
         });
     }
 
@@ -25,8 +25,8 @@ class AddColumnSettingsTable extends Migration
      */
     public function down()
     {
-        Schema::table('settings', function (Blueprint $table) {
-            $table->dropColumn('product_name');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('approve_note');
         });
     }
 }

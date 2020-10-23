@@ -12,7 +12,7 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-4 col-sm-4">
+                            <div class="col-4 col-sm-4 alert-approval">
                                 @if (session('status'))
                                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                                     {{session('status')}}
@@ -57,13 +57,33 @@
                                         <td>
                                             <div class="togglebutton">
                                                 <label id="status">
-                                                    <input type="checkbox" {{ !empty($user->regex) ? 'checked' : ''}}>
-                                                    <span class="toggle"></span>
+                                                    <input type="checkbox" data-id="{{$user->id}}" id="change-status" {{ ($user->status == 1) ? 'checked' : ''}}>
+                                                    <span class="toggle" ></span>
                                                 </label>
                                             </div>
                                         </td>
                                         <td>{{  Carbon\Carbon::parse($user->created_at)->format('d-m-Y')}}</td>
                                         <td class="td-actions text-right">
+                                            @if($user->approve == 1)
+                                                <a rel="tooltip" class="btn btn-primary btn-fab btn-fab-mini btn-round"
+                                                    href="" data-placement="bottom" title="Approved">
+                                                    <i class="material-icons">check_circle</i>
+                                                    <div class="ripple-container"></div>
+                                                </a>
+                                            @elseif($user->approve == 0 && !empty($user->approve_note))
+                                                <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round"
+                                                 data-placement="bottom" title="{{$user->approve_note}}">
+                                                    <i class="material-icons">disabled_by_default</i>
+                                                    <div class="ripple-container"></div>
+                                                </a>
+                                            @elseif($user->status == 0 && $user->approve == 0 && empty($user->approve_note))
+                                            <a rel="tooltip" class="btn btn-warning btn-fab btn-fab-mini btn-round approvalForm"
+                                                href="" data-id="{{$user->id}}" data-placement="bottom" title="Approval" data-toggle="modal"
+                                                data-target="#approvalModal{{$user->id}}">
+                                                <i class="material-icons">approval</i>
+                                                <div class="ripple-container"></div>
+                                            </a>
+                                            @endif
                                             <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round"
                                                 href="" data-placement="bottom" title="Delete" data-toggle="modal"
                                                 data-target="#deleteModal{{$user->id}}">
@@ -79,7 +99,33 @@
                                         </td>
                                     </tr>
 
-
+                                    {{-- modal approval --}}
+                                    <div class="modal fade " id="approvalModal{{$user->id}}" tabindex="-1" role="dialog"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <form action="/admin/approval/{{$user->id}}" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="id" id="user-id" value="{{$user->id}}">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Approval user</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p class="h5">Approve this user {{$user->name}} ?</p>
+                                                        <textarea name="approve_note" class="form-control approve_note" id="approve-{{$user->id}}" placeholder="Reason"></textarea>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary ejectApproval">No</button>
+                                                        <button type="button" class="btn btn-danger submitEject" data-dismiss="modal" >Submit Eject</button>
+                                                        <button type="button" class="btn btn-primary submitApproved" data-dismiss="modal" >Yes</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     {{-- modal delete --}}
                                     <div class="modal fade" id="deleteModal{{$user->id}}" tabindex="-1" role="dialog"
@@ -388,12 +434,91 @@
                 [5, 10, 25, 50, 100, "All"]
             ]
         });
+        var options = "";
         $('#edit-user').tooltip(options);
         $('.selectpicker').selectpicker();
         $('#selectpicker-role').selectpicker();
         $('#selectpicker-productID').selectpicker();
+        
+        $('#change-status').change(function(){
+            $.ajax({
+                url : '{{route("getStatus")}}',
+                type : 'GET',
+                data : {
+                    id : $(this).attr("data-id"),
+                },
+                dataType : 'json',
+                success : function(data){
+                    $('.alert-approval').append('<div class="alert alert-success alert-dismissible fade show" role="alert">'+data.success+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+                },
+                error : function (xhr, status){
+                    console.log(status);
+                },
+                complete : function(){
+                    alreadyloading = false;
+                }
+            });
+        });
 
-        $(".togglebutton").bootstrapSwitch();
+        // $(".togglebutton").bootstrapSwitch();
+        $('.approvalForm').click(function(){
+            $("input[name='id']").val($(this).attr("data-id")),
+            $('.submitEject').hide();
+            $('.approve_note').hide();
+            $('.ejectApproval').show();
+        });
+
+        $(".ejectApproval").click(function(){
+            $('.approve_note').attr('required','true');
+            $('.approve_note').show();
+            $('.ejectApproval').hide();
+            $('.submitEject').show();
+        });
+
+        $('.submitApproved').click(function(){
+            $.ajax({
+                url : '{{route("getApproval")}}',
+                type : 'POST',
+                data : {
+                    _token : $("input[name='_token']").val(),
+                    id : $("input[name='id']").val(),
+                },
+                dataType : 'json',
+                success : function(data){
+                    $('.alert-approval').append('<div class="alert alert-success alert-dismissible fade show" role="alert">'+data.success+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+                    location.reload();
+                },
+                error : function (xhr, status){
+                    console.log(status);
+                },
+                complete : function(){
+                    alreadyloading = false;
+                }
+            });
+        });
+
+        $('.submitEject').click(function(){
+            $.ajax({
+                url : '{{route("getApproval")}}',
+                type : 'POST',
+                data : {
+                    _token : $("input[name='_token']").val(),
+                    id : $("input[name='id']").val(),
+                    approve_note : $("#approve-"+$("input[name='id']").val()).val(),
+                },
+                dataType : 'json',
+                success : function(data){
+                    $('.alert-approval').append('<div class="alert alert-success alert-dismissible fade show" role="alert">'+data.success+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+                    location.reload();
+                },
+                error : function (xhr, status){
+                    console.log(status);
+                },
+                complete : function(){
+                    alreadyloading = false;
+                }
+            });
+        });
     });
 
 </script>
