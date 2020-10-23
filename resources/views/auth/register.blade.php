@@ -1,4 +1,4 @@
-@extends('layouts.app', ['class' => 'off-canvas-sidebar', 'activePage' => 'register', 'title' => __('Affiliate
+@extends('layouts.BaseApp', ['class' => 'off-canvas-sidebar', 'activePage' => 'register', 'title' => __('Affiliate
 Program'), 'titlePage' => 'Registration'])
 
 @section('content')
@@ -99,7 +99,7 @@ Program'), 'titlePage' => 'Registration'])
                             <div class="col-6">
                                 <div class="form-group mt-2 {{ $errors->has('address') ? ' has-danger' : '' }}">
                                     <label for="address">Address <span class="text-danger">*</span></label>
-                                    <textarea class="form-control" id="address" rows="2" placeholder="jl.xxx no xxx"
+                                    <textarea class="form-control" id="address" rows="2" placeholder="Your Address"
                                         name="address">{{ old('address') }}</textarea>
                                     @if ($errors->has('address'))
                                     <div id="address-error" class="error text-danger" for="address"
@@ -127,7 +127,7 @@ Program'), 'titlePage' => 'Registration'])
                                 <div class="form-group mt-2 {{ $errors->has('password') ? ' has-danger' : '' }}">
                                     <label for="password">Password <span class="text-danger">*</span></label>
                                     <input type="password" class="form-control pt-3" id="password"
-                                        placeholder="********" name="password">
+                                        placeholder="Your Password" name="password">
                                     <span class="form-check-sign-register" id="check">
                                         <i class="material-icons password-icon text-secondary" aria-hidden="true"
                                             id="icon-pass">remove_red_eye</i>
@@ -146,7 +146,7 @@ Program'), 'titlePage' => 'Registration'])
                                     <label for="password">Password Confirmation <span
                                             class="text-danger">*</span></label>
                                     <input type="password" class="form-control pt-3" id="password_confirmation"
-                                        placeholder="********" name="password_confirmation">
+                                        placeholder="Re Password" name="password_confirmation">
                                     <span class="form-check-sign-register" id="check2">
                                         <i class="material-icons password-icon text-secondary" aria-hidden="true"
                                             id="icon-pass2">remove_red_eye</i>
