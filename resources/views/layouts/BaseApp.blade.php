@@ -10,7 +10,7 @@
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('material') }}/img/apple-icon.png">
     <link rel="icon" type="image/png" href="{{ asset('material') }}/img/favicon.png">
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
-        name='viewport'/>
+        name='viewport' />
     <!--     Fonts and icons     -->
     <link rel="stylesheet" type="text/css"
         href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
@@ -22,17 +22,18 @@
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet" />
 
-     {{-- Bootstrap select --}}
+    {{-- Bootstrap select --}}
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
-    
+
     {{-- Data Tabels Material UI --}}
     {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.material.min.css"> --}}
     {{-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/dataTables.material.min.css"> --}}
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/4.0.0/material-components-web.min.css">
-    
-    
-   
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/4.0.0/material-components-web.min.css">
+
+
+
 
     {{-- my style --}}
     <link rel="stylesheet" href="{{ asset('mystyle.css') }}">
@@ -43,13 +44,15 @@
     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
         @csrf
     </form>
-        @include('layouts.navbars.navs.guest')
+    @include('layouts.navbars.navs.guest')
     <div class="wrapper wrapper-full-page">
-    <div class="page-header login-page header-filter" filter-color="black" style="background-image: url('{{ asset('material') }}/img/login.jpg'); background-size: cover; background-position: top center;align-items: center;" data-color="purple">
-    <!--   you can change the color of the filter page using: data-color="blue | purple | green | orange | red | rose " -->
-        @yield('content')
-        @include('layouts.footers.guest')
-    </div>
+        <div class="page-header login-page header-filter" filter-color="black"
+            style="background-image: url('{{ asset('img') }}/background.jpg'); background-size: cover; background-position: top center;align-items: center;"
+            data-color="purple">
+            <!--   you can change the color of the filter page using: data-color="blue | purple | green | orange | red | rose " -->
+            @yield('content')
+            @include('layouts.footers.guest')
+        </div>
     </div>
 
     @if (auth()->check())
@@ -151,7 +154,7 @@
     <script src="{{ asset('material') }}/js/plugins/bootstrap-selectpicker.js"></script>
     <!--  Plugin for the DateTimePicker, full documentation here: https://eonasdan.github.io/bootstrap-datetimepicker/ -->
     <script src="{{ asset('material') }}/js/plugins/bootstrap-datetimepicker.min.js"></script>
-    
+
     <!--	Plugin for Tags, full documentation here: https://github.com/bootstrap-tagsinput/bootstrap-tagsinputs  -->
     <script src="{{ asset('material') }}/js/plugins/bootstrap-tagsinput.js"></script>
     <!-- Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
@@ -188,9 +191,11 @@
     <script src="{{ asset('js/select2.min.js') }}"></script>
 
     {{-- show password --}}
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-show-password/1.0.3/bootstrap-show-password.min.js"></script>
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-show-password/1.0.3/bootstrap-show-password.min.js">
+    </script>
 
-    
+
     @stack('js')
 </body>
 
