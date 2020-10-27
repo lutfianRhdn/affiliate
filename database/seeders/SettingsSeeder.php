@@ -22,7 +22,7 @@ class SettingsSeeder extends Seeder
             'group' => 'admin',
             'updated_at' => now()
         ]);
-        DB::table('settings')->where('id', 2)->update([
+        DB::table('settings')->insert([
             'key' => 'day of settelment',
             'label' => 'Day of Settelment',
             'value' => '20',
