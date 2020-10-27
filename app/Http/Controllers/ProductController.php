@@ -45,11 +45,9 @@ class ProductController extends Controller
             'regex' => ['required', 'unique:products'],
         ]);
         
-        Product::create([
-            'product_name' => $request->product_name,
-            'description' => $request->description,
-            'regex' => $request->regex . "-"
-        ]);
+        $productModel = new Product;
+        $productModel->createProduct($request);
+        
         LogActivity::addToLog("Menambahkan product ".$request->product_name);
         return redirect(route('admin.product.index'))->with('status', 'Data inserted successfully');
     }
@@ -88,17 +86,22 @@ class ProductController extends Controller
         $this->validate($request, [
             'product_name' => 'required',
             'description' => 'required',
-            'regex' => ['required', 'unique:products'],
+            'regex' => ['required'],
         ]);
 
-        Product::where('id', $product->id)->update([
-            'product_name' => $request->product_name,
-            'description' => $request->description,
-            'regex' => $request->regex."-",
-            ]);
+        $productModel = new Product;
+        $productModel->updateProduct($request, $product->id);
         
         LogActivity::addToLog("Edit product id ".$product->id);
         return redirect(route('admin.product.index'))->with('status', 'Data updated successfully');
+    }
+
+    public function updateCode(Request $request, Product $product) {
+        $productModel = new Product;
+        $productModel->updateCode($request, $product->id);
+
+        return
+        redirect(route('admin.product.index'))->with('status', 'Code updated successfully');
     }
 
     /**

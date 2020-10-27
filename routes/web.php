@@ -54,6 +54,7 @@ Route::group(['middleware' => ['auth','role:admin']], function () {
 	Route::resource('/admin/reseller', AdminResellerController::class, ["as" => "admin"]);
 	Route::resource('/admin/role', RoleController::class, ["as" => "admin"]);
 	Route::resource('/admin/product', ProductController::class, ["as" => "admin"]);
+	Route::patch('/admin/{product}', [ProductController::class, 'updateCode'])->name('admin.product.updateCode');
 	Route::resource('/admin/setting', SettingController::class, ["as" => "admin"]);
 	Route::resource('/admin/log', LogActivityController::class, ["as" => "admin"]);
 });

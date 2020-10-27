@@ -28,12 +28,14 @@
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <table class="table">
-                            <thead class=" text-primary">
+                        <table class="table" id="tableProduct">
+                            <thead class="text-primary">
                                 <tr>
                                     <th>Product Name</th>
                                     <th>Description</th>
                                     <th>Regex</th>
+                                    <th>URL</th>
+                                    <th>Code</th>
                                     <th class="text-right">Actions</th>
                                 </tr>
                             </thead>
@@ -43,6 +45,14 @@
                                     <td>{{$product->product_name}}</td>
                                     <td>{{$product->description}}</td>
                                     <td>{{$product->regex}}</td>
+                                    <td>{{$product->url}}</td>
+                                    <td><a rel="tooltip" class="btn btn-info btn-fab btn-fab-mini btn-round" href=""
+                                            data-placement="bottom" title="See & Edit Code" data-toggle="modal"
+                                            data-target="#codeModal{{$product->id}}">
+                                            <i class="material-icons">notes</i>
+                                            <div class="ripple-container"></div>
+                                        </a>
+                                    </td>
                                     <td class="td-actions text-right">
                                         <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round" href=""
                                             data-placement="bottom" title="Delete" data-toggle="modal"
@@ -123,11 +133,55 @@
                                                         </div>
                                                         @endif
                                                     </div>
+
+                                                    <div class="bmd-form-group">
+                                                        <div class="form-group pl-2">
+                                                            <label for="product_name">URL</label>
+                                                            <input type="text" class="form-control"
+                                                                placeholder="https://pagii.co/" name="urlProduct"
+                                                                value="{{ $product->url }}">
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
                                                         data-dismiss="modal">Close</button>
                                                     <button type="submit" class="btn btn-primary">Update</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Modal Code -->
+                                <div class="modal fade" id="codeModal{{$product->id}}" tabindex="-1" role="dialog"
+                                    aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLongTitle">Code</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <form action="{{ route('admin.product.updateCode', [$product->id])}}"
+                                                method="POST">
+                                                @method('patch')
+                                                @csrf
+                                                <div class="modal-body">
+                                                    <div class="mt-2 bmd-form-group">
+                                                        <div class="form-group pl-2">
+                                                            <textarea class="form-control" id="code" rows="20"
+                                                                placeholder="{{ !empty($product->code) ? '' : 'Paste Code here' }}"
+                                                                name="code">{{ !empty($product->code) ? $product->code : ''}}</textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary">Save code</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -216,14 +270,27 @@
                     <div class="mt-2 bmd-form-group{{ $errors->has('desc') ? ' has-danger' : '' }}">
                         <div class="form-group pl-2">
                             <label for="desc">Description</label>
-                            <textarea class="form-control" id="desc" rows="3" name="description"
-                                value="{{ old('product_name') }}"></textarea>
+                            <textarea class="form-control" id="desc" rows="2" name="description"
+                                placeholder="Smooets Product" value="{{ old('product_name') }}"></textarea>
                         </div>
                         @if ($errors->has('desc'))
                         <div id="desc-error" class="error text-danger" for="desc" style="display: block;">
                             <strong>{{ $errors->first('desc') }}</strong>
                         </div>
                         @endif
+                    </div>
+                    <div class="bmd-form-group">
+                        <div class="form-group pl-2">
+                            <label for="product_name">URL</label>
+                            <input type="text" class="form-control" placeholder="https://pagii.co/" name="urlProduct"
+                                value="{{ old('url') }}">
+                        </div>
+                    </div>
+                    <div class="mt-2 bmd-form-group">
+                        <div class="form-group pl-2">
+                            <label for="desc">Code</label>
+                            <textarea class="form-control" id="code" rows="5" name="code">{{ old('code') }}</textarea>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -241,8 +308,7 @@
 @push('js')
 <script>
     $(document).ready(function () {
-
-    }
+        $('#tableProduct').DataTable();
     });
 
 </script>

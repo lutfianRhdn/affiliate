@@ -102,7 +102,7 @@ class RegisterController extends Controller
         $product = new Product;
         $regex = $product->getRegex($data['product_id']);
         do{
-            $ref_code = $regex->regex.$random;
+            $ref_code = $regex->regex.'-'.$random;
             $check = $model_user->getRefCode($ref_code);
         }while($check != null);
 

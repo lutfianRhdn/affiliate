@@ -55,7 +55,7 @@ class LoginController extends Controller
             } elseif (auth()->user()->role == 2 && auth()->user()->approve == 1 && auth()->user()->status == 1) {
                 return redirect()->route('reseller');
             } else {
-                return redirect()->route('login');
+                return redirect()->route('login')->with('error', 'Your provided information wrong!');
             } 
         }
         else
