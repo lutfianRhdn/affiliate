@@ -17,14 +17,14 @@ class ProductSeeder extends Seeder
         DB::table('products')->insert([
             'product_name' => 'PAGII',
             'description' => 'Pagii Apps',
-            'regex' => 'PAGII-',
+            'regex' => 'PAGII',
             'created_at' => now()
         ]);
         
         DB::table('products')->insert([
             'product_name' => 'MARS',
             'description' => 'Mars Apps',
-            'regex' => 'MARS-',
+            'regex' => 'MARS',
             'created_at' => now()
         ]);
     }
