@@ -28,8 +28,8 @@
     
     {{-- Data Tabels Material UI --}}
     {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.material.min.css"> --}}
-    {{-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/dataTables.material.min.css"> --}}
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/4.0.0/material-components-web.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/dataTables.material.min.css">
+    {{-- <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/4.0.0/material-components-web.min.css"> --}}
     
     
    
@@ -180,7 +180,7 @@
 
     <!--  DataTables.net Plugin, full documentation here: https://datatables.net/  -->
     <script src="{{ asset('material') }}/js/plugins/jquery.dataTables.min.js"></script>
-    <script src="{{ asset('material') }}/js/plugins/dataTables.material.min.js"></script>
+    {{-- <script src="{{ asset('material') }}/js/plugins/dataTables.material.min.js"></script> --}}
     <!-- select 2 -->
     <script src="{{ asset('js/select2.min.js') }}"></script>
 

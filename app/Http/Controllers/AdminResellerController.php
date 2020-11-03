@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Helpers\LogActivity;
 use App\Mail\KonfirmasiEmail;
 use App\Mail\EmailApproval;
+use App\Mail\EmailConfirmation;
+use App\Models\City;
 use App\Models\Product;
 use App\Models\Province;
 use App\Models\User;
@@ -23,13 +25,13 @@ class AdminResellerController extends Controller
      */
     public function index()
     {
-        $product = new Product;
-        $products = $product->getData();
-        $province = new Province;
-        $provinces = $province->getData();
+        $model_product = new Product;
+        $product = $model_product->getData();
+        $model_province = new Province;
+        $provinces = $model_province->getData();
         $user = new User;
         $users = $user->getResellerData();
-        return view('admin.resellerAdmin', ['users' => $users, 'products' => $products, 'provinces' => $provinces]);
+        return view('admin.resellerAdmin', ['users' => $users, 'products' => $product, 'provinces' => $provinces]);
     }
 
     /**
@@ -50,7 +52,7 @@ class AdminResellerController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
+        // // dd($request);
         $this->validate($request, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -66,28 +68,25 @@ class AdminResellerController extends Controller
             'city' => ['required'],
             'address' => ['required']
         ]);
-        
 
-        $regex = DB::table('products')->select('products.regex')->where('products.id', $request->product_id)->get();
-        
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'country' => $request->country,
-            'product_id' => $request->product_id,
-            'password' => Hash::make($request->password),
-            'role' => $request->role,
-            'ref_code' => $regex[0]->regex. strtoupper(Str::random(6)),
-            'state' => $request->state,
-            'region' => $request->city,
-            'address' => $request->address
-        ]);
+        $permitted_chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $random = substr(str_shuffle($permitted_chars), 0, 6);
+        $model_user = new User;
+        $product = new Product;
+        $regex = $product->getRegex($request['product_id']);
+        do {
+            $ref_code = $regex->regex . '-' . $random;
+            $check = $model_user->getRefCode($ref_code);
+        } while ($check != null);
 
-        $role = $request->role == '1' ? ' Admin' : 'Reseller';
-        Mail::to($user['email'])->send(new KonfirmasiEmail($user));
-        LogActivity::addToLog("Menambahkan ".$role." ".$request->email);
-        return redirect("/admin/reseller")->with('status', 'Data berhasil ditambahkan');
+        if ($check == null) {
+            $user = $model_user->createUserAdmin($request, $ref_code);
+        }
+        $pass = $request['password'];
+
+        Mail::to($user['email'])->send(new EmailConfirmation($user->id, $pass));
+        LogActivity::addToLog("Menambahkan Reseller" . $request->email);
+        return redirect()->back();
     }
 
     /**
@@ -125,16 +124,16 @@ class AdminResellerController extends Controller
         $this->validate($request, [
             'name' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'min:9', 'max:14'],
-            'product_id' => ['required'],
-            'role' => ['required'],
         ]);
 
         User::where('id', $request->id)
             ->update([
                 'name' => $request->name,
                 'phone' => $request->phone,
-                'product_id' => $request->product_id,
                 'role' => $request->role,
+                'country' => $request->country,
+                'state' => $request->state,
+                'region' => $request->city,
             ]);
         $role = $request->role == '1' ? ' Admin' : 'Reseller';
         LogActivity::addToLog("Mengubah data " . $role . " " . $request->email);
@@ -176,5 +175,33 @@ class AdminResellerController extends Controller
         $data = $user->getUser($request->id);
         $note = $data->status == 1 ? " is enabled" : " is disabled";
         return ['success' => $data->name . $note];
+    }
+
+    public function getCity(Request $request)
+    {
+        $term = empty($request->term['term']) ? '' : ($request->term['term']);
+        $cities = new City();
+        $cities = $cities->getCity($request->state, $term);
+
+        $result = array();
+        foreach ($cities as $key => $value) {
+            array_push($result, ['id' => $value->id, 'text' => $value->city_name_full]);
+        }
+
+        return ['results' => $result];
+    }
+    
+    public function getCityEdit(Request $request)
+    {
+        $term = empty($request->term['term']) ? '' : ($request->term['term']);
+        $cities = new City();
+        $cities = $cities->getCity($request->stateEdit, $term);
+
+        $result = array();
+        foreach ($cities as $key => $value) {
+            array_push($result, ['id' => $value->id, 'text' => $value->city_name_full]);
+        }
+
+        return ['results' => $result];
     }
 }

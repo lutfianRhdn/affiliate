@@ -20,6 +20,6 @@ class LogActivity
 
     public static function logActivityLists()
     {
-        return ModelsLogActivity::paginate(15);
+        return ModelsLogActivity::all();
     }
 }

@@ -52,6 +52,8 @@ Route::group(['middleware' => ['auth','role:admin']], function () {
 	Route::post('/admin/approval', [AdminResellerController::class, 'getApproval'])->name('getApproval');
 	Route::get('/admin/status', [AdminResellerController::class, 'getStatus'])->name('getStatus');
 	Route::resource('/admin/reseller', AdminResellerController::class, ["as" => "admin"]);
+	Route::get('/admin/get-city', [AdminResellerController::class, 'getCity']);
+	Route::get('/admin/get-city-edit', [AdminResellerController::class, 'getCityEdit']);
 	Route::resource('/admin/role', RoleController::class, ["as" => "admin"]);
 	Route::resource('/admin/product', ProductController::class, ["as" => "admin"]);
 	Route::patch('/admin/{product}', [ProductController::class, 'updateCode'])->name('admin.product.updateCode');
