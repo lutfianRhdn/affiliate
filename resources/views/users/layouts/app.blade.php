@@ -14,7 +14,8 @@
     <!--     Fonts and icons     -->
     {{-- <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" /> --}}
     <link rel="stylesheet" type="text/css" href="{{ asset('material') }}/css/material-font-icon.css" />
-    <link rel="stylesheet" href="{{ asset('css') }}/font-awesome.min.css">
+    {{-- <link rel="stylesheet" href="{{ asset('css') }}/font-awesome.min.css"> --}}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <!-- CSS Files -->
     <link href="{{ asset('material') }}/css/material-dashboard.css?v=2.1.1" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('css') }}/bootstrap-select.min.css">
