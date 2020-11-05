@@ -31,12 +31,12 @@
                                 @endif
                             </div>
                             <div class="col-12 text-right">
-                                <!-- <a href="" class="btn btn-sm btn-primary" data-toggle="modal"
-                                    data-target="#createUserModal">Add new Admin</a> -->
+                                <a href="" class="btn btn-sm btn-primary" data-toggle="modal"
+                                    data-target="#createUserModal">Add new Admin</a>
                             </div>
                         </div>
                         <div class="">
-                            <table class="table">
+                            <table class="table" id="table_admin">
                                 <thead class=" text-primary">
                                     <tr>
                                         <th>Name</th>
@@ -298,13 +298,7 @@
 @push('js')
 <script>
     $(document).ready(function () {
-        $('#table_admin').DataTable({
-            'info': false,
-            'lengthMenu': [
-                [5, 10, 25, 50, 100, -1],
-                [5, 10, 25, 50, 100, "All"]
-            ]
-        });
+        $('#table_admin').DataTable();
         $('#edit-user').tooltip(options);
 
         $(".modal").on("hidden.bs.modal", function () {

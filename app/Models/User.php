@@ -110,6 +110,26 @@ class User extends Authenticatable
         return $user;
     }
 
+    public function createUserAdmin($data, $ref_code)
+    {
+        $phone = str_replace("-", "", $data->phone);
+        $user = User::create([
+            'name' => $data->name,
+            'email' => $data->email,
+            'phone' => $phone,
+            'product_id' => $data->product_id,
+            'password' => Hash::make($data->password),
+            'role' => $data->role,
+            'ref_code' => $ref_code,
+            'country' => $data->country,
+            'state' => $data->state,
+            'region' => $data->city,
+            'address' => $data->address,
+        ]);
+
+        return $user;
+    }
+
     public function getDataEmail($id)
     {
         $data = User::select('users.name as name', 'users.email as email', 'users.phone as phone', 'users.address as address', 'users.ref_code as ref_code',
