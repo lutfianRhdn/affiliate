@@ -9,8 +9,7 @@
     <title>{{ $titlePage }} | Affiliate</title>
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('material') }}/img/apple-icon.png">
     <link rel="icon" type="image/png" href="{{ asset('material') }}/img/favicon.png">
-    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
-        name='viewport' />
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <!--     Fonts and icons     -->
     <link rel="stylesheet" type="text/css" href="{{ asset('material') }}/css/material-font-icon.css" />
     <link rel="stylesheet" href="{{ asset('css') }}/fontawesome/css/all.min.css">
@@ -39,7 +38,7 @@
         @include('layouts.footers.guest')
     </div>
     </div>
-    
+
     <!--   Core JS Files   -->
     <script src="{{ asset('material') }}/js/core/jquery.min.js"></script>
     <script src="{{ asset('material') }}/js/core/popper.min.js"></script>
