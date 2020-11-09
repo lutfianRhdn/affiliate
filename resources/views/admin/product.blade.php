@@ -142,6 +142,14 @@
                                                                 value="{{ $product->url }}">
                                                         </div>
                                                     </div>
+
+                                                    <div class="mt-2 bmd-form-group">
+                                                        <div class="form-group pl-2">
+                                                            <textarea class="form-control" id="codeInput" rows="20"
+                                                                placeholder="{{ !empty($product->code) ? '' : 'Product Code' }}"
+                                                                name="code">{{ !empty($product->code) ? $product->code : ''}}</textarea>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
@@ -165,25 +173,21 @@
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
-                                            <form action="{{ route('admin.product.updateCode', [$product->id])}}"
-                                                method="POST">
-                                                @method('patch')
-                                                @csrf
-                                                <div class="modal-body">
-                                                    <div class="mt-2 bmd-form-group">
-                                                        <div class="form-group pl-2">
-                                                            <textarea class="form-control" id="code" rows="20"
-                                                                placeholder="{{ !empty($product->code) ? '' : 'Paste Code here' }}"
-                                                                name="code">{{ !empty($product->code) ? $product->code : ''}}</textarea>
-                                                        </div>
+                                            <div class="modal-body">
+                                                <div class="mt-2 bmd-form-group">
+                                                    <div class="form-group pl-2">
+                                                        <textarea class="form-control" id="codeInput" rows="20"
+                                                            placeholder="{{ !empty($product->code) ? '' : 'Product Code' }}"
+                                                            name="code" readonly>{{ !empty($product->code) ? $product->code : ''}}</textarea>
                                                     </div>
                                                 </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-dismiss="modal">Close</button>
-                                                    <button type="submit" class="btn btn-primary">Save code</button>
-                                                </div>
-                                            </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">Close</button>
+                                                <button class="btn btn-primary" id="btnCopy" data-dismiss="modal">Copy
+                                                    code</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -309,7 +313,28 @@
 <script>
     $(document).ready(function () {
         $('#tableProduct').DataTable();
+
+        $(document).on('click', '#btnCopy', function () {
+            copytext($('#codeInput').val(), this);
+        });
+
     });
+
+    function copytext(text, context) {
+        var textField = document.createElement('textarea');
+        textField.innerText = text;
+
+        if (context) {
+            context.parentNode.insertBefore(textField, context);
+        } else {
+            document.body.appendChild(textField);
+        }
+
+        textField.select();
+        document.execCommand('copy');
+        // Let `.remove()` also work with older IEs
+        textField.parentNode.removeChild(textField);
+    }
 
 </script>
 @endpush
