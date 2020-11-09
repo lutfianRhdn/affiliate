@@ -101,9 +101,6 @@ class User extends Authenticatable
             'password' => Hash::make($data['password']),
             'role' => $data['role'],
             'ref_code' => $ref_code,
-            'country' => $data['country'],
-            'state' => $data['state'],
-            'region' => $data['city'],
             'address' => $data['address'],
         ]);
 

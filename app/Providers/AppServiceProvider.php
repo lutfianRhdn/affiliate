@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Http\Resources\CityResource;
+use App\Http\Resources\ErrorResource;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -24,6 +24,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        CityResource::withoutWrapping();
+        ErrorResource::withoutWrapping();
     }
 }

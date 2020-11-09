@@ -4,12 +4,13 @@
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="http://intern-affiliate.smtapps.net/mystyle.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.css">
-  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+<link rel="stylesheet" type="text/css"
+        href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
 
 
-  {{-- container --}}
-  {{-- start --}}
-  <form action="" method="post">
+  <!--  container  -->
+   <!-- start -->
+  <form action="aasdsadsadsa" method="post">
       <div class="card card-login card-hidden container" style="max-width: 825px">
           <div class="card-header card-header-primary text-center pb-4 pt-4">
               <h4 class="card-title"><strong>Register</strong></h4>
@@ -102,16 +103,15 @@
                           <span id="confirm-message2" class="confirm-message"></span>
                       </div>
                   </div>
-                  <div class="form-check mt-4 ml-auto mr-auto {{ $errors->has('policy') ? ' has-danger' : '' }}">
+                  <div class="form-check mt-4 ml-auto mr-auto">
                       <label class="form-check-label">
-                          <input class="form-check-input" type="checkbox" id="policy" name="policy"
-                              {{ old('policy') ? 'checked' : '' }}>
+                          <input class="form-check-input" type="checkbox" id="policy" name="policy">
                           <span class="form-check-sign">
                               <span class="check"></span>
                           </span>
-                          {{ __('I agree with the ') }}
+                          I agree with the
                       </label>
-                      <a href="#" data-toggle="modal" data-target="#policyModal">{{ __('Privacy Policy') }}</a>
+                      <a href="#" data-toggle="modal" data-target="#policyModal">Privacy Policy</a>
 
                   </div>
               </div>
@@ -121,7 +121,7 @@
           </div>
       </div>
   </form>
-  {{-- end  --}}
+  <!-- end  -->
 
 
   <!-- Modal -->
@@ -179,12 +179,14 @@
   <script>
       $(document).ready(() => {
           const apiUrl = 'http://localhost:1029/'
-// set Select2
-          $('#country').select2()
+
+          $('#country').select2({
+              placeholder: 'Select an option'
+          })
           $('#province').select2()
           $('#city').select2()
           $('#Category_Product').select2()
-// show password
+
           $('#check').click(function () {
               input = '#password';
               icon = '#icon-pass';
@@ -198,7 +200,6 @@
                   $(input).prop('type', 'password');
               }
           });
-// show confirm password
           $('#check2').click(function () {
               input = '#password_confirmation';
               icon = '#icon-pass2';
@@ -212,7 +213,6 @@
                   $(input).prop('type', 'password');
               }
           });
-        //  check pass mach with confrim pass
           $("#password_confirmation").on("keyup", function () {
               //Store the password field objects into variables ...
               var password = document.getElementById('password');
@@ -239,14 +239,13 @@
                   message.innerHTML = 'Not Match <i class="fa fa-close"></i>';
               }
           });
-// set province Data
+
           $.get(`${apiUrl}api/provinces`, res => {
               res.map(el => {
                   $('select#province').append(
                       `<option value='${el.id}' >${el.ProvinceName} </option> `)
               })
           })
-        //   set product data
           $.get(`${apiUrl}api/products`, res => {
               res.map(el => {
                   $('select#Category_Product').append(
@@ -255,7 +254,7 @@
           })
 
 
-// add city data
+
           $('#province').on('change', function () {
               $('#city').select2({
                   ajax: {
@@ -270,7 +269,7 @@
                   }
               })
           })
-// create when error function
+          // create when error function
           const setTextError = (id, message) => {
               $(`label[for=${id}]`).addClass('error text-danger')
               const messageError = `<div id="${id}-error" class="error text-danger" for="${id}" style="display: block;">
@@ -290,18 +289,18 @@
               // check hint for is hidden
               if ($('#hint').is(':hidden')) {
                   status = true
-                } else {
+              } else {
                   status = false
               }
-
               // check policy is checked
               if ($('#policy').prop('checked') == true) {
                   status = true
-                } else {
+              } else {
                   $('#policy').focus()
                   setTextError('policy', 'Provacy Policy is required')
                   status = false
               }
+
 
               // check if input is null
               inputs.forEach(el => {
@@ -318,10 +317,12 @@
                   }
               })
 
+
               return status
           }
 
-// check pass
+          // check pass
+
           $('#password').keyup(() => {
               const pass = $('#password').val()
               if (pass.length < 14 && pass.length > 8) {
@@ -337,14 +338,12 @@
                   }
               }
           })
-// on form submit
+
           $('form').submit(() => {
               const validate = formValidate()
               if (!validate) {
                   event.preventDefault();
-                  //   return isValidForm()
               }
-              // console.log(formValidate())
           })
       })
 
