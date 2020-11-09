@@ -110,18 +110,21 @@ class RegisterController extends Controller
             $user = $model_user->createUser($data, $ref_code);
         }
         $pass = $data['password'];
-        
         Mail::to($user['email'])->send(new emailConfirmation($user->id, $pass));
-        return $user;
+
+        return redirect()->back();
     }
 
-    public function emailConfirmation($email, $ref_code)
+    public function emailConfirmation($email)
     {
         $user = new User;
-        if($user->emailConfirmation($email, $ref_code)){
-            return redirect('login')->with('regis-succ', 'Your account has been successfully activated, now you have to wait for admin approval.');
-        }else{
-            return redirect('login')->with('error', 'Something went wrong.');
+        $product = new Product;
+        $url = $product->getUrl($user->getProductID($email)->product_id)->url;
+        if($user->emailConfirmation($email)){
+            // return redirect('login')->with('regis-succ', 'Your account has been successfully activated, now you have to wait for admin approval.');
+            return redirect($url)->with('regis-succ', 'Your account has been successfully activated, now you have to wait for admin approval.');
+        } else {
+            return redirect($url)->with('error', 'Something went wrong.');
         }
     }
 

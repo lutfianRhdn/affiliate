@@ -22,6 +22,12 @@ class Product extends Model
         return $regex;
     }
 
+    public function getUrl($id)
+    {
+        $url = Product::select('products.url')->where('products.id', $id)->first();
+        return $url;
+    }
+
     public function createProduct($request) {
         $product = Product::create([
             'product_name' => $request->product_name,
