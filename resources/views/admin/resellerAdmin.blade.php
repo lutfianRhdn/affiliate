@@ -49,8 +49,7 @@
                                             class="ml-2 badge badge-{{$user->register_status == '1' ? 'success' : 'warning'}}">{{$user->register_status == '1' ? 'Activated' : 'Not Activated'}}</span>
                                     </td>
                                     <td>{{$user->phone}}</td>
-                                    <td>{{$user->address. ', '. $user->region.', '.$user->state.', '.$user->country}}
-                                    </td>
+                                    <td>{{$user->address}}</td>
                                     <td class="text-center">{{$user->product_name}}</td>
                                     <td>{{$user->ref_code }}</td>
                                     <td>
@@ -213,63 +212,6 @@
                                                         @endif
                                                     </div>
                                                     <div
-                                                        class="form-group mt-2 {{ $errors->has('country') ? ' has-danger' : '' }}">
-                                                        <label for="country">Country <span
-                                                                class="text-danger">*</span></label>
-                                                        <select class="form-control" data-style="btn btn-link"
-                                                            id="country2" name="country">
-                                                            <option selected value="Indonesia">Indonesia</option>
-                                                        </select>
-                                                        @if ($errors->has('country'))
-                                                        <div id="country-error" class="error text-danger" for="country"
-                                                            style="display: block;">
-                                                            <strong>{{ $errors->first('country') }}</strong>
-                                                        </div>
-                                                        @endif
-                                                    </div>
-                                                    <div class="row ml-1">
-                                                        <div class="col-lg-6 col-sm-12" style="margin-left: -1rem">
-                                                            <div
-                                                                class="form-group mt-2 {{ $errors->has('state') ? ' has-danger' : '' }}">
-                                                                <label for="state">State/Province <span
-                                                                        class="text-danger">*</span></label>
-                                                                <select class="form-control" data-style="btn btn-link"
-                                                                    id="state-edit" name="state"
-                                                                    title="Select your province">
-                                                                    @foreach ($provinces as $province)
-                                                                    <option value="{{$province->id}}"
-                                                                        {{ $user->state == $province->province_name ? 'selected' : '' }}>
-                                                                        {{$province->province_name}}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                                @if ($errors->has('state'))
-                                                                <div id="state-error" class="error text-danger"
-                                                                    for="state" style="display: block;">
-                                                                    <strong>{{ $errors->first('state') }}</strong>
-                                                                </div>
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-6 col-sm-12">
-                                                            <div
-                                                                class="form-group {{ $errors->has('city') ? ' has-danger' : '' }}">
-                                                                <label for="city">City <span
-                                                                        class="text-danger">*</span></label>
-                                                                <select class="form-control" data-style="btn btn-link"
-                                                                    id="city-reseller-edit" name="city"
-                                                                    value="{{ $user->region }}"
-                                                                    title="Select your city">
-                                                                </select>
-                                                                @if ($errors->has('city'))
-                                                                <div id="city-error" class="error text-danger"
-                                                                    for="city" style="display: block;">
-                                                                    <strong>{{ $errors->first('city') }}</strong>
-                                                                </div>
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div
                                                         class="form-group mt-2 {{ $errors->has('address') ? ' has-danger' : '' }}">
                                                         <label for="address">Address <span
                                                                 class="text-danger">*</span></label>
@@ -309,9 +251,9 @@
 {{-- modal create --}}
 <div class="modal fade createUserModal-modal-lg" id="createUserModal" tabindex="-1" role="dialog"
     aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form action="/admin/reseller" method="POST">
+            <form action="{{ route('admin.reseller.store') }}" method="POST">
                 @csrf
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Add New Reseller</h5>
@@ -320,154 +262,63 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="form-group {{ $errors->has('name') ? ' has-danger' : '' }}">
-                                <label for="name">Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control pt-3" id="name" placeholder="Full Name"
-                                    name="name" value="{{ old('name') }}">
-                                @if ($errors->has('name'))
-                                <div id="name-error" class="error text-danger" for="name" style="display: block;">
-                                    <strong>{{ $errors->first('name') }}</strong>
-                                </div>
-                                @endif
-                            </div>
-                            <div class="form-group mt-2 {{ $errors->has('email') ? ' has-danger' : '' }}">
-                                <label for="email">Email Address <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control pt-3" id="email" placeholder="email@example.com"
-                                    name="email" value="{{ old('email') }}">
-                                @if ($errors->has('email'))
-                                <div id="email-error" class="error text-danger" for="email" style="display: block;">
-                                    <strong>{{ $errors->first('email') }}</strong>
-                                </div>
-                                @endif
-                            </div>
-                            <div class="form-group mt-2 {{ $errors->has('phone') ? ' has-danger' : '' }}">
-                                <label for="phone">Phone Number</label>
-                                <input type="text" oninput="this.value=this.value.replace(/[^0-9]/g,'');"
-                                    class="form-control pt-3" id="phone-reseller" placeholder="08xx-xxxx-xxxxx"
-                                    name="phone" value="{{ old('phone') }}">
-                                @if ($errors->has('phone'))
-                                <div id="phone-error" class="error text-danger" for="phone" style="display: block;">
-                                    <strong>{{ $errors->first('phone') }}</strong>
-                                </div>
-                                @endif
-                            </div>
-                            <div class="form-group mt-2 {{ $errors->has('country') ? ' has-danger' : '' }}">
-                                <label for="country">Country <span class="text-danger">*</span></label>
-                                <select class="form-control" data-style="btn btn-link" id="country2" name="country">
-                                    <option selected value="Indonesia">Indonesia</option>
-                                </select>
-                                @if ($errors->has('country'))
-                                <div id="country-error" class="error text-danger" for="country" style="display: block;">
-                                    <strong>{{ $errors->first('country') }}</strong>
-                                </div>
-                                @endif
-                            </div>
-                            <div class="row ml-1">
-                                <div class="col-lg-6 col-sm-12" style="margin-left: -1rem">
-                                    <div class="form-group mt-2 {{ $errors->has('state') ? ' has-danger' : '' }}">
-                                        <label for="state">State/Province <span class="text-danger">*</span></label>
-                                        <select class="form-control" data-style="btn btn-link" id="state" name="state"
-                                            value="{{ old('state') }}">
-                                            <option value="" selected disabled>Select your province</option>
-                                            @foreach ($provinces as $province)
-                                            <option value="{{$province->id}}"
-                                                {{ old('state') == $province->id ? 'selected' : '' }}>
-                                                {{$province->province_name}}</option>
-                                            @endforeach
-                                        </select>
-                                        @if ($errors->has('state'))
-                                        <div id="state-error" class="error text-danger" for="state"
-                                            style="display: block;">
-                                            <strong>{{ $errors->first('state') }}</strong>
-                                        </div>
-                                        @endif
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-sm-12">
-                                    <div class="form-group {{ $errors->has('city') ? ' has-danger' : '' }}">
-                                        <label for="city">City <span class="text-danger">*</span></label>
-                                        <select class="form-control" data-style="btn btn-link" id="city-reseller"
-                                            name="city" value="{{ old('city') }}">
-                                            <option value="" selected disabled>Select your city</option>
-                                        </select>
-                                        @if ($errors->has('city'))
-                                        <div id="city-error" class="error text-danger" for="city"
-                                            style="display: block;">
-                                            <strong>{{ $errors->first('city') }}</strong>
-                                        </div>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="form-group {{ $errors->has('name') ? ' has-danger' : '' }}">
+                        <label for="name">Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control pt-3" id="name" placeholder="Full Name" name="name"
+                            value="{{ old('name') }}">
+                        @if ($errors->has('name'))
+                        <div id="name-error" class="error text-danger" for="name" style="display: block;">
+                            <strong>{{ $errors->first('name') }}</strong>
                         </div>
-                        <div class="col-6">
-                            <div class="form-group mt-2 {{ $errors->has('address') ? ' has-danger' : '' }}">
-                                <label for="address">Address <span class="text-danger">*</span></label>
-                                <textarea class="form-control" id="address" rows="2" placeholder="Your Address"
-                                    name="address">{{ old('address') }}</textarea>
-                                @if ($errors->has('address'))
-                                <div id="address-error" class="error text-danger" for="address" style="display: block;">
-                                    <strong>{{ $errors->first('address') }}</strong>
-                                </div>
-                                @endif
-                            </div>
-                            <div class="form-group mt-2 {{ $errors->has('product_id') ? ' has-danger' : '' }}">
-                                <label for="product_id">Category Product <span class="text-danger">*</span></label>
-                                <select class="form-control custom-select" data-style="btn btn-link"
-                                    id="prouct-reseller" name="product_id">
-                                    <option value="" selected disabled>Select Product</option>
-                                    @foreach ($products as $product)
-                                    <option value="{{ $product->id }}">{{$product->product_name}}</option>
-                                    @endforeach
-                                </select>
-                                @if ($errors->has('product_id'))
-                                <div id="product_id-error" class="error text-danger" for="product_id"
-                                    style="display: block;">
-                                    <strong>{{ $errors->first('product_id') }}</strong>
-                                </div>
-                                @endif
-                            </div>
-                            <div class="form-group mt-2 {{ $errors->has('password') ? ' has-danger' : '' }}">
-                                <label for="password">Password <span class="text-danger">*</span></label>
-                                <input type="password" class="form-control pt-3" id="password_reseller"
-                                    placeholder="Your Password" name="password">
-                                <span class="form-check-sign-register" id="check_reseller">
-                                    <i class="material-icons password-icon text-secondary" aria-hidden="true"
-                                        id="icon-pass-reseller">remove_red_eye</i>
-                                </span>
-                                <small class="text-danger" id="hint_reseller">Password must be contain 8 character,
-                                    uppercase
-                                    and lowercase letter, number and special character. Ex: Password23!</small>
-                                @if ($errors->has('password'))
-                                <div id="password-error" class="error text-danger" for="password"
-                                    style="display: block;">
-                                    <strong>{{ $errors->first('password') }}</strong>
-                                </div>
-                                @endif
-                            </div>
-                            <div
-                                class="form-group mt-3 {{ $errors->has('password_confirmation') ? ' has-danger' : '' }}">
-                                <label for="password">Password Confirmation <span class="text-danger">*</span></label>
-                                <input type="password" class="form-control pt-3" id="password_confirmation"
-                                    placeholder="Re Password" name="password_confirmation">
-                                <span class="form-check-sign-register" id="check3">
-                                    <i class="material-icons password-icon text-secondary" aria-hidden="true"
-                                        id="icon-pass3">remove_red_eye</i>
-                                </span>
-                                <span id="confirm-message3" class="confirm-message"></span>
-                                @if ($errors->has('password_confirmation'))
-                                <div id="password-error" class="error text-danger" for="password_confirmation"
-                                    style="display: block;">
-                                    <strong>{{ $errors->first('password_confirmation') }}</strong>
-                                </div>
-                                @endif
-                            </div>
-
-                            <input type="hidden" name="role" value="2">
-                        </div>
+                        @endif
                     </div>
+                    <div class="form-group mt-2 {{ $errors->has('email') ? ' has-danger' : '' }}">
+                        <label for="email">Email Address <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control pt-3" id="email" placeholder="email@example.com"
+                            name="email" value="{{ old('email') }}">
+                        @if ($errors->has('email'))
+                        <div id="email-error" class="error text-danger" for="email" style="display: block;">
+                            <strong>{{ $errors->first('email') }}</strong>
+                        </div>
+                        @endif
+                    </div>
+                    <div class="form-group mt-2 {{ $errors->has('phone') ? ' has-danger' : '' }}">
+                        <label for="phone">Phone Number</label>
+                        <input type="text" oninput="this.value=this.value.replace(/[^0-9]/g,'');"
+                            class="form-control pt-3" id="phone-reseller" placeholder="08xx-xxxx-xxxxx" name="phone"
+                            value="{{ old('phone') }}">
+                        @if ($errors->has('phone'))
+                        <div id="phone-error" class="error text-danger" for="phone" style="display: block;">
+                            <strong>{{ $errors->first('phone') }}</strong>
+                        </div>
+                        @endif
+                    </div>
+                    <div class="form-group mt-2 {{ $errors->has('address') ? ' has-danger' : '' }}">
+                        <label for="address">Address <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="address" rows="2" placeholder="Your Address"
+                            name="address">{{ old('address') }}</textarea>
+                        @if ($errors->has('address'))
+                        <div id="address-error" class="error text-danger" for="address" style="display: block;">
+                            <strong>{{ $errors->first('address') }}</strong>
+                        </div>
+                        @endif
+                    </div>
+                    <div class="form-group mt-2 {{ $errors->has('product_id') ? ' has-danger' : '' }}">
+                        <label for="product_id">Category Product <span class="text-danger">*</span></label>
+                        <select class="form-control custom-select" data-style="btn btn-link" id="prouct-reseller"
+                            name="product_id">
+                            <option value="" selected disabled>Select Product</option>
+                            @foreach ($products as $product)
+                            <option value="{{ $product->id }}">{{$product->product_name}}</option>
+                            @endforeach
+                        </select>
+                        @if ($errors->has('product_id'))
+                        <div id="product_id-error" class="error text-danger" for="product_id" style="display: block;">
+                            <strong>{{ $errors->first('product_id') }}</strong>
+                        </div>
+                        @endif
+                    </div>
+                    <input type="hidden" name="role" value="2">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -480,22 +331,6 @@
 
 @endsection
 
-{{-- 
-
-    <select class="form-control custom-select"
-                                                                data-style="btn btn-link" id="prouct-reseller-edit"
-                                                                name="product_id">
-                                                                <option value="" selected disabled>Select Product
-                                                                </option>
-                                                                @foreach ($products as $product)
-                                                                <option value="{{$product->id}}"
-{{$product->id == $user->product_id ? 'selected' : ''}}>
-{{$product->product_name}}</option>
-@endforeach
-</select>
-
---}}
-
 
 @push('js')
 <script>
@@ -503,7 +338,9 @@
         $('#table_reseller').DataTable({
             // "responsive": true,
             "scrollX": true,
-            "order": [[ 7, "desc" ]]
+            "order": [
+                [7, "desc"]
+            ]
         });
         var options = "";
         $('#edit-user').tooltip(options);
@@ -652,18 +489,18 @@
 
         // edit
         $('#city-reseller-edit').select2({
-             placeholder: "Select City",
-                ajax: {
-                    url: '/admin/get-city-edit',
-                    dataType: 'json',
-                    type: 'GET',
-                    data: function (term) {
-                        return {
-                            term: term,
-                            stateEdit: $('#state-edit').val(),
-                        };
-                    },
+            placeholder: "Select City",
+            ajax: {
+                url: '/admin/get-city-edit',
+                dataType: 'json',
+                type: 'GET',
+                data: function (term) {
+                    return {
+                        term: term,
+                        stateEdit: $('#state-edit').val(),
+                    };
                 },
+            },
         });
 
         //function to chained city
