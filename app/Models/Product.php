@@ -29,7 +29,10 @@ class Product extends Model
             'regex' => $request->regex,
             'url' => $request->urlProduct,
             'code' => $request->code
-        ]);
+            ]);
+        $id = $product->id;
+        $product->code = view('pages.RegisterEmbed', compact('id'))->render(); 
+        $product->save();
         return $product;
     }
 

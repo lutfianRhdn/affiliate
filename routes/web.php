@@ -3,6 +3,7 @@
 use App\Helpers\LogActivity;
 use App\Http\Controllers\AdminResellerController;
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LogActivityController;
@@ -41,6 +42,9 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Auth::routes();
+// ApiController
+Route::post('register/{id}', [ApiController::class, 'RegisterApi']);
+
 Route::group(['middleware' => ['auth','role:admin']], function () {
 	Route::get('/admin', [HomeController::class, 'index'])->name('admin');
 	// Route::get('/admin/user', [AdminUserController::class, 'index'])->name('admin.user')->middleware('auth');
