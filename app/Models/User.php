@@ -189,4 +189,9 @@ class User extends Authenticatable
         $result = $data->status == 0 ? $data->update(array('status' => 1)) : $data->update(array('status' => 0));
         return $result;
     }
+
+    public function getProductID($email) {
+        $product = User::select('users.product_id')->where('users.email', $email)->first();
+        return $product;
+    }
 }

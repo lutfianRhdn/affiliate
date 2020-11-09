@@ -30,7 +30,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/registration', [RegisterController::class, 'index']);
+Route::get('/registration', [RegisterController::class, 'index'])->name('registration');
 Route::get('/registration/get-city', [RegisterController::class, 'getCity']);
 // Route::get('/registration/create', [RegisterController::class, 'create'])->name('registration.create');
 // Route::get('/registration', [RegisterController::class, 'store'])->name('registrations.store');
