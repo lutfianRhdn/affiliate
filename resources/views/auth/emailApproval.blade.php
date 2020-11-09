@@ -177,7 +177,7 @@
                                 </div>
                             </div>
                             @if($user->approve == 1)
-                            <a href="{{ route('login')->with('regis-succ', 'Your account has been successfully activated, now you have to wait for admin approval.');">
+                            <a href="{{ route('login') }}">
                             <div align="center" class="button-container" style="padding-top:15px;padding-right:10px;padding-bottom:0px;padding-left:10px;">
                                 <div style="text-decoration:none;display:inline-block;color:#ffffff;background-color:#1aa19c;border-radius:60px;-webkit-border-radius:60px;-moz-border-radius:60px;width:auto; width:auto;;border-top:1px solid #1aa19c;border-right:1px solid #1aa19c;border-bottom:1px solid #1aa19c;border-left:1px solid #1aa19c;padding-top:15px;padding-bottom:15px;font-family:Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;text-align:center;mso-border-alt:none;word-break:keep-all;">
                                     <span style="padding-left:30px;padding-right:30px;font-size:16px;display:inline-block;">

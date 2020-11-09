@@ -21,4 +21,39 @@ class Product extends Model
         $regex = Product::select('products.regex')->where('products.id', $id)->first();
         return $regex;
     }
+
+    public function getUrl($id)
+    {
+        $url = Product::select('products.url')->where('products.id', $id)->first();
+        return $url;
+    }
+
+    public function createProduct($request) {
+        $product = Product::create([
+            'product_name' => $request->product_name,
+            'description' => $request->description,
+            'regex' => $request->regex,
+            'url' => $request->urlProduct,
+            'code' => $request->code
+        ]);
+        return $product;
+    }
+
+    public function updateProduct($request, $id) {
+        $product = Product::where('id', $id)->update([
+            'product_name' => $request->product_name,
+            'description' => $request->description,
+            'regex' => $request->regex,
+            'url' => $request->urlProduct,
+            'code' => $request->code
+        ]);
+
+        return $product;
+    }
+
+    public function updateCode($request, $id) {
+        $code = Product::where('id', $id)->update(['code'=>$request->code]);
+        return $code;
+    }
+
 }

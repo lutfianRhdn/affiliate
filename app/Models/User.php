@@ -110,6 +110,26 @@ class User extends Authenticatable
         return $user;
     }
 
+    public function createUserAdmin($data, $ref_code)
+    {
+        $phone = str_replace("-", "", $data->phone);
+        $user = User::create([
+            'name' => $data->name,
+            'email' => $data->email,
+            'phone' => $phone,
+            'product_id' => $data->product_id,
+            'password' => Hash::make($data->password),
+            'role' => $data->role,
+            'ref_code' => $ref_code,
+            'country' => $data->country,
+            'state' => $data->state,
+            'region' => $data->city,
+            'address' => $data->address,
+        ]);
+
+        return $user;
+    }
+
     public function getDataEmail($id)
     {
         $data = User::select('users.name as name', 'users.email as email', 'users.phone as phone', 'users.address as address', 'users.ref_code as ref_code',
@@ -130,9 +150,9 @@ class User extends Authenticatable
         return $data;
     }
 
-    public function emailConfirmation($email, $ref_code)
+    public function emailConfirmation($email)
     {
-        $data = User::where(['email' => $email, 'ref_code' => $ref_code])
+        $data = User::where(['email' => $email])
         ->update(['register_status' => '1']);
         return $data;
     }
@@ -145,6 +165,7 @@ class User extends Authenticatable
                 ->join('provinces', 'provinces.id', '=', 'users.state')
                 ->join('cities', 'cities.id', '=', 'users.region')
                 ->where('users.role', 2)
+                ->orderBy('users.created_at', 'DESC')
                 ->get();
         return $data;
     }
@@ -168,5 +189,10 @@ class User extends Authenticatable
         $data = User::find($id);
         $result = $data->status == 0 ? $data->update(array('status' => 1)) : $data->update(array('status' => 0));
         return $result;
+    }
+
+    public function getProductID($email) {
+        $product = User::select('users.product_id')->where('users.email', $email)->first();
+        return $product;
     }
 }
