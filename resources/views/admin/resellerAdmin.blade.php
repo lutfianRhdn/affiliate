@@ -503,6 +503,7 @@
         $('#table_reseller').DataTable({
             // "responsive": true,
             "scrollX": true,
+            "order": [[ 7, "desc" ]]
         });
         var options = "";
         $('#edit-user').tooltip(options);

@@ -147,9 +147,9 @@ class User extends Authenticatable
         return $data;
     }
 
-    public function emailConfirmation($email, $ref_code)
+    public function emailConfirmation($email)
     {
-        $data = User::where(['email' => $email, 'ref_code' => $ref_code])
+        $data = User::where(['email' => $email])
         ->update(['register_status' => '1']);
         return $data;
     }
@@ -162,6 +162,7 @@ class User extends Authenticatable
                 ->join('provinces', 'provinces.id', '=', 'users.state')
                 ->join('cities', 'cities.id', '=', 'users.region')
                 ->where('users.role', 2)
+                ->orderBy('users.created_at', 'DESC')
                 ->get();
         return $data;
     }
@@ -185,5 +186,10 @@ class User extends Authenticatable
         $data = User::find($id);
         $result = $data->status == 0 ? $data->update(array('status' => 1)) : $data->update(array('status' => 0));
         return $result;
+    }
+
+    public function getProductID($email) {
+        $product = User::select('users.product_id')->where('users.email', $email)->first();
+        return $product;
     }
 }
