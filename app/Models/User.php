@@ -150,9 +150,9 @@ class User extends Authenticatable
         return $data;
     }
 
-    public function emailConfirmation($email, $ref_code)
+    public function emailConfirmation($email)
     {
-        $data = User::where(['email' => $email, 'ref_code' => $ref_code])
+        $data = User::where(['email' => $email])
         ->update(['register_status' => '1']);
         return $data;
     }
@@ -165,6 +165,7 @@ class User extends Authenticatable
                 ->join('provinces', 'provinces.id', '=', 'users.state')
                 ->join('cities', 'cities.id', '=', 'users.region')
                 ->where('users.role', 2)
+                ->orderBy('users.created_at', 'DESC')
                 ->get();
         return $data;
     }

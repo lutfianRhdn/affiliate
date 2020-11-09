@@ -115,12 +115,12 @@ class RegisterController extends Controller
         return redirect()->back();
     }
 
-    public function emailConfirmation($email, $ref_code)
+    public function emailConfirmation($email)
     {
         $user = new User;
         $product = new Product;
         $url = $product->getUrl($user->getProductID($email)->product_id)->url;
-        if($user->emailConfirmation($email, $ref_code)){
+        if($user->emailConfirmation($email)){
             // return redirect('login')->with('regis-succ', 'Your account has been successfully activated, now you have to wait for admin approval.');
             return redirect($url)->with('regis-succ', 'Your account has been successfully activated, now you have to wait for admin approval.');
         } else {
