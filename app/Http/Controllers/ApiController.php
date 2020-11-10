@@ -23,6 +23,13 @@ class ApiController extends Controller
     {
 
     // Rules
+    $product = Product::find($id);
+    if (!$product) {
+        return response()->json([
+            'status' =>'error',
+            'error'=> 'application is not registered'
+            ]);
+    }
         $Rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],

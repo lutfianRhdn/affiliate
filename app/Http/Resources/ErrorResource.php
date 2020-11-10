@@ -25,6 +25,9 @@ class ErrorResource extends JsonResource
             }
         }
         $collection = collect($errors);
-        return ['errors'=>$collection];
+        return [
+            'status' => 'error',
+            'errors'=>$collection
+        ];
     }
 }

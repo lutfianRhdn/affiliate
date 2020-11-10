@@ -22,4 +22,3 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('products', [ProductController::class,'ProductApi']);
 
-Route::post('register/{id}', [ApiController::class, 'RegisterApi']);
