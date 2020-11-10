@@ -98,7 +98,7 @@ class ApiController extends Controller
         ];
 
     // vallidate
-        $validator = Validator::make($request->all(), $Rules);
+        $validator = Validator::make($request->all(), $Rules,$Messages);
 
     // error hendling
         if ($validator->fails()) {
