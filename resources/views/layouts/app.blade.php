@@ -86,6 +86,7 @@
 
     <!--  DataTables.net Plugin, full documentation here: https://datatables.net/  -->
     <script src="{{ asset('material') }}/js/plugins/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/plug-ins/1.10.11/sorting/date-eu.js"></script>
 
     <!-- select 2 -->
     <script src="{{ asset('js/select2.min.js') }}"></script>

@@ -35,8 +35,8 @@
                                     <th>Description</th>
                                     <th>Regex</th>
                                     <th>URL</th>
-                                    <th>Code</th>
-                                    <th class="text-right">Actions</th>
+                                    <th class="no-sort">Code</th>
+                                    <th class="text-right no-sort">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -312,11 +312,18 @@
 @push('js')
 <script>
     $(document).ready(function () {
-        $('#tableProduct').DataTable();
+        $('#tableProduct').DataTable({
+            "aoColumnDefs": [{
+                'bSortable': false,
+                'aTargets': ['no-sort']
+            }]
+        });
 
         $(document).on('click', '#btnCopy', function () {
             copytext($('#codeInput').val(), this);
         });
+
+        $('.custom-select').selectpicker();
 
     });
 

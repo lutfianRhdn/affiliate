@@ -28,7 +28,7 @@
                                         <th style="width: 10%">No.</th>
                                         <th style="width: 20%">Time</th>
                                         <th>Subject</th>
-                                        <th class="text-right" style="width: 10%">Actions</th>
+                                        <th class="text-right no-sort" style="width: 10%">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -91,7 +91,12 @@
 @push('js')
 <script>
     $(document).ready(function () {
-        $('#table_log').DataTable();
+        $('#table_log').DataTable({
+            "aoColumnDefs": [{
+                'bSortable': false,
+                'aTargets': ['no-sort']
+            }]
+        });
         $('.custom-select').selectpicker();
     });
 

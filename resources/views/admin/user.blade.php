@@ -44,7 +44,7 @@
                                         <th>Phone</th>
                                         <th>Role</th>
                                         <th>Create Date</th>
-                                        <th class="text-right">Actions</th>
+                                        <th class="text-right no-sort">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -58,7 +58,7 @@
                                             <span
                                                 class="ml-2 badge badge-{{$user->register_status == '1' ? 'success' : 'warning'}}">{{$user->register_status == '1' ? 'Activated' : 'Not Activated'}}</span>
                                         </td>
-                                        <td>{{  Carbon\Carbon::parse($user->created_at)->format('d-m-Y')}}</td>
+                                        <td>{{  Carbon\Carbon::parse($user->created_at)->format('d/m/Y')}}</td>
                                         <td class="td-actions text-right">
                                             <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round"
                                                 href="" data-placement="bottom" title="Delete" data-toggle="modal"
@@ -298,12 +298,23 @@
 @push('js')
 <script>
     $(document).ready(function () {
-        $('#table_admin').DataTable();
-        $('#edit-user').tooltip(options);
+        $('#table_admin').DataTable({
+            columnDefs: [{ 'targets': 4, type: 'date-euro' }],
+            "order": [
+                [4, "desc"]
+            ],
+            "aoColumnDefs": [{
+                'bSortable': false,
+                'aTargets': ['no-sort']
+            }]
+        });
+        
+        $('#edit-user').tooltip();
 
         $(".modal").on("hidden.bs.modal", function () {
             $("#createUserModal").html("");
         });
+        $('.custom-select').selectpicker();
     });
 
 </script>

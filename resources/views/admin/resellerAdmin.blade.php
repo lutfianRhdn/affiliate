@@ -34,11 +34,11 @@
                                     <th>Email</th>
                                     <th>Phone</th>
                                     <th>Address</th>
-                                    <th class="text-center">Product Category</th>
+                                    <th>Product Category</th>
                                     <th>Refferal Code</th>
-                                    <th>Status</th>
+                                    <th class="no-sort">Status</th>
                                     <th>Create Date</th>
-                                    <th class="text-right">Actions</th>
+                                    <th class="text-right no-sort">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -50,7 +50,7 @@
                                     </td>
                                     <td>{{$user->phone}}</td>
                                     <td>{{$user->address}}</td>
-                                    <td class="text-center">{{$user->product_name}}</td>
+                                    <td>{{$user->product_name}}</td>
                                     <td>{{$user->ref_code }}</td>
                                     <td>
                                         <div class="togglebutton">
@@ -61,7 +61,7 @@
                                             </label>
                                         </div>
                                     </td>
-                                    <td>{{  Carbon\Carbon::parse($user->created_at)->format('d-m-Y')}}</td>
+                                    <td>{{  Carbon\Carbon::parse($user->created_at)->format('d/m/Y')}}</td>
                                     <td class="td-actions text-right">
                                         @if($user->approve == 1)
                                         <a rel="tooltip" class="btn btn-primary btn-fab btn-fab-mini btn-round" href=""
@@ -338,9 +338,17 @@
         $('#table_reseller').DataTable({
             // "responsive": true,
             "scrollX": true,
+            columnDefs: [{ 'targets': 4, type: 'date-euro' }],
             "order": [
                 [7, "desc"]
-            ]
+            ],
+            "order": [
+                [7, "desc"]
+            ],
+            "aoColumnDefs": [{
+                'bSortable': false,
+                'aTargets': ['no-sort']
+            }]
         });
         var options = "";
         $('#edit-user').tooltip(options);
