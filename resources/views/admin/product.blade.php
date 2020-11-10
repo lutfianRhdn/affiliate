@@ -143,13 +143,13 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="mt-2 bmd-form-group">
+                                                    {{-- <div class="mt-2 bmd-form-group">
                                                         <div class="form-group pl-2">
                                                             <textarea class="form-control" id="codeInput" rows="20"
                                                                 placeholder="{{ !empty($product->code) ? '' : 'Product Code' }}"
                                                                 name="code">{{ !empty($product->code) ? $product->code : ''}}</textarea>
                                                         </div>
-                                                    </div>
+                                                    </div> --}}
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
@@ -290,12 +290,12 @@
                                 value="{{ old('url') }}">
                         </div>
                     </div>
-                    <div class="mt-2 bmd-form-group">
+                    {{-- <div class="mt-2 bmd-form-group">
                         <div class="form-group pl-2">
                             <label for="desc">Code</label>
                             <textarea class="form-control" id="code" rows="5" name="code">{{ old('code') }}</textarea>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
