@@ -1,6 +1,7 @@
 <?php
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -14,7 +15,7 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->insert([
+        $user = User::create([
         'name' => 'Admin Affiliate',
         'email' => 'admin@affiliate.com',
         'role' => '1',
@@ -28,5 +29,6 @@ class UsersTableSeeder extends Seeder
         'created_at' => now(),
 
         ]);
+        $user->assignRole('admin');
     }
 }

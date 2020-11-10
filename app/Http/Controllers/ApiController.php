@@ -15,12 +15,14 @@ class ApiController extends Controller
     public function ProductApi(Request $request)
     {
 
+        // return 'oke dudse';
         $product = Product::find($request->id);
         return (new ProductResource($product));
     }
 
     public function RegisterApi(Request $request,$id)
     {
+        // return response()->json(['status'=>'errors']);  
 
     // Rules
     $product = Product::find($id);
@@ -96,7 +98,7 @@ class ApiController extends Controller
         ];
 
     // vallidate
-        $validator = Validator::make($request->all(), $Rules,$Messages);
+        $validator = Validator::make($request->all(), $Rules);
 
     // error hendling
         if ($validator->fails()) {
