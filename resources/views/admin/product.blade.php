@@ -2,6 +2,7 @@
 
 
 @section('content')
+<div id="preloaders" class="preloader"></div>
 <div class="content">
     <div class="row">
         <div class="col-md-12">
@@ -312,12 +313,11 @@
                 'aTargets': ['no-sort']
             }]
         });
-
+        $('.custom-select').selectpicker();
+        $("#preloaders").fadeOut(1000);
         $(document).on('click', '#btnCopy', function () {
             copytext($('#codeInput').val(), this);
         });
-
-        $('.custom-select').selectpicker();
 
     });
 

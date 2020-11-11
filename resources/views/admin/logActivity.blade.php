@@ -1,6 +1,7 @@
 @extends('layouts.app', ['activePage' => 'log', 'titlePage' => __('Log Activities')])
 
 @section('content')
+<div id="preloaders" class="preloader"></div>
 <div class="content">
     <div class="container">
         <div class="row">
@@ -41,7 +42,7 @@
                                         <td class="td-actions text-right">
                                             <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round mr-2"
                                                 href="" data-placement="bottom" title="Delete" data-toggle="modal"
-                                        data-target="#deleteModal{{$log->id}}">
+                                                data-target="#deleteModal{{$log->id}}">
                                                 <i class="material-icons">delete</i>
                                                 <div class="ripple-container"></div>
                                             </a>
@@ -98,7 +99,7 @@
             }]
         });
         $('.custom-select').selectpicker();
+        $("#preloaders").fadeOut(1000);
     });
-
 </script>
 @endpush

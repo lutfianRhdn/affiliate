@@ -1,6 +1,7 @@
 @extends('layouts.app', ['activePage' => 'reseller', 'titlePage' => __('Reseller Management')])
 
 @section('content')
+<div id="preloaders" class="preloader"></div>
 <div class="content">
     <div class="row">
         <div class="col-md-12">
@@ -338,7 +339,10 @@
         $('#table_reseller').DataTable({
             // "responsive": true,
             "scrollX": true,
-            columnDefs: [{ 'targets': 4, type: 'date-euro' }],
+            columnDefs: [{
+                'targets': 4,
+                type: 'date-euro'
+            }],
             "order": [
                 [7, "desc"]
             ],
@@ -350,6 +354,7 @@
                 'aTargets': ['no-sort']
             }]
         });
+        $("#preloaders").fadeOut(1000);
         var options = "";
         $('#edit-user').tooltip(options);
 
@@ -477,117 +482,6 @@
         $("#phone-reseller").on("keypress keyup blur", function (event) {
             $(this).val($(this).val().replace(/(\d{4})\-?(\d{4})\-?(\d{4})/, '$1-$2-$3'));
         });
-        //function to chained city
-        $('#state').on('change', function () {
-            $('#city-reseller').select2({
-                placeholder: "Select City",
-                ajax: {
-                    url: '/admin/get-city',
-                    dataType: 'json',
-                    type: 'GET',
-                    data: function (term) {
-                        return {
-                            term: term,
-                            state: $('#state').val(),
-                        };
-                    },
-                },
-            });
-        });
-
-        // edit
-        $('#city-reseller-edit').select2({
-            placeholder: "Select City",
-            ajax: {
-                url: '/admin/get-city-edit',
-                dataType: 'json',
-                type: 'GET',
-                data: function (term) {
-                    return {
-                        term: term,
-                        stateEdit: $('#state-edit').val(),
-                    };
-                },
-            },
-        });
-
-        //function to chained city
-        $('#state-edit').select2();
-        $('#state-edit').on('change', function () {
-            $('#city-reseller-edit').select2({
-                placeholder: "Select City",
-                ajax: {
-                    url: '/admin/get-city-edit',
-                    dataType: 'json',
-                    type: 'GET',
-                    data: function (term) {
-                        return {
-                            term: term,
-                            stateEdit: $('#state-edit').val(),
-                        };
-                    },
-                },
-            });
-        });
-
-        $('#check_reseller').click(function () {
-            input = '#password_reseller';
-            icon = '#icon-pass-reseller';
-            if ($(input).attr('type') == 'password') {
-                $(input).prop('type', 'text');
-                $(icon).removeClass('text-secondary')
-                $(icon).addClass('text-info');
-            } else {
-                $(icon).removeClass('text-info');
-                $(icon).addClass('text-secondary');
-                $(input).prop('type', 'password');
-            }
-        });
-
-        $('#check3').click(function () {
-            input = '#password_confirmation';
-            icon = '#icon-pass3';
-            if ($(input).attr('type') == 'password') {
-                $(input).prop('type', 'text');
-                $(icon).removeClass('text-secondary')
-                $(icon).addClass('text-info');
-            } else {
-                $(icon).removeClass('text-info');
-                $(icon).addClass('text-secondary');
-                $(input).prop('type', 'password');
-            }
-        });
-
-        //function for check password confirmation
-        $("#password_confirmation").on("keyup", function () {
-            //Store the password field objects into variables ...
-            var password = document.getElementById('password_reseller');
-            var confirm = document.getElementById('password_confirmation');
-            var message = document.getElementById('confirm-message3');
-            //Set the colors we will be using ...
-            var good_color = "#66cc66";
-            var bad_color = "#ff6666";
-            //Compare the values in the password field 
-            //and the confirmation field
-            if (password.value == confirm.value) {
-                //The passwords match. 
-                //Set the color to the good color and inform
-                //the user that they have entered the correct password 
-                confirm.style.borderColor = good_color;
-                message.style.color = good_color;
-                message.innerHTML = 'Match <i class="fa fa-check"></i>';
-            } else {
-                //The passwords do not match.
-                //Set the color to the bad color and
-                //notify the user.
-                confirm.style.borderColor = bad_color;
-                message.style.color = bad_color;
-                message.innerHTML = 'Not Match <i class="fa fa-close"></i>';
-            }
-        });
-
-
-
     });
 
 </script>

@@ -1,6 +1,7 @@
 @extends('layouts.app', ['activePage' => 'role', 'titlePage' => __('Role Management')])
 
 @section('content')
+<div id="preloaders" class="preloader"></div>
 <div class="content">
     <div class="row">
         <div class="col-md-10">
@@ -166,7 +167,7 @@
 @push('js')
 <script>
     $(document).ready(function () {
-
+        $("#preloaders").fadeOut(1000);
     });
 
 </script>

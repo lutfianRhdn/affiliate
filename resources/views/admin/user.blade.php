@@ -1,6 +1,7 @@
 @extends('layouts.app', ['activePage' => 'admin', 'titlePage' => __('User Management')])
 
 @section('content')
+<div id="preloaders" class="preloader"></div>
 <div class="content">
     <div class="container">
         <div class="row">
@@ -308,6 +309,7 @@
                 'aTargets': ['no-sort']
             }]
         });
+        $("#preloaders").fadeOut(1000);
         
         $('#edit-user').tooltip();
 
