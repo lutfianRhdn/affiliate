@@ -27,11 +27,9 @@ class AdminResellerController extends Controller
     {
         $model_product = new Product;
         $product = $model_product->getData();
-        $model_province = new Province;
-        $provinces = $model_province->getData();
         $user = new User;
         $users = $user->getResellerData();
-        return view('admin.resellerAdmin', ['users' => $users, 'products' => $product, 'provinces' => $provinces]);
+        return view('admin.resellerAdmin', ['users' => $users, 'products' => $product,]);
     }
 
     /**
@@ -56,33 +54,26 @@ class AdminResellerController extends Controller
         $this->validate($request, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed',
-            'regex:/[a-z]/',
-            'regex:/[A-Z]/',
-            'regex:/[0-9]/',
-            'regex:/[@$!%*#?&]/'],
             'phone' => ['required', 'min:9', 'max:14'],
             'product_id' => ['required'],
-            'country' => ['required'],
-            'state' => ['required'],
-            'city' => ['required'],
             'address' => ['required']
         ]);
+
 
         $permitted_chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $random = substr(str_shuffle($permitted_chars), 0, 6);
         $model_user = new User;
         $product = new Product;
         $regex = $product->getRegex($request['product_id']);
+        $pass = Str::random(10);
         do {
             $ref_code = $regex->regex . '-' . $random;
             $check = $model_user->getRefCode($ref_code);
         } while ($check != null);
 
         if ($check == null) {
-            $user = $model_user->createUserAdmin($request, $ref_code);
+            $user = $model_user->createUserAdmin($request, $ref_code, $pass);
         }
-        $pass = $request['password'];
 
         Mail::to($user['email'])->send(new EmailConfirmation($user->id, $pass));
         LogActivity::addToLog("Menambahkan Reseller" . $request->email);
@@ -130,14 +121,11 @@ class AdminResellerController extends Controller
             ->update([
                 'name' => $request->name,
                 'phone' => $request->phone,
-                'role' => $request->role,
-                'country' => $request->country,
-                'state' => $request->state,
-                'region' => $request->city,
+                'address' => $request->address,
             ]);
         $role = $request->role == '1' ? ' Admin' : 'Reseller';
         LogActivity::addToLog("Mengubah data " . $role . " " . $request->email);
-        return redirect("/admin/reseller")->with('status', 'Berhasil update data ' . $request->name);
+        return redirect()->back()->with('status', 'Sucess Update data ' . $request->name);
     }
 
     /**

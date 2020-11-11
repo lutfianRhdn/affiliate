@@ -2,6 +2,7 @@
 
 
 @section('content')
+<div id="preloaders" class="preloader"></div>
 <div class="content">
     <div class="row">
         <div class="col-md-12">
@@ -35,8 +36,8 @@
                                     <th>Description</th>
                                     <th>Regex</th>
                                     <th>URL</th>
-                                    <th>Code</th>
-                                    <th class="text-right">Actions</th>
+                                    <th class="no-sort">Code</th>
+                                    <th class="text-right no-sort">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -249,7 +250,7 @@
                     <div class="bmd-form-group{{ $errors->has('product_name') ? ' has-danger' : '' }}">
                         <div class="form-group pl-2">
                             <label for="product_name">Product Name</label>
-                            <input type="text" class="form-control" placeholder="Pagii" name="product_name"
+                            <input type="text" class="form-control pl-2" placeholder="Name" name="product_name"
                                 value="{{ old('product_name') }}">
                         </div>
                         @if ($errors->has('product_name'))
@@ -262,7 +263,7 @@
                     <div class="bmd-form-group{{ $errors->has('regex') ? ' has-danger' : '' }}">
                         <div class="form-group pl-2">
                             <label for="regex">Regex</label>
-                            <input type="text" class="form-control" placeholder="pagii" name="regex"
+                            <input type="text" class="form-control pl-2" placeholder="ABCD" name="regex"
                                 value="{{ old('regex') }}" oninput="this.value = this.value.toUpperCase()">
                         </div>
                         @if ($errors->has('regex'))
@@ -274,8 +275,8 @@
                     <div class="mt-2 bmd-form-group{{ $errors->has('desc') ? ' has-danger' : '' }}">
                         <div class="form-group pl-2">
                             <label for="desc">Description</label>
-                            <textarea class="form-control" id="desc" rows="2" name="description"
-                                placeholder="Smooets Product" value="{{ old('product_name') }}"></textarea>
+                            <textarea class="form-control pl-2" id="desc" rows="2" name="description"
+                                placeholder="Type your product description here" value="{{ old('product_name') }}"></textarea>
                         </div>
                         @if ($errors->has('desc'))
                         <div id="desc-error" class="error text-danger" for="desc" style="display: block;">
@@ -286,16 +287,10 @@
                     <div class="bmd-form-group">
                         <div class="form-group pl-2">
                             <label for="product_name">URL</label>
-                            <input type="text" class="form-control" placeholder="https://pagii.co/" name="urlProduct"
+                            <input type="text" class="form-control pl-2" placeholder="https://sample.com" name="urlProduct"
                                 value="{{ old('url') }}">
                         </div>
                     </div>
-                    {{-- <div class="mt-2 bmd-form-group">
-                        <div class="form-group pl-2">
-                            <label for="desc">Code</label>
-                            <textarea class="form-control" id="code" rows="5" name="code">{{ old('code') }}</textarea>
-                        </div>
-                    </div> --}}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -312,8 +307,14 @@
 @push('js')
 <script>
     $(document).ready(function () {
-        $('#tableProduct').DataTable();
-
+        $('#tableProduct').DataTable({
+            "aoColumnDefs": [{
+                'bSortable': false,
+                'aTargets': ['no-sort']
+            }]
+        });
+        $('.custom-select').selectpicker();
+        $("#preloaders").fadeOut(1000);
         $(document).on('click', '#btnCopy', function () {
             copytext($('#codeInput').val(), this);
         });

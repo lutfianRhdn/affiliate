@@ -53,3 +53,14 @@ input[type=number] {
 .form-check .form-check-label span {
     top: -4px !important;
 }
+
+.preloader {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url('css/Infinity-1s-221px.svg') 50% 50% no-repeat rgb(249, 249, 249);
+    opacity: .8;
+}
