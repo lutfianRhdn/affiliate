@@ -58,7 +58,8 @@ class RegisterController extends Controller
         $product = $model_product->getData();
         // $model_province = new Province;
         // $provinces = $model_province->getData();
-        return view("auth.register", ['products' => $product]);
+        // return view("auth.register", ['products' => $product]);
+        return redirect()->back();
     }
 
     /**

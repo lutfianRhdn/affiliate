@@ -1,4 +1,5 @@
-@extends('layouts.BaseApp', ['class' => 'off-canvas-sidebar', 'activePage' => 'login', 'title' => __('Affiliate Program'),
+@extends('layouts.BaseApp', ['class' => 'off-canvas-sidebar', 'activePage' => 'login', 'title' => __('Affiliate
+Program'),
 'titlePage' => 'Login'])
 
 @section('content')
@@ -68,29 +69,15 @@
                     </div>
                 </div>
             </form>
-            <div class="row">
-                {{-- <div class="col-6">
-                    @if (Route::has('password.request'))
-                    <a href="{{ route('password.request') }}" class="text-light">
-                <small>{{ __('Forgot password?') }}</small>
-                </a>
-                @endif
-            </div> --}}
-            <div class="col-12 text-center">
-                <a href="/registration" class="text-light">
-                    <small>{{ __('Create new account') }}</small>
-                </a>
-            </div>
         </div>
     </div>
-</div>
 </div>
 @endsection
 
 @push('js')
 <script>
     $(document).ready(function () {
-        $('#check').click(function (){
+        $('#check').click(function () {
             input = '#password';
             icon = '#icon-pass';
             if ($(input).attr('type') == 'password') {
