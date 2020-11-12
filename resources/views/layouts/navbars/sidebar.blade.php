@@ -63,7 +63,7 @@
         </a>
       </li>
       @endcan
-      @can('setting')
+      @role('admin')
 
       <li class="nav-item{{ $activePage == 'setting' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('admin.setting.index')}}">
@@ -71,8 +71,8 @@
             <p>{{ __('Settings') }}</p>
         </a>
       </li> 
-      @endcan
-      @can('Log.view')
+      @endrole
+      @role('admin')
 
       <li class="nav-item{{ $activePage == 'log' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('admin.log.index')}}">
@@ -80,7 +80,7 @@
             <p>{{ __('Log Activity') }}</p>
         </a>
       </li>
-      @endcan
+      @endrole
     </ul>
   </div>
 </div>

@@ -47,7 +47,7 @@ $id = Crypt::decrypt($hash);
                 'regex:/[@$!%*#?&]/'
             ],
             'password_confirmation' => ['required_with:password', 'same:password'],
-            'phone' => ['required','integer', 'between:9,14'],
+            'phone' => ['required', 'min:9','max:12'],
             'address' => ['required']
         ];
 
