@@ -1,6 +1,7 @@
 @extends('layouts.app', ['activePage' => 'role', 'titlePage' => __('Role Management')])
 
 @section('content')
+<div id="preloaders" class="preloader"></div>
 <div class="content">
     <div class="row">
         <div class="col-md-10">
@@ -324,6 +325,7 @@
     $(document).ready(function () {
         $('.permission-edit').select2()
         $('#permission-create').select2()
+        $("#preloaders").fadeOut(1000);
     });
 
 </script>
