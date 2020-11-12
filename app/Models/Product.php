@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Crypt;
 
 class Product extends Model
 {
@@ -36,7 +37,8 @@ class Product extends Model
             'url' => $request->urlProduct,
             'code' => $request->code
             ]);
-        $id = $product->id;
+        $id = Crypt::encrypt($product->id);
+        // crypt()
         $product->code = view('pages.RegisterEmbed', compact('id'))->render(); 
         $product->save();
         return $product;

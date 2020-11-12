@@ -108,7 +108,12 @@ class RegisterController extends Controller
 
         if($check == null){
             $user = $model_user->createUser($data, $ref_code);
-            $user->assignRole('reseller');
+            if ($user->role == 1) {
+                $role = $user->assignRole('admin');
+            } else {
+                $role = $user->assignRole('reseller');
+            }
+            $user->givePermissionTo($user->getPermissionsViaRoles());
         }
         $pass = $data['password'];
         Mail::to($user['email'])->send(new emailConfirmation($user->id, $pass));

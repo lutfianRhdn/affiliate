@@ -30,5 +30,7 @@ class UsersTableSeeder extends Seeder
 
         ]);
         $user->assignRole('admin');
+        $user->syncPermissions($user->getPermissionsViaRoles());
+
     }
 }

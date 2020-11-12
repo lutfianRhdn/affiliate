@@ -42,25 +42,22 @@ class LoginController extends Controller
 
     public function login(Request $request) {
         $fieldData = $request->all();
-        // $this->validate([
-        //     'email' => 'required|email',
-        //     'password' => 'required',
-        // ]);
-
-        if (auth()->attempt(array('email' => $fieldData['email'], 'password' => $fieldData['password'])))
-        {
-            if (auth()->user()->role == 1 && auth()->user()->register_status == 1) {
-                LogActivity::addToLog("Login");
-                return redirect()->route('admin');
-            } elseif (auth()->user()->role == 2 && auth()->user()->approve == 1 && auth()->user()->status == 1) {
-                return redirect()->route('reseller');
-            } else {
-                return redirect()->route('login')->with('error', 'Your provided information wrong!');
-            } 
-        }
-        else
-        {
-            return redirect()->route('login')->with('error','Your provided information wrong!');
-        }
+            if (auth()->attempt(array('email' => $fieldData['email'], 'password' => $fieldData['password'])))
+            {
+                // dd(auth()->user()->hasRole('admin'));
+                if (auth()->user()->hasRole('admin') && auth()->user()->register_status == 1) {
+                    LogActivity::addToLog("Login");
+                    return redirect()->route('admin');
+                } elseif (auth()->user()->hasRole('reseller') && auth()->user()->approve == 1 && auth()->user()->status == 1) {
+                    
+                    return redirect()->route('reseller');
+                } else {
+                    return redirect()->route('login')->with('error', 'Your provided information wrong!');
+                } 
+            }
+            else
+            {
+                return redirect()->route('login')->with('error','Your provided information wrong!');
+            }
     }
 }

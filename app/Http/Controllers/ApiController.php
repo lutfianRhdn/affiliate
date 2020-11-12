@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ErrorResource;
 use App\Http\Resources\ProductResource;
+use App\Models\LogActivity;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
 
 class ApiController extends Controller
@@ -16,14 +18,16 @@ class ApiController extends Controller
     {
 
         // return 'oke dudse';
+        
         $product = Product::find($request->id);
         return (new ProductResource($product));
     }
 
-    public function RegisterApi(Request $request,$id)
+    public function RegisterApi(Request $request,$hash)
     {
         // return response()->json(['status'=>'errors']);  
-
+$id = Crypt::decrypt($hash);
+// dd($id);
     // Rules
     $product = Product::find($id);
     if (!$product) {
@@ -32,7 +36,7 @@ class ApiController extends Controller
             'error'=> 'application is not registered'
             ]);
     }
-        $Rules = [
+    $Rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => [
@@ -43,7 +47,7 @@ class ApiController extends Controller
                 'regex:/[@$!%*#?&]/'
             ],
             'password_confirmation' => ['required_with:password', 'same:password'],
-            'phone' => ['required', 'between:9,14'],
+            'phone' => ['required','integer', 'between:9,14'],
             'address' => ['required']
         ];
 
@@ -74,10 +78,10 @@ class ApiController extends Controller
                 'type'=> 'required',
                 'message'=> 'The :attribute field is required'
             ],
-            'numeric'=>[
-                'type'=>'inValid',
-                'message'=> 'The :attribute must be a number.'
-            ],
+            // 'numeric'=>[
+            //     'type'=>'inValid',
+            //     'message'=> 'The :attribute must be a number.'
+            // ],
             'between'=>[
                 'type'=>'limited',
                 'message'=> 'The :attribute value :input is not between :min - :max.'
@@ -112,7 +116,7 @@ class ApiController extends Controller
         $permitted_chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $random = substr(str_shuffle($permitted_chars), 0, 6);
         $model_user = new User;
-        $product = new Product;
+        // $product = new Product;
         $regex = $product->getRegex($request->product_id);
         do {
             $ref_code = $regex->regex . '-' . $random;
@@ -120,6 +124,11 @@ class ApiController extends Controller
         } while ($check != null);
         if ($check == null) {
             $user = $model_user->createUser($request, $ref_code);
+            $user->assignRole('reseller'.$product->name);
+            // set Role and Permission
+            LogActivity::addToLog("Add Resseler from ");
+// LogActivity
+            $user->givePermissionTo($user->getPermissionsViaRoles());
             return response()->json(['status'=>'success']);
         }
     }

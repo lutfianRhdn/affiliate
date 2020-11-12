@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+
 class HomeController extends Controller
 {
     /**
@@ -21,6 +24,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+
         return view('admin.dashboard');
     }
 
