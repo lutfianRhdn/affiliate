@@ -96,8 +96,8 @@
                                                                             @foreach ($permissions as $permission)
                                                                             <input type="checkbox"
                                                                                 name="permission-{{$permission}}-view"
-                                                                                class="mt-2 mb-3" id="" @if
-                                                                                ($role->hasPermissionTo($permission.'.view'))
+                                                                                class="mt-2 mb-3" id="" 
+                                                                                @if($role->hasPermissionTo($permission.'.view'))
                                                                             checked
                                                                             @endif>
                                                                             @endforeach
@@ -111,8 +111,8 @@
                                                                             @foreach ($permissions as $permission)
                                                                             <input type="checkbox"
                                                                                 name="permission-{{$permission}}-create"
-                                                                                class="mt-2 mb-3" id="" @if
-                                                                                ($role->hasPermissionTo($permission.'.create'))
+                                                                                class="mt-2 mb-3" id="" 
+                                                                                @if($role->hasPermissionTo($permission.'.create'))
                                                                             checked
                                                                             @endif
                                                                             >
@@ -127,8 +127,8 @@
                                                                             @foreach ($permissions as $permission)
                                                                             <input type="checkbox"
                                                                                 name="permission-{{$permission}}-edit"
-                                                                                class="mt-2 mb-3" id="" @if
-                                                                                ($role->hasPermissionTo($permission.'.edit'))
+                                                                                class="mt-2 mb-3" id="" 
+                                                                                @if($role->hasPermissionTo($permission.'.edit'))
                                                                             checked
                                                                             @endif>
 
@@ -143,8 +143,8 @@
                                                                             @foreach ($permissions as $permission)
                                                                             <input type="checkbox"
                                                                                 name="permission-{{$permission}}-delete"
-                                                                                class="mt-2 mb-3" id="" @if
-                                                                                ($role->hasPermissionTo($permission.'.delete'))
+                                                                                class="mt-2 mb-3" id="" 
+                                                                                @if($role->hasPermissionTo($permission.'.delete'))
                                                                             checked
                                                                             @endif
                                                                             >
@@ -253,8 +253,8 @@
                                                 <p>View</p>
                                                 @foreach ($permissions as $permission)
                                                 <input type="checkbox" name="permission-{{$permission}}-view"
-                                                    class="mt-2 mb-3" id="" @if
-                                                    ($role->hasPermissionTo($permission.'.view'))
+                                                    class="mt-2 mb-3" id="" 
+                                                    @if($role->hasPermissionTo($permission.'.view'))
                                                 checked
                                                 @endif>
                                                 @endforeach
@@ -266,8 +266,8 @@
                                                 <p>Create</p>
                                                 @foreach ($permissions as $permission)
                                                 <input type="checkbox" name="permission-{{$permission}}-create"
-                                                    class="mt-2 mb-3" id="" @if
-                                                    ($role->hasPermissionTo($permission.'.create'))
+                                                    class="mt-2 mb-3" id="" 
+                                                    @if($role->hasPermissionTo($permission.'.create'))
                                                 checked
                                                 @endif
                                                 >
@@ -280,8 +280,8 @@
                                                 <p>Update</p>
                                                 @foreach ($permissions as $permission)
                                                 <input type="checkbox" name="permission-{{$permission}}-edit"
-                                                    class="mt-2 mb-3" id="" @if
-                                                    ($role->hasPermissionTo($permission.'.edit'))
+                                                    class="mt-2 mb-3" id="" 
+                                                    @if($role->hasPermissionTo($permission.'.edit'))
                                                 checked
                                                 @endif>
 
@@ -294,8 +294,8 @@
                                                 <p>Delete</p>
                                                 @foreach ($permissions as $permission)
                                                 <input type="checkbox" name="permission-{{$permission}}-delete"
-                                                    class="mt-2 mb-3" id="" @if
-                                                    ($role->hasPermissionTo($permission.'.delete'))
+                                                    class="mt-2 mb-3" id="" 
+                                                    @if($role->hasPermissionTo($permission.'.delete'))
                                                 checked
                                                 @endif
                                                 >
