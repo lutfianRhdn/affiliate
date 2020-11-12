@@ -29,14 +29,14 @@ class Province extends Model
 
     protected $primaryKey = 'id';
     
-    public function cities()
-    {
-        return $this->hasMany('App\Model\City','province_id');
-    }
+    // public function cities()
+    // {
+    //     return $this->hasMany('App\Model\City','province_id');
+    // }
     
-    public function getData()
-    {
-        $provinces = Province::select('id','province_name')->orderBy('province_name')->get();
-        return $provinces;
-    }
+    // public function getData()
+    // {
+    //     $provinces = Province::select('id','province_name')->orderBy('province_name')->get();
+    //     return $provinces;
+    // }
 }

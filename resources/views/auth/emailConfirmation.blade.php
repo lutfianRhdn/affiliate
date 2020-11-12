@@ -167,7 +167,7 @@
                                             Email : {{$user->email}}<br>
                                             Phone : {{$user->phone}}<br>
                                             Product : {{$user->product_name}}<br>
-                                            Address : {{$user->address}}, {{$user->city_name_full}}, {{$user->province_name}}<br>
+                                            Address : {{$user->address}}<br>
                                             Password : {{$pass}}<br>
                                         </span>
                                     </p>

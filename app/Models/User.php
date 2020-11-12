@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable,HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -26,9 +27,6 @@ class User extends Authenticatable
         'role',
         'product_id',
         'register_status',
-        'country',
-        'state',
-        'region',
         'address',
         'approve',
         'approve_note',
@@ -101,16 +99,12 @@ class User extends Authenticatable
             'password' => Hash::make($data['password']),
             'role' => $data['role'],
             'ref_code' => $ref_code,
-            'country' => $data['country'],
-            'state' => $data['state'],
-            'region' => $data['city'],
             'address' => $data['address'],
         ]);
-
         return $user;
     }
 
-    public function createUserAdmin($data, $ref_code)
+    public function createUserAdmin($data, $ref_code, $password)
     {
         $phone = str_replace("-", "", $data->phone);
         $user = User::create([
@@ -118,12 +112,9 @@ class User extends Authenticatable
             'email' => $data->email,
             'phone' => $phone,
             'product_id' => $data->product_id,
-            'password' => Hash::make($data->password),
+            'password' => Hash::make($password),
             'role' => $data->role,
             'ref_code' => $ref_code,
-            'country' => $data->country,
-            'state' => $data->state,
-            'region' => $data->city,
             'address' => $data->address,
         ]);
 
@@ -133,11 +124,9 @@ class User extends Authenticatable
     public function getDataEmail($id)
     {
         $data = User::select('users.name as name', 'users.email as email', 'users.phone as phone', 'users.address as address', 'users.ref_code as ref_code',
-            'products.product_name','cities.city_name_full as city_name_full', 'provinces.province_name as province_name')
+            'products.product_name',)
             ->where('users.id', $id)
-            ->join('products','products.id','=','users.product_id')
-            ->join('cities','cities.id','=','users.region')
-            ->join('provinces','provinces.id','=','users.state')->first();
+            ->join('products','products.id','=','users.product_id')->first();
 
         return $data;
     }
@@ -160,10 +149,8 @@ class User extends Authenticatable
     public function getResellerData()
     {
         $data = User::select('users.id', 'users.name', 'users.phone', 'users.register_status', 'users.status', 'users.ref_code', 'users.id', 'users.role', 'users.id', 'users.approve', 'users.approve_note', 
-                'users.created_at', 'users.email', 'users.address', 'users.country', 'provinces.province_name as state', 'cities.city_name_full as region', 'products.product_name', 'products.regex')
+                'users.created_at', 'users.email', 'users.address','products.product_name', 'products.regex')
                 ->join('products', 'products.id', '=', 'users.product_id')
-                ->join('provinces', 'provinces.id', '=', 'users.state')
-                ->join('cities', 'cities.id', '=', 'users.region')
                 ->where('users.role', 2)
                 ->orderBy('users.created_at', 'DESC')
                 ->get();

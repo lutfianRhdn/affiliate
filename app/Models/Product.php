@@ -35,7 +35,10 @@ class Product extends Model
             'regex' => $request->regex,
             'url' => $request->urlProduct,
             'code' => $request->code
-        ]);
+            ]);
+        $id = $product->id;
+        $product->code = view('pages.RegisterEmbed', compact('id'))->render(); 
+        $product->save();
         return $product;
     }
 
@@ -45,7 +48,7 @@ class Product extends Model
             'description' => $request->description,
             'regex' => $request->regex,
             'url' => $request->urlProduct,
-            'code' => $request->code
+            // 'code' => $request->code
         ]);
 
         return $product;

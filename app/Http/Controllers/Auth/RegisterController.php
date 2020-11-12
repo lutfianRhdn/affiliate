@@ -56,9 +56,9 @@ class RegisterController extends Controller
     public function index() {
         $model_product = new Product;
         $product = $model_product->getData();
-        $model_province = new Province;
-        $provinces = $model_province->getData();
-        return view("auth.register", ['products' => $product, 'provinces' => $provinces]);
+        // $model_province = new Province;
+        // $provinces = $model_province->getData();
+        return view("auth.register", ['products' => $product]);
     }
 
     /**
@@ -80,9 +80,6 @@ class RegisterController extends Controller
             'password_confirmation' => ['required_with:password','same:password'],
             'phone' => ['required', 'min:9', 'max:14'],
             'product_id' => ['required'],
-            'country' => ['required'],
-            'state' => ['required'],
-            'city' => ['required'],
             'address' => ['required']
         ]);
     }
@@ -108,6 +105,7 @@ class RegisterController extends Controller
 
         if($check == null){
             $user = $model_user->createUser($data, $ref_code);
+            $user->assignRole('reseller');
         }
         $pass = $data['password'];
         Mail::to($user['email'])->send(new emailConfirmation($user->id, $pass));
