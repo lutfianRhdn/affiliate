@@ -12,11 +12,15 @@
   <div class="sidebar-wrapper">
     <ul class="nav">
       <li class="nav-item{{ $activePage == 'dashboard' ? ' active' : '' }}">
-        <a class="nav-link" href="{{ route('admin') }}">
+        <a class="nav-link" href="{{ route($routeDashboard) }}">
           <i class="material-icons">dashboard</i>
-            <p>{{ __('Dashboard') }}</p>
+          <p>{{ __('Dashboard') }}</p>
         </a>
       </li>
+      {{-- {{dd(auth()->user()->role())}} --}}
+      
+      @can('user.view')
+
       <li class="nav-item {{ ($activePage == 'reseller' || $activePage == 'admin') ? ' active' : '' }}">
         <a class="nav-link" data-toggle="collapse" href="#adminService" aria-expanded="true">
           <i><span class="material-icons">perm_identity</span></i>
@@ -41,30 +45,42 @@
           </ul>
         </div>
       </li>
+      @endcan
+      @can('role.view')
+
       <li class="nav-item{{ $activePage == 'role' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('admin.role.index') }}">
           <i class="material-icons">admin_panel_settings</i>
             <p>{{ __('Role Management') }}</p>
         </a>
       </li>
+      @endcan
+      @can('product.view')
       <li class="nav-item{{ $activePage == 'product' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('admin.product.index') }}">
           <i class="material-icons">content_paste</i>
             <p>{{ __('Product') }}</p>
         </a>
       </li>
+      @endcan
+      @role('admin')
+
       <li class="nav-item{{ $activePage == 'setting' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('admin.setting.index')}}">
           <i class="material-icons">settings_applications</i>
             <p>{{ __('Settings') }}</p>
         </a>
-      </li>
+      </li> 
+      @endrole
+      @role('admin')
+
       <li class="nav-item{{ $activePage == 'log' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('admin.log.index')}}">
           <i class="material-icons">timeline</i>
             <p>{{ __('Log Activity') }}</p>
         </a>
       </li>
+      @endrole
     </ul>
   </div>
 </div>

@@ -33,9 +33,13 @@
     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
         @csrf
     </form>
-    @include('users.layouts.page_templates.auth')
+    @include('layouts.page_templates.auth',['routeDashboard'=>'reseller'])
     @endauth
-
+    @guest()
+    @include('layouts.page_templates.guest')
+    @endguest
+    @if (auth()->check())
+    @endif
     <!--   Core JS Files   -->
     <script src="{{ asset('material') }}/js/core/jquery.min.js"></script>
     <script src="{{ asset('material') }}/js/core/popper.min.js"></script>

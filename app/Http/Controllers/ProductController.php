@@ -13,6 +13,15 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $this->middleware('permission:product.view')->only('index');
+        $this->middleware('permission:product.create')->only('store');
+        $this->middleware('permission:product.edit')->only('update');
+        $this->middleware('permission:product.delete')->only('destroy');
+    }
+
     public function index()
     {
         $product = Product::all();

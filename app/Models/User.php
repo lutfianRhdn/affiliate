@@ -101,6 +101,10 @@ class User extends Authenticatable
             'ref_code' => $ref_code,
             'address' => $data['address'],
         ]);
+        $role = Role::find($data['role']);
+        
+        $user->assignRole($role->name);
+        // dd($user)
         return $user;
     }
 

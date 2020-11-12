@@ -62,8 +62,8 @@
                                                 <div class="modal-body">
                                                     <div
                                                         class="bmd-form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
-                                                        <div class="form-group pl-2">
-                                                            <label for="name">Role Name</label>
+                                                        <div class="form-group pl-2 d-flex">
+                                                            <label for="name " class="w-100">Role Name</label>
                                                             <input type="text" class="form-control"
                                                                 placeholder="Reseller" name="name"
                                                                 value="{{ $role->name }}">
@@ -75,6 +75,88 @@
                                                         </div>
                                                         @endif
                                                     </div>
+                                                    <div class="bmd-form-group">
+                                                        <div class="form-group pl-2 d-flex">
+                                                            <div class="form-group w-100">
+                                                                <div class="row">
+                                                                    {{-- text --}}
+                                                                    <div class="col-4">
+                                                                        <p>#</p>
+                                                                        @foreach ($permissions as $permission)
+                                                                        <p class="text-capitalize">{{$permission}}
+                                                                            Management</p>
+                                                                        @endforeach
+
+                                                                    </div>
+                                                                    {{-- view --}}
+                                                                    <div class="col-2 m">
+                                                                        <div
+                                                                            class="d-flex flex-column justify-content-center align-items-center">
+                                                                            <p>View</p>
+                                                                            @foreach ($permissions as $permission)
+                                                                            <input type="checkbox"
+                                                                                name="permission-{{$permission}}-view"
+                                                                                class="mt-2 mb-3" id="" 
+                                                                                @if($role->hasPermissionTo($permission.'.view'))
+                                                                            checked
+                                                                            @endif>
+                                                                            @endforeach
+                                                                        </div>
+                                                                    </div>
+                                                                    {{-- create --}}
+                                                                    <div class="col-2">
+                                                                        <div
+                                                                            class="d-flex flex-column justify-content-center align-items-center">
+                                                                            <p>Create</p>
+                                                                            @foreach ($permissions as $permission)
+                                                                            <input type="checkbox"
+                                                                                name="permission-{{$permission}}-create"
+                                                                                class="mt-2 mb-3" id="" 
+                                                                                @if($role->hasPermissionTo($permission.'.create'))
+                                                                            checked
+                                                                            @endif
+                                                                            >
+                                                                            @endforeach
+                                                                        </div>
+                                                                    </div>
+                                                                    {{-- update --}}
+                                                                    <div class="col-2">
+                                                                        <div
+                                                                            class="d-flex flex-column justify-content-center align-items-center">
+                                                                            <p>Update</p>
+                                                                            @foreach ($permissions as $permission)
+                                                                            <input type="checkbox"
+                                                                                name="permission-{{$permission}}-edit"
+                                                                                class="mt-2 mb-3" id="" 
+                                                                                @if($role->hasPermissionTo($permission.'.edit'))
+                                                                            checked
+                                                                            @endif>
+
+                                                                            @endforeach
+                                                                        </div>
+                                                                    </div>
+                                                                    {{-- delete --}}
+                                                                    <div class="col-2">
+                                                                        <div
+                                                                            class="d-flex flex-column justify-content-center align-items-center">
+                                                                            <p>Delete</p>
+                                                                            @foreach ($permissions as $permission)
+                                                                            <input type="checkbox"
+                                                                                name="permission-{{$permission}}-delete"
+                                                                                class="mt-2 mb-3" id="" 
+                                                                                @if($role->hasPermissionTo($permission.'.delete'))
+                                                                            checked
+                                                                            @endif
+                                                                            >
+                                                                            @endforeach
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
@@ -127,6 +209,7 @@
 </div>
 
 {{-- modal create --}}
+
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -145,12 +228,85 @@
                             <label for="name">Role Name</label>
                             <input type="text" class="form-control" placeholder="Reseller" name="name"
                                 value="{{ old('name') }}">
+
                         </div>
                         @if ($errors->has('name'))
                         <div id="name-error" class="error text-danger" for="name" style="display: block;">
                             <strong>{{ $errors->first('name') }}</strong>
                         </div>
                         @endif
+                        <div class="bmd-form-group">
+                            <div class="form-group pl-2 d-flex">
+                                <div class="form-group w-100">
+                                    <div class="row">
+                                        {{-- text --}}
+                                        <div class="col-4">
+                                            <p>#</p>
+                                            @foreach ($permissions as $permission)
+                                            <p class="text-capitalize">{{$permission}} Management</p>
+                                            @endforeach
+
+                                        </div>
+                                        {{-- view --}}
+                                        <div class="col-2 m">
+                                            <div class="d-flex flex-column justify-content-center align-items-center">
+                                                <p>View</p>
+                                                @foreach ($permissions as $permission)
+                                                <input type="checkbox" name="permission-{{$permission}}-view"
+                                                    class="mt-2 mb-3" id="" 
+                                                    @if($role->hasPermissionTo($permission.'.view'))
+                                                checked
+                                                @endif>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        {{-- create --}}
+                                        <div class="col-2">
+                                            <div class="d-flex flex-column justify-content-center align-items-center">
+                                                <p>Create</p>
+                                                @foreach ($permissions as $permission)
+                                                <input type="checkbox" name="permission-{{$permission}}-create"
+                                                    class="mt-2 mb-3" id="" 
+                                                    @if($role->hasPermissionTo($permission.'.create'))
+                                                checked
+                                                @endif
+                                                >
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        {{-- update --}}
+                                        <div class="col-2">
+                                            <div class="d-flex flex-column justify-content-center align-items-center">
+                                                <p>Update</p>
+                                                @foreach ($permissions as $permission)
+                                                <input type="checkbox" name="permission-{{$permission}}-edit"
+                                                    class="mt-2 mb-3" id="" 
+                                                    @if($role->hasPermissionTo($permission.'.edit'))
+                                                checked
+                                                @endif>
+
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        {{-- delete --}}
+                                        <div class="col-2">
+                                            <div class="d-flex flex-column justify-content-center align-items-center">
+                                                <p>Delete</p>
+                                                @foreach ($permissions as $permission)
+                                                <input type="checkbox" name="permission-{{$permission}}-delete"
+                                                    class="mt-2 mb-3" id="" 
+                                                    @if($role->hasPermissionTo($permission.'.delete'))
+                                                checked
+                                                @endif
+                                                >
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -167,6 +323,8 @@
 @push('js')
 <script>
     $(document).ready(function () {
+        $('.permission-edit').select2()
+        $('#permission-create').select2()
         $("#preloaders").fadeOut(1000);
     });
 
