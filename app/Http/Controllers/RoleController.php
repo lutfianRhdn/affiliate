@@ -53,9 +53,8 @@ class RoleController extends Controller
         $this->validate($request, ['name' => ['required']]);
         $role = Role::create(['name' => $request->name,'guard_name'=>'web']);
         // delete all permission
-
         $keys = $request->keys();
-        unset($keys[0], $keys[1], $keys[2]);
+        unset($keys[0], $keys[1]);
         foreach ($keys as $key) {
             $roleName = explode('-', $key);
             $role->givePermissionTo($roleName[1] . '.' . $roleName[2]);
@@ -104,7 +103,7 @@ class RoleController extends Controller
         // $user->syncPermissions($user->getAllPermissions());
         
         // set permission
-        $roles =[];
+        $role->syncPermissions([]);
         $keys = $request->keys();
         unset($keys[0],$keys[1],$keys[2]);
         foreach($keys as $key){
