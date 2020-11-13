@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\LogActivity;
 use App\Models\Product;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use LogHelper;
 
 class SettingController extends Controller
 {
@@ -86,8 +86,8 @@ class SettingController extends Controller
             'value' => $request->value,
             'product_id' => $request->product_id
         ]);
-        
-        LogActivity::addToLog('Merubah settingan Id '. $setting->id);
+
+        LogHelper::addToLog('Merubah settingan Id '. $setting->id);
         return redirect(route('admin.setting.index'));
     }
 

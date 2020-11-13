@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\LogActivity;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+Use LogHelper;
 
 class RoleController extends Controller
 {
@@ -59,7 +59,7 @@ class RoleController extends Controller
             $roleName = explode('-', $key);
             $role->givePermissionTo($roleName[1] . '.' . $roleName[2]);
         }
-        LogActivity::addToLog("Add Role " . $request->name);
+        LogHelper::addToLog("Add Role " . $request->name);
         return redirect(route('admin.role.index'));
 
     }
@@ -111,7 +111,7 @@ class RoleController extends Controller
 
             $role->givePermissionTo($roleName[1].'.'.$roleName[2]);
         }
-        LogActivity::addToLog("Add Role " . $request->name);
+        LogHelper::addToLog("Add Role " . $request->name);
         return redirect(route('admin.role.index'));
     }
 
@@ -124,7 +124,7 @@ class RoleController extends Controller
     public function destroy(Role $role)
     {
         Role::destroy($role->id);
-        LogActivity::addToLog('Delete role ' . $role->name);
+        LogHelper::addToLog('Delete role ' . $role->name);
         return redirect(route('admin.role.index'));
     }
 }

@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use LogHelper;
 
 class AdminResellerController extends Controller
 {
@@ -76,7 +77,7 @@ class AdminResellerController extends Controller
         }
 
         Mail::to($user['email'])->send(new EmailConfirmation($user->id, $pass));
-        LogActivity::addToLog("Menambahkan Reseller" . $request->email);
+        LogHelper::addToLog("Menambahkan Reseller" . $request->email);
         return redirect()->back();
     }
 
@@ -124,7 +125,7 @@ class AdminResellerController extends Controller
                 'address' => $request->address,
             ]);
         $role = $request->role == '1' ? ' Admin' : 'Reseller';
-        LogActivity::addToLog("Mengubah data " . $role . " " . $request->email);
+        LogHelper::addToLog("Mengubah data " . $role . " " . $request->email);
         return redirect()->back()->with('status', 'Sucess Update data ' . $request->name);
     }
 
@@ -138,7 +139,7 @@ class AdminResellerController extends Controller
     public function destroy(Request $request)
     {
         User::destroy($request->id);
-        LogActivity::addToLog("Menghapus akun" . $request->email);
+        LogHelper::addToLog("Menghapus akun" . $request->email);
         return redirect("/admin/reseller")->with('status', 'Data berhasil dihapus');
     }
 

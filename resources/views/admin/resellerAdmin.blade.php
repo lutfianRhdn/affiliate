@@ -338,7 +338,7 @@
     $(document).ready(function () {
         $('#table_reseller').DataTable({
             // "responsive": true,
-            "scrollX": true,
+            // "scrollX": true,
             columnDefs: [{
                 'targets': 4,
                 type: 'date-euro'

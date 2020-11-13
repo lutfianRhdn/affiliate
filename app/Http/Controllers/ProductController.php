@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\LogActivity;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use LogHelper;
 
 class ProductController extends Controller
 {
@@ -55,8 +55,8 @@ class ProductController extends Controller
         
         $productModel = new Product;
         $productModel->createProduct($request);
-        
-        LogActivity::addToLog("Menambahkan product ".$request->product_name);
+
+        LogHelper::addToLog("Menambahkan product ".$request->product_name);
         return redirect(route('admin.product.index'))->with('status', 'Data inserted successfully');
     }
 
@@ -100,7 +100,7 @@ class ProductController extends Controller
         $productModel = new Product;
         $productModel->updateProduct($request, $product->id);
         
-        LogActivity::addToLog("Edit product id ".$product->id);
+        LogHelper::addToLog("Edit product id ".$product->id);
         return redirect(route('admin.product.index'))->with('status', 'Data updated successfully');
     }
 
@@ -121,7 +121,7 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         Product::destroy($product->id);
-        LogActivity::addToLog("Delete product ".$product->product_name);
+        LogHelper::addToLog("Delete product ".$product->product_name);
         return redirect(route('admin.product.index'))->with('status', 'Item deleted successfully');
     }
 }

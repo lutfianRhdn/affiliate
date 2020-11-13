@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
+use LogHelper;
 
 class ApiController extends Controller
 {
@@ -127,7 +128,7 @@ $id = Crypt::decrypt($hash);
             $user = $model_user->createUser($request, $ref_code);
             $user->assignRole('reseller'.$product->name);
             // set Role and Permission
-            HelpersLogActivity::addToLog("Add Resseler from ");
+            LogHelper::addToLog("Add Resseler from ");
 // LogActivity
             $user->givePermissionTo($user->getPermissionsViaRoles());
             return response()->json(['status'=>'success']);

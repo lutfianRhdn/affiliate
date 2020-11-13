@@ -85,7 +85,8 @@
                                             <div
                                                 class="form-group mt-2 {{ $errors->has('product_id') ? ' has-danger' : '' }}">
                                                 <label for="product_id">Product Name</label>
-                                                <select class="form-control" data-style="btn btn-link" id="product_id"
+                                                <div class="row mx-2">
+                                                <select class="form-control productIdSetting col-12 " data-style="btn btn-link" id="product_id_setting"
                                                     name="product_id">
                                                     @foreach ($products as $prd)
                                                     <option value="{{$prd->id}}"
@@ -93,6 +94,7 @@
                                                         {{$prd->product_name}}</option>
                                                     @endforeach
                                                 </select>
+                                                </div>
                                                 @if ($errors->has('product_id'))
                                                 <div id="product_id-error" class="error text-danger" for="product_id"
                                                     style="display: block;">
@@ -123,10 +125,8 @@
 @push('js')
 <script>
     $(document).ready(function () {
-        $('#edit-setting').tooltip(options);
-    }
-
+        $('.productIdSetting').select2();
+        // $('#edit-setting').tooltip();
     });
-
 </script>
 @endpush
