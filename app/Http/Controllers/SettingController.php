@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Setting;
 use Illuminate\Http\Request;
-use LogHelper;
 
 class SettingController extends Controller
 {
@@ -87,7 +86,7 @@ class SettingController extends Controller
             'product_id' => $request->product_id
         ]);
 
-        LogHelper::addToLog('Merubah settingan Id '. $setting->id);
+        addToLog('Merubah settingan Id '. $setting->id);
         return redirect(route('admin.setting.index'));
     }
 

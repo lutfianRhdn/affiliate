@@ -10,8 +10,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
-use LogHelper;
-
 class AdminUserController extends Controller
 {
 
@@ -67,7 +65,7 @@ class AdminUserController extends Controller
                 $user = $model_user->createUser($request->all(), $ref_code);
             }
         // Mail::to($user['email'])->send(new KonfirmasiEmail($user));
-        LogHelper::addToLog("Menambahkan Adminn".$request->email);
+        addToLog("Menambahkan Adminn".$request->email);
         return redirect(route('admin.user.index'))->with('status', 'Admin successfully added');
     }
 
@@ -96,7 +94,7 @@ class AdminUserController extends Controller
                 'role' => $request->role,
             ]);
         $role = $request->role == '1' ? ' Admin' : 'Reseller';
-        LogHelper::addToLog("Mengubah data " . $role . " " . $request->email);
+        addToLog("Mengubah data " . $role . " " . $request->email);
         return redirect(route('admin.user.index'))->with('status', 'Berhasil update data '.$request->name);
     }
 
@@ -104,7 +102,7 @@ class AdminUserController extends Controller
     {
         if($user->email != 'admin@admin.com'){
             User::destroy($user->id);
-            LogHelper::addToLog("Delete account " . $user->email);
+            addToLog("Delete account " . $user->email);
             return redirect(route('admin.user.index'))->with('status', 'Data deleted successfully');
         }
         return redirect(route('admin.user.index'))->with('statusAdmin', 'Admin cannot be deleted');
