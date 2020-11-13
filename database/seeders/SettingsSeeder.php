@@ -14,7 +14,7 @@ class SettingsSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('settings')->where('id', 1)->update([
+        DB::table('settings')->insert([
             'key' => 'percentage',
             'label' => 'Percentage',
             'value' => '10',

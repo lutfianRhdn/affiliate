@@ -11,4 +11,10 @@ class LogActivity extends Model
     protected $fillable = [
         'subject'
     ];
+
+    public function getData()
+    {
+        $logs = LogActivity::all();
+        return $logs;
+    }
 }

@@ -20,7 +20,8 @@ class LogActivityController extends Controller
      */
     public function index()
     {
-        $logs = LogActivity::logActivityLists();
+        $logsModel = new ModelsLogActivity;
+        $logs = $logsModel->getData();
         return view('admin.logActivity', ["logs"=>$logs]);
     }
 

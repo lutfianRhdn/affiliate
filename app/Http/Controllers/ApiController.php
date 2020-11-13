@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\LogActivity as HelpersLogActivity;
 use App\Http\Resources\ErrorResource;
 use App\Http\Resources\ProductResource;
 use App\Models\LogActivity;
@@ -126,7 +127,7 @@ $id = Crypt::decrypt($hash);
             $user = $model_user->createUser($request, $ref_code);
             $user->assignRole('reseller'.$product->name);
             // set Role and Permission
-            LogActivity::addToLog("Add Resseler from ");
+            addToLog("Add Resseler from ");
 // LogActivity
             $user->givePermissionTo($user->getPermissionsViaRoles());
             return response()->json(['status'=>'success']);

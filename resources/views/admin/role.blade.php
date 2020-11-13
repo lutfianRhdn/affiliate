@@ -323,8 +323,8 @@
 @push('js')
 <script>
     $(document).ready(function () {
-        $('.permission-edit').select2()
-        $('#permission-create').select2()
+        $('.permission-edit').select2();
+        $('#permission-create').select2();
         $("#preloaders").fadeOut(1000);
     });
 

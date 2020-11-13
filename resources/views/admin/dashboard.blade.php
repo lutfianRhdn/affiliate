@@ -1,6 +1,7 @@
 @extends('layouts.app', ['activePage' => 'dashboard', 'titlePage' => __('Admin')])
 
 @section('content')
+<div id="preloaders" class="preloader"></div>
   <div class="content">
     <div class="container-fluid">
       <div class="row">
@@ -423,6 +424,7 @@
     $(document).ready(function() {
       // Javascript method's body can be found in assets/js/demos.js
       md.initDashboardPageCharts();
+      $("#preloaders").fadeOut(1000);
     });
   </script>
 @endpush

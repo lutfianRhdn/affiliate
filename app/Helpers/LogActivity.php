@@ -1,15 +1,13 @@
 <?php
 
 
-namespace App\Helpers;
+// namespace App\Helpers;
 
 use App\Models\LogActivity as ModelsLogActivity;
 
-class LogActivity
-{
 
 
-    public static function addToLog($subject)
+    function addToLog($subject)
     {
         $log = [];
         $log['subject'] = $subject;
@@ -18,8 +16,5 @@ class LogActivity
     }
 
 
-    public static function logActivityLists()
-    {
-        return ModelsLogActivity::all();
-    }
-}
+    
+

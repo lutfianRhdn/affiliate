@@ -25,11 +25,6 @@
         </li>
     @endauth
     @guest
-        <li class="nav-item{{ $activePage == 'register' ? ' active' : '' }}">
-          <a href="/registration" class="nav-link">
-            <i class="material-icons">person_add</i> {{ __('Register') }}
-          </a>
-        </li>
         <li class="nav-item{{ $activePage == 'login' ? ' active' : '' }}">
           <a href="{{ route('login') }}" class="nav-link">
             <i class="material-icons">fingerprint</i> {{ __('Login') }}
