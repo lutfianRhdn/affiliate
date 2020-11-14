@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Vinkla\Hashids\Facades\Hashids;
 
 class RoleController extends Controller
 {
@@ -24,6 +25,8 @@ class RoleController extends Controller
     }
     public function index()
     {
+        Hashids::encode('1');
+dd(Hashids::encode(1));
         $roles = Role::all();
         $permissions = [
             'role','user','product'

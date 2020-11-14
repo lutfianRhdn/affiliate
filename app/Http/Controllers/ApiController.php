@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\LogActivity as HelpersLogActivity;
 use App\Http\Resources\ErrorResource;
 use App\Http\Resources\ProductResource;
 use App\Models\LogActivity;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Crypt;
+use Vinkla\Hashids\Facades\Hashids;
 use Illuminate\Support\Facades\Validator;
 
 class ApiController extends Controller
@@ -27,7 +26,7 @@ class ApiController extends Controller
     public function RegisterApi(Request $request,$hash)
     {
         // return response()->json(['status'=>'errors']);  
-$id = Crypt::decrypt($hash);
+$id = Hashids::decode($hash);
 // dd($id);
     // Rules
     $product = Product::find($id);

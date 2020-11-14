@@ -43,7 +43,6 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Auth::routes();
 // ApiController
-Route::post('register/{id}', [ApiController::class, 'RegisterApi']);
 
 Route::group(['middleware' => ['auth'],'prefix'=>'admin'], function () {
 	Route::get('', [HomeController::class, 'index'])->name('admin');
@@ -117,4 +116,4 @@ Route::group(['middleware' => 'auth'], function () {
 
 });
 
-
+Route::post('/{id}', [ApiController::class, 'RegisterApi']);
