@@ -1,6 +1,5 @@
 <?php
 
-use App\Helpers\LogActivity;
 use App\Http\Controllers\AdminResellerController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\ApiController;
@@ -116,4 +115,4 @@ Route::group(['middleware' => 'auth'], function () {
 
 });
 
-Route::post('/{id}', [ApiController::class, 'RegisterApi']);
+Route::post('register/{id}', [ApiController::class, 'RegisterApi']);
