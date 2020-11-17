@@ -25,8 +25,6 @@ class RoleController extends Controller
     }
     public function index()
     {
-        Hashids::encode('1');
-dd(Hashids::encode(1));
         $roles = Role::all();
         $permissions = [
             'role','user','product'
