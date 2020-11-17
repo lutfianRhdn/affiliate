@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\LogActivity as HelpersLogActivity;
 use App\Http\Resources\ErrorResource;
 use App\Http\Resources\ProductResource;
-use App\Models\LogActivity;
+use App\Mail\EmailConfirmation;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Crypt;
+use Vinkla\Hashids\Facades\Hashids;
+use Illuminate\Support\Facades\Mail;
+
 use Illuminate\Support\Facades\Validator;
 
 class ApiController extends Controller
@@ -27,10 +28,10 @@ class ApiController extends Controller
     public function RegisterApi(Request $request,$hash)
     {
         // return response()->json(['status'=>'errors']);  
-$id = Crypt::decrypt($hash);
-// dd($id);
+    $id = Hashids::decode($hash);
     // Rules
-    $product = Product::find($id);
+    $product = Product::find($id)->first();
+    // dd($product);
     if (!$product) {
         return response()->json([
             'status' =>'error',
@@ -79,10 +80,10 @@ $id = Crypt::decrypt($hash);
                 'type'=> 'required',
                 'message'=> 'The :attribute field is required'
             ],
-            // 'numeric'=>[
-            //     'type'=>'inValid',
-            //     'message'=> 'The :attribute must be a number.'
-            // ],
+            'numeric'=>[
+                'type'=>'inValid',
+                'message'=> 'The :attribute must be a number.'
+            ],
             'between'=>[
                 'type'=>'limited',
                 'message'=> 'The :attribute value :input is not between :min - :max.'
@@ -111,26 +112,25 @@ $id = Crypt::decrypt($hash);
             return new ErrorResource([ $errors]);
         }
 
-// on success
-        $request->request->add(['product_id'=>$id,'role'=> 2]);
-        
+    // on success
         $permitted_chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $random = substr(str_shuffle($permitted_chars), 0, 6);
         $model_user = new User;
-        // $product = new Product;
-        $regex = $product->getRegex($request->product_id);
+        $regex = $product->getRegex($product->id);
+        
         do {
             $ref_code = $regex->regex . '-' . $random;
             $check = $model_user->getRefCode($ref_code);
         } while ($check != null);
+
         if ($check == null) {
-            $user = $model_user->createUser($request, $ref_code);
-            $user->assignRole('reseller'.$product->name);
-            // set Role and Permission
-            addToLog("Add Resseler from ");
-// LogActivity
+            $request->request->add(['product_id'=>$product->id,'role'=>'2']);
+            $user = $model_user->createUserAdmin($request, $ref_code, $request->password);
+        }
+        // Mail::to($user->email)->send(new EmailConfirmation($user->id, $request->password));
+        addToLog("Menambahkan Reseller" . $request->email);
             $user->givePermissionTo($user->getPermissionsViaRoles());
             return response()->json(['status'=>'success']);
         }
     }
-}
+

@@ -46,7 +46,7 @@ class LoginController extends Controller
             {
                 // dd(auth()->user()->hasRole('admin'));
                 if (auth()->user()->hasRole('admin') && auth()->user()->register_status == 1) {
-                    LogActivity::addToLog("Login");
+                    addToLog("Login");
                     return redirect()->route('admin');
                 } elseif (auth()->user()->hasRole('reseller') && auth()->user()->approve == 1 && auth()->user()->status == 1) {
                     

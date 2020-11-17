@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Crypt;
+use Vinkla\Hashids\Facades\Hashids;
 
 class Product extends Model
 {
@@ -37,7 +37,7 @@ class Product extends Model
             'url' => $request->urlProduct,
             'code' => $request->code
             ]);
-        $id = Crypt::encrypt($product->id);
+        $id = Hashids::encode($product->id);
         // crypt()
         $product->code = view('pages.RegisterEmbed', compact('id'))->render(); 
         $product->save();

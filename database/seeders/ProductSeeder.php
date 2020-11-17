@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Product;
+use Vinkla\Hashids\Facades\Hashids;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -14,18 +16,23 @@ class ProductSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('products')->insert([
+        $pagii = Product::create([
             'product_name' => 'PAGII',
             'description' => 'Pagii Apps',
             'regex' => 'PAGII',
             'created_at' => now()
         ]);
-        
-        DB::table('products')->insert([
+        $id = Hashids::encode($pagii->id);
+        $pagii->code = view('pages.registerEmbed',compact('id'))->render();
+        $pagii->save();
+       $mars = Product::create([
             'product_name' => 'MARS',
             'description' => 'Mars Apps',
             'regex' => 'MARS',
             'created_at' => now()
         ]);
+        $id = Hashids::encode($mars->id); 
+        $mars->code = view('pages/registerEmbed',compact('id'))->render();
+        $mars->save();
     }
 }
