@@ -35,6 +35,7 @@ class Product extends Model
             'description' => $request->description,
             'regex' => $request->regex,
             'url' => $request->urlProduct,
+            'permission_ip' => $request->permissionUrl ,
             'code' => $request->code
             ]);
         $id = Hashids::encode($product->id);
@@ -50,6 +51,7 @@ class Product extends Model
             'description' => $request->description,
             'regex' => $request->regex,
             'url' => $request->urlProduct,
+            'permission_ip'=> $request->permissionUrl
             // 'code' => $request->code
         ]);
 

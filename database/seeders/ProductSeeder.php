@@ -20,19 +20,21 @@ class ProductSeeder extends Seeder
             'product_name' => 'PAGII',
             'description' => 'Pagii Apps',
             'regex' => 'PAGII',
+            'permission_ip'=> 'http://intern-pagii.smtapps.net/',
             'created_at' => now()
         ]);
         $id = Hashids::encode($pagii->id);
-        $pagii->code = view('pages.registerEmbed',compact('id'))->render();
+        $pagii->code = view('pages.RegisterEmbed',compact('id'))->render();
         $pagii->save();
        $mars = Product::create([
             'product_name' => 'MARS',
             'description' => 'Mars Apps',
             'regex' => 'MARS',
+            'permission_ip'=>'http://mars.co',
             'created_at' => now()
         ]);
         $id = Hashids::encode($mars->id); 
-        $mars->code = view('pages/registerEmbed',compact('id'))->render();
+        $mars->code = view('pages.RegisterEmbed',compact('id'))->render();
         $mars->save();
     }
 }

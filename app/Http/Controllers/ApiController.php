@@ -18,26 +18,36 @@ class ApiController extends Controller
 
     public function ProductApi(Request $request)
     {
-
-        // return 'oke dudse';
-        
         $product = Product::find($request->id);
         return (new ProductResource($product));
     }
 
     public function RegisterApi(Request $request,$hash)
     {
-        // return response()->json(['status'=>'errors']);  
     $id = Hashids::decode($hash);
-    // Rules
     $product = Product::find($id)->first();
-    // dd($product);
+
+    // check origin url
+    // set allowed url
+        $allowedHosts = explode(',', env('ALLOWED_DOMAINS'));
+        $productUrl = parse_url($product->permission_ip, PHP_URL_HOST);
+        array_push($allowedHosts, $productUrl);
+    // get url hit 
+        $requestHost = parse_url($request->headers->get('origin'),
+            PHP_URL_HOST
+        );
+    // if url request came from != alowed url
+        if (!in_array($requestHost, $allowedHosts, False)) {
+            abort(403);
+        }
+        
     if (!$product) {
         return response()->json([
             'status' =>'error',
             'error'=> 'application is not registered'
             ]);
     }
+    // Rules
     $Rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
