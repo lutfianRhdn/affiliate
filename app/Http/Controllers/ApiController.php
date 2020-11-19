@@ -27,6 +27,12 @@ class ApiController extends Controller
     $id = Hashids::decode($hash);
     $product = Product::find($id)->first();
 
+        if (!$product) {
+            return response()->json([
+                'status' => 'error',
+                'error' => 'application is not registered'
+            ]);
+        }
     // check origin url
     // set allowed url
         $allowedHosts = explode(',', env('ALLOWED_DOMAINS'));
@@ -41,12 +47,7 @@ class ApiController extends Controller
             abort(403);
         }
         
-    if (!$product) {
-        return response()->json([
-            'status' =>'error',
-            'error'=> 'application is not registered'
-            ]);
-    }
+   
     // Rules
     $Rules = [
             'name' => ['required', 'string', 'max:255'],
