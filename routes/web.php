@@ -52,7 +52,7 @@ Route::group(['middleware' => ['auth'],'prefix'=>'admin'], function () {
 	// Route::patch('/{user}', [AdminUserController::class, 'update'])->middleware('auth');
 
 // route resouce
-	Route::resource('/user', AdminUserController::class, ["as" => "admin"]);
+	Route::resource('/user', AdminUserController::class, ["as" => "admin"])->middleware('role:admin');
 	Route::resource('/role', RoleController::class, ["as" => "admin"]);
 	Route::resource('/product', ProductController::class, ["as" => "admin"]);
 	Route::resource('/setting', SettingController::class, ["as" => "admin"]);

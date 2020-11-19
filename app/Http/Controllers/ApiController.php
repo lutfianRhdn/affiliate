@@ -18,27 +18,38 @@ class ApiController extends Controller
 
     public function ProductApi(Request $request)
     {
-
-        // return 'oke dudse';
-        
         $product = Product::find($request->id);
         return (new ProductResource($product));
     }
 
     public function RegisterApi(Request $request,$hash)
     {
-        // return response()->json(['status'=>'errors']);  
-    $id = Hashids::decode($hash);
-    // Rules
-    $product = Product::find($id)->first();
-    // dd($product);
-    if (!$product) {
-        return response()->json([
-            'status' =>'error',
-            'error'=> 'application is not registered'
+        $id = Hashids::decode($hash);
+        $product = Product::find($id)->first();
+
+        if (!$product) {
+            return response()->json([
+                'status' => 'error',
+                'error' => 'application is not registered'
             ]);
-    }
-    $Rules = [
+        }
+    // check origin url
+    // set allowed url
+        $allowedHosts = explode(',', env('ALLOWED_DOMAINS'));
+        $productUrl = parse_url($product->permission_ip, PHP_URL_HOST);
+        array_push($allowedHosts, $productUrl);
+    // get url hit 
+        $requestHost = parse_url($request->headers->get('origin'),
+            PHP_URL_HOST
+        );
+    // if url request came from != alowed url
+        if (!in_array($requestHost, $allowedHosts, False)) {
+            abort(403);
+        }
+        
+   
+    // Rules
+        $Rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => [
@@ -126,8 +137,9 @@ class ApiController extends Controller
         if ($check == null) {
             $request->request->add(['product_id'=>$product->id,'role'=>'2']);
             $user = $model_user->createUserAdmin($request, $ref_code, $request->password);
+            $user->assignRole('reseller');
         }
-        // Mail::to($user->email)->send(new EmailConfirmation($user->id, $request->password));
+        Mail::to($user->email)->send(new EmailConfirmation($user->id, $request->password));
         addToLog("Menambahkan Reseller" . $request->email);
             $user->givePermissionTo($user->getPermissionsViaRoles());
             return response()->json(['status'=>'success']);

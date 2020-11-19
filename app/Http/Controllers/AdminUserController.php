@@ -13,13 +13,7 @@ use Illuminate\Support\Str;
 class AdminUserController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->middleware('permission:user.view')->only('index');
-        $this->middleware('permission:user.create')->only('store');
-        $this->middleware('permission:user.edit')->only('update');
-        $this->middleware('permission:user.delete')->only('destroy');
-    }
+    
 
     public function index()
     {
