@@ -9,7 +9,7 @@ use Vinkla\Hashids\Facades\Hashids;
 class Product extends Model
 {
     use HasFactory;
-    protected $fillable = ['', 'product_name', 'description','regex'];
+    protected $fillable = ['', 'product_name', 'description','regex','permission_ip','url'];
 
     public function getData()
     {
@@ -35,7 +35,7 @@ class Product extends Model
             'description' => $request->description,
             'regex' => $request->regex,
             'url' => $request->urlProduct,
-            'permission_ip' => $request->all()['permissionUrl']
+            'permission_ip' => $request->permissionUrl
         ]);
         $id = Hashids::encode($product->id);
         $product->code = view('pages.register_embed', compact('id'))->render(); 

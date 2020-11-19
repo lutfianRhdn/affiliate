@@ -50,7 +50,8 @@ class ProductController extends Controller
             'product_name' => ['required'],
             'description' => ['required'],
             'regex' => ['required', 'unique:products'],
-            'permissionUrl' =>['required']
+            'permissionUrl' =>['required','url'],
+            'urlProduct'=>['required','url']
         ]);
         
         $productModel = new Product;

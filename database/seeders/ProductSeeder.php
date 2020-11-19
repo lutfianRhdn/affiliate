@@ -21,6 +21,7 @@ class ProductSeeder extends Seeder
             'description' => 'Pagii Apps',
             'regex' => 'PAGII',
             'permission_ip'=> 'http://intern-pagii.smtapps.net/',
+            'url'=>'http://pagii.co',
             'created_at' => now()
         ]);
         $id = Hashids::encode($pagii->id);
@@ -31,6 +32,7 @@ class ProductSeeder extends Seeder
             'description' => 'Mars Apps',
             'regex' => 'MARS',
             'permission_ip'=>'http://mars.co',
+            'url'=> 'http://mars.co',
             'created_at' => now()
         ]);
         $id = Hashids::encode($mars->id); 

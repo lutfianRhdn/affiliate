@@ -168,6 +168,12 @@
                                                                 placeholder="https://pagii.co/" name="urlProduct"
                                                                 value="{{ $product->url }}">
                                                         </div>
+                                                        @if ($errors->has('urlProduct'))
+                                                        <div id="permissionUrl-error" class="error text-danger"
+                                                            for="permissionUrl" style="display: block;">
+                                                            <strong>{{ $errors->first('permissionUrl') }}</strong>
+                                                        </div>
+                                                        @endif
                                                     </div>
 
                                                     {{-- <div class="mt-2 bmd-form-group">
