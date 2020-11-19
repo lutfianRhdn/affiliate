@@ -10,10 +10,12 @@
                     <h4 class="card-title ">Role Management</h4>
                 </div>
                 <div class="card-body">
+                    @can('role.create')
                     <div class="col-12 text-right">
                         <a href="" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#createModal">Add
                             Role</a>
                     </div>
+                        @endcan
                     <div class="table-responsive">
                         <table class="table">
                             <thead class="text-primary">
@@ -28,6 +30,7 @@
                                 <tr>
                                     <td>{{$role->id}}</td>
                                     <td>{{$role->name}}</td>
+                                    @can('role.delete')
                                     <td class="text-right">
                                         <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round" href=""
                                             data-placement="bottom" title="Delete" data-toggle="modal"
@@ -35,12 +38,15 @@
                                             <i class="material-icons">delete</i>
                                             <div class="ripple-container"></div>
                                         </a>
+                                    @endcan
+                                    @can('role.edit')
                                         <a rel="tooltip" class="btn btn-primary btn-fab btn-fab-mini btn-round" href=""
                                             data-original-title="" data-placement="bottom" title="Edit"
                                             data-toggle="modal" data-target="#editModal{{$role->id}}">
                                             <i class="material-icons">edit</i>
                                             <div class="ripple-container"></div>
                                         </a>
+                                    @endcan
                                     </td>
                                 </tr>
 

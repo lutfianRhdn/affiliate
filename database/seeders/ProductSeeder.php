@@ -24,7 +24,7 @@ class ProductSeeder extends Seeder
             'created_at' => now()
         ]);
         $id = Hashids::encode($pagii->id);
-        $pagii->code = view('pages.RegisterEmbed',compact('id'))->render();
+        $pagii->code = view('pages.register_embed',compact('id'))->render();
         $pagii->save();
        $mars = Product::create([
             'product_name' => 'MARS',
@@ -34,7 +34,7 @@ class ProductSeeder extends Seeder
             'created_at' => now()
         ]);
         $id = Hashids::encode($mars->id); 
-        $mars->code = view('pages.RegisterEmbed',compact('id'))->render();
+        $mars->code = view('pages.register_embed',compact('id'))->render();
         $mars->save();
     }
 }

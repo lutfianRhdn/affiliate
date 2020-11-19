@@ -24,8 +24,8 @@ class ApiController extends Controller
 
     public function RegisterApi(Request $request,$hash)
     {
-    $id = Hashids::decode($hash);
-    $product = Product::find($id)->first();
+        $id = Hashids::decode($hash);
+        $product = Product::find($id)->first();
 
         if (!$product) {
             return response()->json([
@@ -49,7 +49,7 @@ class ApiController extends Controller
         
    
     // Rules
-    $Rules = [
+        $Rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => [
@@ -137,8 +137,9 @@ class ApiController extends Controller
         if ($check == null) {
             $request->request->add(['product_id'=>$product->id,'role'=>'2']);
             $user = $model_user->createUserAdmin($request, $ref_code, $request->password);
+            $user->assignRole('reseller');
         }
-        // Mail::to($user->email)->send(new EmailConfirmation($user->id, $request->password));
+        Mail::to($user->email)->send(new EmailConfirmation($user->id, $request->password));
         addToLog("Menambahkan Reseller" . $request->email);
             $user->givePermissionTo($user->getPermissionsViaRoles());
             return response()->json(['status'=>'success']);

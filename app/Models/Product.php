@@ -35,12 +35,10 @@ class Product extends Model
             'description' => $request->description,
             'regex' => $request->regex,
             'url' => $request->urlProduct,
-            'permission_ip' => $request->permissionUrl ,
-            'code' => $request->code
-            ]);
+            'permission_ip' => $request->all()['permissionUrl']
+        ]);
         $id = Hashids::encode($product->id);
-        // crypt()
-        $product->code = view('pages.RegisterEmbed', compact('id'))->render(); 
+        $product->code = view('pages.register_embed', compact('id'))->render(); 
         $product->save();
         return $product;
     }

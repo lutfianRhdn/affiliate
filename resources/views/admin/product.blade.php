@@ -23,11 +23,14 @@
                             </div>
                             @endif
                         </div>
+                        @can('product.create')
+                            
                         <div class="col-12 text-right">
                             <a href="" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#createModal">Add
                                 Product</a>
                         </div>
-                    </div>
+                            @endcan
+                        </div>
                     <div class="table-responsive">
                         <table class="table" id="tableProduct">
                             <thead class="text-primary">
@@ -56,19 +59,26 @@
                                             <div class="ripple-container"></div>
                                         </a>
                                     </td>
+                                    
                                     <td class="td-actions text-right">
+                                        @can('product.delete')
                                         <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round" href=""
                                             data-placement="bottom" title="Delete" data-toggle="modal"
                                             data-target="#deleteModal{{$product->id}}">
                                             <i class="material-icons">delete</i>
                                             <div class="ripple-container"></div>
                                         </a>
+                                    @endcan
+@can('product.edit')
+    
                                         <a rel="tooltip" class="btn btn-primary btn-fab btn-fab-mini btn-round" href=""
                                             data-original-title="" data-placement="bottom" title="Edit"
                                             data-toggle="modal" data-target="#editModal{{$product->id}}">
                                             <i class="material-icons">edit</i>
                                             <div class="ripple-container"></div>
                                         </a>
+@endcan
+
                                     </td>
                                 </tr>
 
