@@ -50,9 +50,12 @@ class ProductController extends Controller
             'product_name' => ['required'],
             'description' => ['required'],
             'regex' => ['required', 'unique:products'],
+            'permissionUrl' =>['required','url'],
+            'urlProduct'=>['required','url']
         ]);
         
         $productModel = new Product;
+        // dd($request);
         $productModel->createProduct($request);
 
         addToLog("Menambahkan product ".$request->product_name);
@@ -94,6 +97,7 @@ class ProductController extends Controller
             'product_name' => 'required',
             'description' => 'required',
             'regex' => ['required'],
+            'permissionUrl' => ['required', 'url']
         ]);
 
         $productModel = new Product;

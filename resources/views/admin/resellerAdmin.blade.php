@@ -22,10 +22,12 @@
                             </div>
                             @endif
                         </div>
+                        @can('user.create')
                         <div class="col-12 text-right">
                             <a href="" class="btn btn-sm btn-primary" data-toggle="modal"
                                 data-target="#createUserModal">Add new Reseller</a>
                         </div>
+                        @endcan
                     </div>
                     <div class="table-responsive">
                         <table class="table" id="table_reseller">
@@ -85,18 +87,22 @@
                                             <div class="ripple-container"></div>
                                         </a>
                                         @endif
+                                        @can('user.delete')
                                         <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round" href=""
                                             data-placement="bottom" title="Delete" data-toggle="modal"
                                             data-target="#deleteModal{{$user->id}}">
                                             <i class="material-icons">delete</i>
                                             <div class="ripple-container"></div>
                                         </a>
+                                        @endcan
+                                        @can('user.edit')
                                         <a rel="tooltip" class="btn btn-primary btn-fab btn-fab-mini btn-round" href=""
                                             data-placement="bottom" title="Edit" data-toggle="modal"
                                             data-target="#editUserModal{{$user->id}}">
                                             <i class="material-icons">edit</i>
                                             <div class="ripple-container"></div>
                                         </a>
+                                        @endcan
                                     </td>
                                 </tr>
 

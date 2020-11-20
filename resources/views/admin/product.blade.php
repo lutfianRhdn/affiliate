@@ -23,11 +23,14 @@
                             </div>
                             @endif
                         </div>
+                        @can('product.create')
+                            
                         <div class="col-12 text-right">
                             <a href="" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#createModal">Add
                                 Product</a>
                         </div>
-                    </div>
+                            @endcan
+                        </div>
                     <div class="table-responsive">
                         <table class="table" id="tableProduct">
                             <thead class="text-primary">
@@ -36,6 +39,7 @@
                                     <th>Description</th>
                                     <th>Regex</th>
                                     <th>URL</th>
+                                    <th>Permission Url</th>
                                     <th class="no-sort">Code</th>
                                     <th class="text-right no-sort">Actions</th>
                                 </tr>
@@ -47,6 +51,7 @@
                                     <td>{{$product->description}}</td>
                                     <td>{{$product->regex}}</td>
                                     <td>{{$product->url}}</td>
+                                    <td>{{$product->permission_ip}}</td>
                                     <td><a rel="tooltip" class="btn btn-info btn-fab btn-fab-mini btn-round" href=""
                                             data-placement="bottom" title="See & Edit Code" data-toggle="modal"
                                             data-target="#codeModal{{$product->id}}">
@@ -54,19 +59,26 @@
                                             <div class="ripple-container"></div>
                                         </a>
                                     </td>
+                                    
                                     <td class="td-actions text-right">
+                                        @can('product.delete')
                                         <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round" href=""
                                             data-placement="bottom" title="Delete" data-toggle="modal"
                                             data-target="#deleteModal{{$product->id}}">
                                             <i class="material-icons">delete</i>
                                             <div class="ripple-container"></div>
                                         </a>
+                                    @endcan
+@can('product.edit')
+    
                                         <a rel="tooltip" class="btn btn-primary btn-fab btn-fab-mini btn-round" href=""
                                             data-original-title="" data-placement="bottom" title="Edit"
                                             data-toggle="modal" data-target="#editModal{{$product->id}}">
                                             <i class="material-icons">edit</i>
                                             <div class="ripple-container"></div>
                                         </a>
+@endcan
+
                                     </td>
                                 </tr>
 
@@ -134,7 +146,21 @@
                                                         </div>
                                                         @endif
                                                     </div>
-
+                                                    <div
+                                                        class="bmd-form-group {{ $errors->has('permissionUrl') ? ' has-danger' : '' }}">
+                                                        <div class="form-group pl-2">
+                                                            <label for="product_name">Permission Url</label>
+                                                            <input type="text" class="form-control pl-2"
+                                                                placeholder="https://sample.com" name="permissionUrl"
+                                                                value="{{ $product->permission_ip }}">
+                                                        </div>
+                                                        @if ($errors->has('permissionUrl'))
+                                                        <div id="permissionUrl-error" class="error text-danger"
+                                                            for="permissionUrl" style="display: block;">
+                                                            <strong>{{ $errors->first('permissionUrl') }}</strong>
+                                                        </div>
+                                                        @endif
+                                                    </div>
                                                     <div class="bmd-form-group">
                                                         <div class="form-group pl-2">
                                                             <label for="product_name">URL</label>
@@ -142,6 +168,12 @@
                                                                 placeholder="https://pagii.co/" name="urlProduct"
                                                                 value="{{ $product->url }}">
                                                         </div>
+                                                        @if ($errors->has('urlProduct'))
+                                                        <div id="permissionUrl-error" class="error text-danger"
+                                                            for="permissionUrl" style="display: block;">
+                                                            <strong>{{ $errors->first('permissionUrl') }}</strong>
+                                                        </div>
+                                                        @endif
                                                     </div>
 
                                                     {{-- <div class="mt-2 bmd-form-group">
@@ -162,75 +194,70 @@
                                     </div>
                                 </div>
 
-                                <!-- Modal Code -->
-                                <div class="modal fade" id="codeModal{{$product->id}}" tabindex="-1" role="dialog"
-                                    aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                                    <div class="modal-dialog modal-lg" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLongTitle">Code</h5>
-                                                <button type="button" class="close" data-dismiss="modal"
-                                                    aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="mt-2 bmd-form-group">
-                                                    <div class="form-group pl-2">
-                                                        <textarea class="form-control" id="codeInput" rows="20"
-                                                            placeholder="{{ !empty($product->code) ? '' : 'Product Code' }}"
-                                                            name="code" readonly>{{ !empty($product->code) ? $product->code : ''}}</textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-dismiss="modal">Close</button>
-                                                <button class="btn btn-primary" id="btnCopy" data-dismiss="modal">Copy
-                                                    code</button>
-                                            </div>
-                                        </div>
+                <!-- Modal Code -->
+                <div class="modal fade" id="codeModal{{$product->id}}" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Code</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mt-2 bmd-form-group">
+                                    <div class="form-group pl-2">
+                                        <textarea class="form-control" id="codeInput" rows="20"
+                                            placeholder="{{ !empty($product->code) ? '' : 'Product Code' }}" name="code"
+                                            readonly>{{ !empty($product->code) ? $product->code : ''}}</textarea>
                                     </div>
                                 </div>
-
-                                {{-- modal delete --}}
-                                <div class="modal fade" id="deleteModal{{$product->id}}" tabindex="-1" role="dialog"
-                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <form action="{{ route('admin.product.destroy', $product->id)}}"
-                                                method="POST">
-                                                @method('delete')
-                                                @csrf
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Delete items</h5>
-                                                    <button type="button" class="close" data-dismiss="modal"
-                                                        aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <p class="h5">Are you sure want to permanently remove this item?
-                                                    </p>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-dismiss="modal">No</button>
-                                                    <button type="submit" class="btn btn-danger">Yes</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                @endforeach
-                            </tbody>
-                        </table>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button class="btn btn-primary" id="btnCopy" data-dismiss="modal">Copy
+                                    code</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                {{-- modal delete --}}
+                <div class="modal fade" id="deleteModal{{$product->id}}" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <form action="{{ route('admin.product.destroy', $product->id)}}" method="POST">
+                                @method('delete')
+                                @csrf
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Delete items</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p class="h5">Are you sure want to permanently remove this item?
+                                    </p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                    <button type="submit" class="btn btn-danger">Yes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                @endforeach
+                </tbody>
+                </table>
             </div>
         </div>
     </div>
+</div>
+</div>
 </div>
 
 {{-- modal create --}}
@@ -276,7 +303,8 @@
                         <div class="form-group pl-2">
                             <label for="desc">Description</label>
                             <textarea class="form-control pl-2" id="desc" rows="2" name="description"
-                                placeholder="Type your product description here" value="{{ old('product_name') }}"></textarea>
+                                placeholder="Type your product description here"
+                                value="{{ old('product_name') }}"></textarea>
                         </div>
                         @if ($errors->has('desc'))
                         <div id="desc-error" class="error text-danger" for="desc" style="display: block;">
@@ -284,11 +312,24 @@
                         </div>
                         @endif
                     </div>
+                    <div class="bmd-form-group {{ $errors->has('permissionUrl') ? ' has-danger' : '' }}">
+                        <div class="form-group pl-2">
+                            <label for="product_name">Permission Url</label>
+                            <input type="text" class="form-control pl-2" placeholder="https://sample.com"
+                                name="permissionUrl" value="{{ old('permissionUrl') }}">
+                        </div>
+                        @if ($errors->has('permissionUrl'))
+                        <div id="permissionUrl-error" class="error text-danger" for="permissionUrl"
+                            style="display: block;">
+                            <strong>{{ $errors->first('permissionUrl') }}</strong>
+                        </div>
+                        @endif
+                    </div>
                     <div class="bmd-form-group">
                         <div class="form-group pl-2">
                             <label for="product_name">URL</label>
-                            <input type="text" class="form-control pl-2" placeholder="https://sample.com" name="urlProduct"
-                                value="{{ old('url') }}">
+                            <input type="text" class="form-control pl-2" placeholder="https://sample.com"
+                                name="urlProduct" value="{{ old('url') }}">
                         </div>
                     </div>
                 </div>

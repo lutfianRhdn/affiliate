@@ -30,18 +30,22 @@
         </a>
         <div class="collapse {{ ($activePage == 'reseller' || $activePage == 'admin') ? ' show' : '' }}" id="adminService">
           <ul class="nav">
+            @role('admin')
             <li class="nav-item{{ $activePage == 'admin' ? ' active' : '' }}">
               <a class="nav-link" href="{{ route('admin.user.index') }}">
                 <span class="sidebar-mini"> AD </span>
                 <span class="sidebar-normal"> {{ __('Admin') }} </span>
               </a>
             </li>
+            @endrole
+            @can('user.view', Model::class)
             <li class="nav-item{{ $activePage == 'reseller' ? ' active' : '' }}">
               <a class="nav-link" href="{{ route('admin.reseller.index') }}">
                 <span class="sidebar-mini"> RS </span>
                 <span class="sidebar-normal">{{ __('Reseller') }} </span>
               </a>
             </li>
+            @endcan
           </ul>
         </div>
       </li>
