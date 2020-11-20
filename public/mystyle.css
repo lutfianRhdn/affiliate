@@ -64,3 +64,11 @@ input[type=number] {
     background: url('css/Infinity-1s-221px.svg') 50% 50% no-repeat rgb(249, 249, 249);
     opacity: .8;
 }
+
+/* data tables dropdown */
+.btn,
+.btn .btn-default {
+    color: #999999;
+    background-color: transparent;
+    box-shadow: none;
+}
