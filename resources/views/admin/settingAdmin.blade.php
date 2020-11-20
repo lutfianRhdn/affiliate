@@ -17,7 +17,7 @@
                         <tr>
                             <td class="h5" style="width: 30%">{{$setting->label}}</td>
                             <td style="width: 10%">:</td>
-                            <td class="text-left">{{$setting->value}}</td>
+                            <td class="text-center">{{$setting->value}}</td>
                             <td class="text-right">
                                 <a rel="tooltip" class="btn btn-primary btn-fab btn-fab-mini btn-round" href=""
                                     data-placement="left" title="Edit Settings" id="edit-setting" data-toggle="modal"
