@@ -11,6 +11,16 @@ class Product extends Model
     use HasFactory;
     protected $fillable = ['', 'product_name', 'description','regex','permission_ip','url'];
 
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+
     public function getData()
     {
         $product = Product::all();

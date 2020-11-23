@@ -32,9 +32,9 @@ class EmailConfirmation extends Mailable
     public function build()
     {   
         $user = new User;
-        $data = $user->getDataEmail($this->user);
+        $data = User::find($this->user);
+        // dd($data);
         if(!$data){
-            // dd($this->user);
             $data = User::find($this->user);
         }
         return $this->view('auth.emailConfirmation', ["user" => $data, "pass" => $this->pass]);
