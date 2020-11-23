@@ -12,7 +12,7 @@ Program'), 'titlePage' => 'Registration'])
                     <div class="card-header card-header-primary text-center pb-4 pt-4">
                         <h4 class="card-title"><strong>{{ __('Register') }}</strong></h4>
                     </div>
-                    <div class="card-body mt-3">
+                    <div class="card-body mt-3 p-4">
                         <div class="form-group {{ $errors->has('name') ? ' has-danger' : '' }}">
                             <label for="name">Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control pt-3" id="name" placeholder="Full Name" name="name"
@@ -23,7 +23,7 @@ Program'), 'titlePage' => 'Registration'])
                             </div>
                             @endif
                         </div>
-                        <div class="form-group mt-2 {{ $errors->has('email') ? ' has-danger' : '' }}">
+                        <div class="form-group mt-3 {{ $errors->has('email') ? ' has-danger' : '' }}">
                             <label for="email">Email Address <span class="text-danger">*</span></label>
                             <input type="text" class="form-control pt-3" id="email" placeholder="email@example.com"
                                 name="email" value="{{ old('email') }}">
@@ -33,7 +33,17 @@ Program'), 'titlePage' => 'Registration'])
                             </div>
                             @endif
                         </div>
-                        <div class="form-group mt-2 {{ $errors->has('phone') ? ' has-danger' : '' }}">
+                        <div class="form-group mt-3 {{ $errors->has('company') ? ' has-danger' : '' }}">
+                            <label for="company">Company Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control pt-3" id="company" placeholder="company Name"
+                                name="company" value="{{ old('company') }}">
+                            @if ($errors->has('company'))
+                            <div id="company-error" class="error text-danger" for="company" style="display: block;">
+                                <strong>{{ $errors->first('company') }}</strong>
+                            </div>
+                            @endif
+                        </div>
+                        <div class="form-group mt-3 {{ $errors->has('phone') ? ' has-danger' : '' }}">
                             <label for="phone">Phone Number</label>
                             <input type="text" oninput="this.value=this.value.replace(/[^0-9]/g,'');"
                                 class="form-control pt-3" id="phone" placeholder="08xx-xxxx-xxxxx" name="phone"
@@ -44,7 +54,7 @@ Program'), 'titlePage' => 'Registration'])
                             </div>
                             @endif
                         </div>
-                        <div class="form-group mt-2 {{ $errors->has('address') ? ' has-danger' : '' }}">
+                        <div class="form-group mt-3 {{ $errors->has('address') ? ' has-danger' : '' }}">
                             <label for="address">Address <span class="text-danger">*</span></label>
                             <textarea class="form-control" id="address" rows="2" placeholder="Your Address"
                                 name="address">{{ old('address') }}</textarea>
@@ -54,24 +64,9 @@ Program'), 'titlePage' => 'Registration'])
                             </div>
                             @endif
                         </div>
-                        <div class="form-group mt-2 {{ $errors->has('product_id') ? ' has-danger' : '' }}">
-                            <label for="product_id">Category Product <span class="text-danger">*</span></label>
-                            <select class="form-control custom-select" data-style="btn btn-link" id="product_id"
-                                name="product_id">
-                                <option value="" selected disabled>Select Product</option>
-                                @foreach ($products as $product)
-                                <option value="{{ $product->id }}">{{$product->product_name}}</option>
-                                @endforeach
-                            </select>
-                            @if ($errors->has('product_id'))
-                            <div id="product_id-error" class="error text-danger" for="product_id"
-                                style="display: block;">
-                                <strong>{{ $errors->first('product_id') }}</strong>
-                            </div>
-                            @endif
-                        </div>
-                        <div class="form-group mt-2 {{ $errors->has('password') ? ' has-danger' : '' }}">
-                            <label for="password">Password <span class="text-danger">*</span></label>
+                        <div class="row ">
+                        <div class="form-group col-md-6 mt-3 {{ $errors->has('password') ? ' has-danger' : '' }}">
+                            <label for="password" class="ml-3">Password <span class="text-danger">*</span></label>
                             <input type="password" class="form-control pt-3" id="password" placeholder="Your Password"
                                 name="password">
                             <span class="form-check-sign-register" id="check">
@@ -86,8 +81,8 @@ Program'), 'titlePage' => 'Registration'])
                             </div>
                             @endif
                         </div>
-                        <div class="form-group mt-3 {{ $errors->has('password_confirmation') ? ' has-danger' : '' }}">
-                            <label for="password">Password Confirmation <span class="text-danger">*</span></label>
+                        <div class="form-group col-md-6 mt-3 {{ $errors->has('password_confirmation') ? ' has-danger' : '' }}">
+                            <label for="password" class="ml-3">Password Confirmation <span class="text-danger">*</span></label>
                             <input type="password" class="form-control pt-3" id="password_confirmation"
                                 placeholder="Re Password" name="password_confirmation">
                             <span class="form-check-sign-register" id="check2">
@@ -102,10 +97,11 @@ Program'), 'titlePage' => 'Registration'])
                             </div>
                             @endif
                         </div>
+                        </div>
 
                         <input type="hidden" name="role" value="2">
 
-                        <div class="form-check mt-4 justify-content-center {{ $errors->has('policy') ? ' has-danger' : '' }}">
+                        <div class="form-check mt-3 justify-content-center {{ $errors->has('policy') ? ' has-danger' : '' }}">
                             <label class="form-check-label">
                                 <input class="form-check-input" type="checkbox" id="policy" name="policy"
                                     {{ old('policy') ? 'checked' : '' }}>

@@ -22,23 +22,8 @@
         <div class="container">
             <div class="row align-items-center  my-auto justify-content-center" style="height:100vh">
                 <div class="col-md-9  text-center ">
-                    <?php
-                    if (isset($_GET['st'])) {
-                        if ($_GET['st'] == 0) {
-                    ?>
-                            <h1><span class="text-primary">Thank</span> You</h1>
-                            <h3>Activation Sucess Please wait for Approval</h3>
-                        <?php
-                        } elseif ($_GET['st'] == 1) {
-                        ?>
-                            <h1><span class="text-primary">Activation</span> Failed</h1>
-                            <h3>Activation Failed please Contact the Call Center</h3>
-                    <?php
-                        }else{
-                            echo 'status invalid';
-                        }
-                    }
-                    ?>
+                    <h1><?= $_GET['st'] == 0 ? ' <span class="text-primary">Thank</span> You' : '<span class="text-primary">Activation</span> Failed' ?>!</h1>
+                    <h3><?= $_GET['res'] ?></h3>
                 </div>
             </div>
         </div>

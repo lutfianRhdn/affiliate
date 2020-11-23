@@ -30,7 +30,7 @@
         </a>
         <div class="collapse {{ ($activePage == 'reseller' || $activePage == 'admin') ? ' show' : '' }}" id="adminService">
           <ul class="nav">
-            @role('admin')
+            @role('super-admin')
             <li class="nav-item{{ $activePage == 'admin' ? ' active' : '' }}">
               <a class="nav-link" href="{{ route('admin.user.index') }}">
                 <span class="sidebar-mini"> AD </span>

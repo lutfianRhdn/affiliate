@@ -166,7 +166,12 @@
                                             Full Name : {{$user->name}}<br>
                                             Email : {{$user->email}}<br>
                                             Phone : {{$user->phone}}<br>
-                                            Product : {{$user->product_name}}<br>
+                                            @if ($user->product)
+                                            Product : {{$user->product_name}}
+                                            @else
+                                            Company : {{$user->company->name}}
+                                            @endif
+                                            <br>
                                             Address : {{$user->address}}<br>
                                             Password : {{$pass}}<br>
                                         </span>
