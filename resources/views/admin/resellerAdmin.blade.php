@@ -2,6 +2,8 @@
 
 @section('content')
 <div id="preloaders" class="preloader"></div>
+<div id="preloaders-approve" class="preloader"></div>
+<div id="preloaders-status" class="preloader"></div>
 <div class="content">
     <div class="row">
         <div class="col-md-12">
@@ -363,8 +365,9 @@
         $("#preloaders").fadeOut(1000);
         var options = "";
         $('#edit-user').tooltip(options);
-
+        $('#preloaders-status').hide();
         $('#change-status').change(function () {
+        $('#preloaders-status').show();
             $.ajax({
                 url: '{{route("getStatus")}}',
                 type: 'GET',
@@ -378,6 +381,7 @@
                         data.success +
                         '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>'
                     );
+                    $("#preloaders-status").fadeOut(1000);
                 },
                 error: function (xhr, status) {
                     console.log(status);
@@ -403,7 +407,9 @@
             $('.submitEject').show();
         });
 
+        $('#preloaders-approve').hide();
         $('.submitApproved').click(function () {
+            $('#preloaders-approve').show();
             $.ajax({
                 url: '{{route("getApproval")}}',
                 type: 'POST',
@@ -418,6 +424,7 @@
                         data.success +
                         '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>'
                     );
+                    // $("#preloaders").fadeOut(1000);
                     location.reload();
                 },
                 error: function (xhr, status) {

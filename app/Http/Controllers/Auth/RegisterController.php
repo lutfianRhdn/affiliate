@@ -115,7 +115,6 @@ class RegisterController extends Controller
         }
         $pass = $data['password'];
         Mail::to($user['email'])->send(new emailConfirmation($user->id, $pass));
-
         return redirect()->back();
     }
 
@@ -124,11 +123,11 @@ class RegisterController extends Controller
         $user = new User;
         $product = new Product;
         $url = $product->getUrl($user->getProductID($email)->product_id)->url;
-        if($user->emailConfirmation($email)){
+        if($user->emailConfirmation($email) && $url){
             // return redirect('login')->with('regis-succ', 'Your account has been successfully activated, now you have to wait for admin approval.');
             return redirect($url);
         } else {
-            return redirect($url);
+            return redirect('/');
         }
     }
 
