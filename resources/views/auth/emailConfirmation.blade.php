@@ -169,10 +169,12 @@
                                             @if ($user->product)
                                             Product : {{$user->product_name}}
                                             @else
-                                            Company : {{$user->company->name}}
+                                            Company : {{$user->company_name}}
                                             @endif
                                             <br>
+                                            @if ($user->address)
                                             Address : {{$user->address}}<br>
+                                            @endif
                                             Password : {{$pass}}<br>
                                         </span>
                                     </p>

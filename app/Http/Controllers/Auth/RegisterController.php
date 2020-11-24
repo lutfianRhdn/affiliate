@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Mail\EmailConfirmation;
+use App\Mail\EmailConfirmationCompany;
 use App\Models\Product;
 use App\Models\Province;
 use App\Models\City;
@@ -100,28 +101,38 @@ private $pass ='';
         if ($validator->fails()) {
             return $validator->errors();
         }
-            $company = Company::create(['name'=>$data['company']]);
-        $data['company_id'] = $company->id;
-        $user = new User;
+            // $company = Company::create(['name'=>$data['company']]);
+        // $data['company_id'] = $company->id;
+        $company = new company;
         $this->pass = $data['password'];
-        $this->guard()->login($user);
-       return $user= $user->CreateAdmin($data);
+        $this->guard()->login($company);
+        
+       return $company= $company->addCompany($data);
     }
 
 
     public function register(Request $request)
     {
         $this->validator($request->all())->validate();
-        event(new Registered($user = $this->create($request->all())));
-        Mail::to($user->email)->send(new emailConfirmation($user->id, $this->pass));
+        event(new Registered($company = $this->create($request->all())));
+        Mail::to($company->email)->send(new EmailConfirmationCompany($company->id, $this->pass));
         return redirect()->back();
     }
 
     public function emailConfirmation($email)
     {
         $user = new User;
-        $product = new Product;
-        $url = $product->getUrl($user->getProductID($email)->product_id);
+        $productModel = new Product;
+        $product= $user->getProductID($email);
+        if ($product) {
+            $url = $productModel->getUrl($product->product_id);
+            # code...
+        }else{
+            $company = Company::where('email',$email)->get()->first();
+            $company->is_active = 1;
+            $company->save();
+            $url = null;
+        }
         if (!$url) {
             $url = url('/thankyou.php?st=0');
         }else{

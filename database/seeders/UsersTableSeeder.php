@@ -16,20 +16,20 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        $user = User::create([
-        'name' => 'Admin Affiliate',
-        'email' => 'admin@affiliate.com',
-        'role' => '1',
-        'phone' => '08123456789',
-        'register_status' => '1',
-        'company_id' => Company::where('name', 'affiliate')->get()->first()->id,
-        'address' => 'Jl. Holis Regency No.37A, Babakan, Babakan Ciparay',
-        'password' => Hash::make('admin1234'),
-        'created_at' => now(),
-        ]);
+        // $user = User::create([
+        // 'name' => 'Admin Affiliate',
+        // 'email' => 'admin@affiliate.com',
+        // 'role' => '1',
+        // 'phone' => '08123456789',
+        // 'register_status' => '1',
+        // 'company_id' => Company::where('name', 'affiliate')->get()->first()->id,
+        // 'address' => 'Jl. Holis Regency No.37A, Babakan, Babakan Ciparay',
+        // 'password' => Hash::make('admin1234'),
+        // 'created_at' => now(),
+        // ]);
         $superUser = User::create([
             'name' => 'super Admin',
-            'email' => 'admin@super.com',
+            'email' => 'admin@admin.com',
             'role' => '1',
             'phone' => '08123456789',
             'register_status' => '1',
@@ -39,8 +39,7 @@ class UsersTableSeeder extends Seeder
             'created_at' => now(),
         ]);
         $superUser->assignRole('super-admin');
-        $user->assignRole('admin');
-        $user->syncPermissions($user->getPermissionsViaRoles());
+        
 
     }
 }

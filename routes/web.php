@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminResellerController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LogActivityController;
 use App\Http\Controllers\ProductController;
@@ -51,6 +52,7 @@ Route::group(['middleware' => ['auth'],'prefix'=>'admin'], function () {
 	// Route::patch('/{user}', [AdminUserController::class, 'update'])->middleware('auth');
 
 // route resouce
+	Route::resource('/company', CompanyController::class, ["as" => "admin"])->middleware('role:super-admin');
 	Route::resource('/user', AdminUserController::class, ["as" => "admin"])->middleware('role:super-admin');
 	Route::resource('/role', RoleController::class, ["as" => "admin"]);
 	Route::resource('/product', ProductController::class, ["as" => "admin"]);
@@ -59,6 +61,7 @@ Route::group(['middleware' => ['auth'],'prefix'=>'admin'], function () {
 
 // custom route
 	Route::post('/approval', [AdminResellerController::class, 'getApproval'])->name('getApproval');
+	Route::post('/approvalCompany', [CompanyController::class, 'approve'])->name('approveCompany');
 	Route::get('/status', [AdminResellerController::class, 'getStatus'])->name('getStatus');
 	Route::resource('/reseller', AdminResellerController::class, ["as" => "admin"]);
 	Route::get('/get-city', [AdminResellerController::class, 'getCity']);

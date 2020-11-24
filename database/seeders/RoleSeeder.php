@@ -24,16 +24,14 @@ class RoleSeeder extends Seeder
             'created_at' => now()
             ]);
         $admin = Role::create([
-                'name'=>'admin',
+                'name'=>'admin-company',
                 'slug' => '',
-                'company_id'=>Company::where('name','affiliate')->get()->first()->id,
                 'guard_name' => 'web',
                 'created_at' => now()
             ]);
            $resellerRole= Role::create([
                 'name' => 'reseller',
                 'slug' => '',
-                'company_id' => Company::where('name', 'affiliate')->get()->first()->id,
                 'guard_name'=>'web',
             'created_at' => now()
         ]);

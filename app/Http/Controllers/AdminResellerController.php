@@ -25,7 +25,7 @@ class AdminResellerController extends Controller
 
     public function __construct()
     {
-        $this->middleware('permission:user.view')->only('index');
+        $this->middleware(['permission:user.view','role:super-admin'])->only('index');
         $this->middleware('permission:user.create')->only('store');
         $this->middleware('permission:user.edit')->only('update');
         $this->middleware('permission:user.delete')->only('destroy');
@@ -36,7 +36,7 @@ class AdminResellerController extends Controller
         $model_product = new Product;
         $product = $model_product->getData();
         $user = new User;
-        $users = $user->getResellerData();
+        $users = $user->getResellerData(); 
         return view('admin.resellerAdmin', ['users' => $users, 'products' => $product,]);
     }
 
