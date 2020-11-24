@@ -82,11 +82,6 @@ class User extends Authenticatable
         return $this->belongsTo(Company::class);
     }
 
-    public function product()
-    {
-        return $this->belongsTo(Product::class,'product_id');
-    }
-
     public function getUser($id)
     {
         $user = User::find($id);
@@ -122,7 +117,6 @@ class User extends Authenticatable
     public function createUserAdmin($data, $ref_code, $password)
     {
         $phone = str_replace("-", "", $data->phone);
-        $product = Product::find($data->product_id);
         $user = User::create([
             'name' => $data->name,
             'email' => $data->email,
@@ -132,7 +126,6 @@ class User extends Authenticatable
             'role' => $data->role,
             'ref_code' => $ref_code,
             'address' => $data->address,
-            'company_id'=> $product->company->id
         ]);
 
         return $user;

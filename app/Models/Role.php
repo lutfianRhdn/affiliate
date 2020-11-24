@@ -13,8 +13,4 @@ class Role extends Model
     public function User(){
         return $this->belongsToMany('App\Models\User','role_id');   
     }
-    public function company()
-    {
-        return $this->belongsTo(Company::class);
-    }
 }

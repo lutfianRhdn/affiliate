@@ -167,7 +167,7 @@
                                             Email : {{$user->email}}<br>
                                             Phone : {{$user->phone}}<br>
                                             @if ($user->product)
-                                            Product : {{$user->product->product_name}}
+                                            Product : {{$user->product_name}}
                                             @else
                                             Company : {{$user->company->name}}
                                             @endif

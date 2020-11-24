@@ -9,8 +9,4 @@ class Setting extends Model
 {
     use HasFactory;
     protected $fillable = ['', 'key','label','value', 'product_id'];
-    public function company()
-    {
-        return $this->belongsTo(Company::class);
-    }
 }
