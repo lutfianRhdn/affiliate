@@ -133,8 +133,8 @@ private $pass ='';
             $company->save();
             $url = null;
         }
-        if (!$url) {
-            $url = url('/thankyou.php?st=0');
+        if ($url ==null) {
+            return redirect(url('/thankyou.php?st=0'));
         }else{
             $url = $url->url;
         }
