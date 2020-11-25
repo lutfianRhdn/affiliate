@@ -69,7 +69,7 @@
                                             <div class="ripple-container"></div>
                                         </a>
                                         
-                                        @elseif( $company->approve == 0 )) 
+                                        @elseif( $company->approve == 0 )
                                         <a rel="tooltip"
                                             class="btn btn-warning btn-fab btn-fab-mini btn-round approvalForm" href=""
                                             data-id="{{$company->id}}" data-placement="bottom" title="Approval"
@@ -113,7 +113,7 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <p class="h5">Approve this company {{$company->name}} ?</p>
+                                                    <p class="h5">Approve this company {{$company->company_name}} ?</p>
                                                     <textarea name="approve_note" class="form-control approve_note"
                                                         id="approve-{{$company->id}}" placeholder="Reason"></textarea>
                                                 </div>
@@ -193,7 +193,7 @@
                                                     </div>
                                                     <div
                                                         class="form-group {{ $errors->has('email') ? ' has-danger' : '' }}">
-                                                        <label for="email">email <span
+                                                        <label for="email">Email <span
                                                                 class="text-danger">*</span></label>
                                                         <input type="text" class="form-control pt-3" id="email"
                                                             placeholder="Full email" name="email"
@@ -207,7 +207,7 @@
                                                     </div>
                                                     <div
                                                         class="form-group {{ $errors->has('company') ? ' has-danger' : '' }}">
-                                                        <label for="company">company <span
+                                                        <label for="company">Company <span
                                                                 class="text-danger">*</span></label>
                                                         <input type="text" class="form-control pt-3" id="company"
                                                             placeholder="Company Name" name="company"
