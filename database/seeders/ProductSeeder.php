@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Company;
 use App\Models\Product;
 use Vinkla\Hashids\Facades\Hashids;
 use Illuminate\Database\Seeder;
@@ -22,6 +23,7 @@ class ProductSeeder extends Seeder
             'regex' => 'PAGII',
             'permission_ip'=> 'http://intern-pagii.smtapps.net/',
             'url'=>'http://pagii.co',
+            'company_id'=>Company::where('company_name','pagii')->get()->first()->id,
             'created_at' => now()
         ]);
         $id = Hashids::encode($pagii->id);
@@ -33,6 +35,8 @@ class ProductSeeder extends Seeder
             'regex' => 'MARS',
             'permission_ip'=>'http://mars.co',
             'url'=> 'http://mars.co',
+            'company_id' => Company::where('company_name', 'affiliate')->get()->first()->id,
+
             'created_at' => now()
         ]);
         $id = Hashids::encode($mars->id); 

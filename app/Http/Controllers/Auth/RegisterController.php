@@ -5,13 +5,17 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Mail\EmailConfirmation;
+use App\Mail\EmailConfirmationCompany;
 use App\Models\Product;
 use App\Models\Province;
 use App\Models\City;
+use App\Models\Company;
 use App\Models\Regency;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Doctrine\DBAL\Schema\Table;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Foundation\Auth\RedirectsUsers;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +23,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-
+use Symfony\Contracts\Service\Attribute\Required;
 
 class RegisterController extends Controller
 {
@@ -42,7 +46,7 @@ class RegisterController extends Controller
      * @var string
      */
     protected $redirectTo = RouteServiceProvider::HOME;
-
+private $pass ='';
     /**
      * Create a new controller instance.
      *
@@ -58,8 +62,7 @@ class RegisterController extends Controller
         $product = $model_product->getData();
         // $model_province = new Province;
         // $provinces = $model_province->getData();
-        // return view("auth.register", ['products' => $product]);
-        return redirect()->back();
+        return view("auth.register");
     }
 
     /**
@@ -79,8 +82,8 @@ class RegisterController extends Controller
                 'regex:/[0-9]/',
                 'regex:/[@$!%*#?&]/'],
             'password_confirmation' => ['required_with:password','same:password'],
+            'company'=>['required'],
             'phone' => ['required', 'min:9', 'max:14'],
-            'product_id' => ['required'],
             'address' => ['required']
         ]);
     }
@@ -94,36 +97,48 @@ class RegisterController extends Controller
 
     protected function create(array $data)
     {
-        $permitted_chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $random = substr(str_shuffle($permitted_chars), 0, 6);
-        $model_user = new User;
-        $product = new Product;
-        $regex = $product->getRegex($data['product_id']);
-        do{
-            $ref_code = $regex->regex.'-'.$random;
-            $check = $model_user->getRefCode($ref_code);
-        }while($check != null);
-
-        if($check == null){
-            $user = $model_user->createUser($data, $ref_code);
-            if ($user->role == 1) {
-                $role = $user->assignRole('admin');
-            } else {
-                $role = $user->assignRole('reseller');
-            }
-            $user->givePermissionTo($user->getPermissionsViaRoles());
+        $validator = $this->validator($data);
+        if ($validator->fails()) {
+            return $validator->errors();
         }
-        $pass = $data['password'];
-        Mail::to($user['email'])->send(new emailConfirmation($user->id, $pass));
+            // $company = Company::create(['name'=>$data['company']]);
+        // $data['company_id'] = $company->id;
+        $company = new company;
+        $this->pass = $data['password'];
+        $this->guard()->login($company);
+        
+       return $company= $company->addCompany($data);
+    }
+
+
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+        event(new Registered($company = $this->create($request->all())));
+        Mail::to($company->email)->send(new EmailConfirmationCompany($company->id, $this->pass));
         return redirect()->back();
     }
 
     public function emailConfirmation($email)
     {
         $user = new User;
-        $product = new Product;
-        $url = $product->getUrl($user->getProductID($email)->product_id)->url;
-        if($user->emailConfirmation($email) && $url){
+        $productModel = new Product;
+        $product= $user->getProductID($email);
+        if ($product) {
+            $url = $productModel->getUrl($product->product_id);
+            # code...
+        }else{
+            $company = Company::where('email',$email)->get()->first();
+            $company->is_active = 1;
+            $company->save();
+            $url = null;
+        }
+        if ($url ==null) {
+            return redirect(url('/thankyou.php?st=0'));
+        }else{
+            $url = $url->url;
+        }
+        if($user->emailConfirmation($email)){
             // return redirect('login')->with('regis-succ', 'Your account has been successfully activated, now you have to wait for admin approval.');
             return redirect($url);
         } else {

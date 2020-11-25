@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Company;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
@@ -17,10 +18,16 @@ class RoleSeeder extends Seeder
     public function run()
     {
        $adminRole = Role::create([
-            'name' => 'admin',
+            'name' => 'super-admin',
             'slug' => '',
             'guard_name'=>'web',
             'created_at' => now()
+            ]);
+        $admin = Role::create([
+                'name'=>'admin-company',
+                'slug' => '',
+                'guard_name' => 'web',
+                'created_at' => now()
             ]);
            $resellerRole= Role::create([
                 'name' => 'reseller',
@@ -29,6 +36,5 @@ class RoleSeeder extends Seeder
             'created_at' => now()
         ]);
         $adminRole->syncPermissions(Permission::all());
-
     }
 }

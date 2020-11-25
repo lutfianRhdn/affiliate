@@ -28,17 +28,25 @@
             <b class="caret"></b>
           </p>
         </a>
-        <div class="collapse {{ ($activePage == 'reseller' || $activePage == 'admin') ? ' show' : '' }}" id="adminService">
+        <div class="collapse {{ ($activePage == 'reseller' || $activePage == 'admin' || $activePage=='company') ? ' show' : '' }}" id="adminService">
           <ul class="nav">
-            @role('admin')
+            @if(auth()->user()->hasRole(['super-admin']) ||auth()->user()->can('company.view'))
+            <li class="nav-item{{ $activePage == 'company' ? ' active' : '' }}">
+              <a class="nav-link" href="{{ route('admin.company.index') }}">
+                <span class="sidebar-mini"> CP </span>
+                <span class="sidebar-normal"> {{ __('Company') }} </span>
+              </a>
+            </li>
+            @endif
+            @if(auth()->user()->hasRole(['super-admin','admin-company']))
             <li class="nav-item{{ $activePage == 'admin' ? ' active' : '' }}">
               <a class="nav-link" href="{{ route('admin.user.index') }}">
                 <span class="sidebar-mini"> AD </span>
                 <span class="sidebar-normal"> {{ __('Admin') }} </span>
               </a>
             </li>
-            @endrole
-            @can('user.view', Model::class)
+            @endif
+            @can('user.view')
             <li class="nav-item{{ $activePage == 'reseller' ? ' active' : '' }}">
               <a class="nav-link" href="{{ route('admin.reseller.index') }}">
                 <span class="sidebar-mini"> RS </span>
@@ -67,7 +75,7 @@
         </a>
       </li>
       @endcan
-      @role('admin')
+     @if(auth()->user()->hasRole(['super-admin','admin-company']))
 
       <li class="nav-item{{ $activePage == 'setting' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('admin.setting.index')}}">
@@ -75,8 +83,8 @@
             <p>{{ __('Settings') }}</p>
         </a>
       </li> 
-      @endrole
-      @role('admin')
+      @endif
+     @if(auth()->user()->hasRole(['super-admin','admin-company']))
 
       <li class="nav-item{{ $activePage == 'log' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('admin.log.index')}}">
@@ -84,7 +92,7 @@
             <p>{{ __('Log Activity') }}</p>
         </a>
       </li>
-      @endrole
+      @endif
     </ul>
   </div>
 </div>

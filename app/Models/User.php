@@ -31,6 +31,7 @@ class User extends Authenticatable
         'approve',
         'approve_note',
         'status',
+        'company_id',
     ];
 
     /**
@@ -74,6 +75,11 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo('App\Models\Role','role');
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
     }
 
     public function getUser($id)
@@ -125,10 +131,17 @@ class User extends Authenticatable
         return $user;
     }
 
+    public function CreateAdmin($data)
+    {
+    $data['phone'] = str_replace("-", "", $data['phone']);
+    $data['password'] = Hash::make($data['password']);
+    // dd($data);
+       return  User::create($data);
+    }
     public function getDataEmail($id)
     {
         $data = User::select('users.name as name', 'users.email as email', 'users.phone as phone', 'users.address as address', 'users.ref_code as ref_code',
-            'products.product_name',)
+            'products.product_name')
             ->where('users.id', $id)
             ->join('products','products.id','=','users.product_id')->first();
 
