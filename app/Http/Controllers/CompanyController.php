@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\EmailConfirmationCompany;
+use Illuminate\Support\Facades\Mail;
 use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -48,7 +50,8 @@ class CompanyController extends Controller
 
         $request->request->add(['password'=>Str::random(8)]);
         $company = new Company;
-        $company->addCompany($request->all());
+        $data = $company->addCompany($request->all());
+        Mail::to($data->email)->send(new EmailConfirmationCompany($data->id, $request->password));
         return redirect()->back();
     }
 

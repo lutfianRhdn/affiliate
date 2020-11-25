@@ -272,7 +272,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group {{ $errors->has('name') ? ' has-danger' : '' }}">
-                        <label for="name">name <span class="text-danger">*</span></label>
+                        <label for="name">Name <span class="text-danger">*</span></label>
                         <input type="text" class="form-control pt-3" id="name" placeholder="Full Name" name="name"
                             value="{{ old('name') }}">
                         @if ($errors->has('name'))
@@ -282,7 +282,7 @@
                         @endif
                     </div>
                     <div class="form-group {{ $errors->has('company') ? ' has-danger' : '' }}">
-                        <label for="company">company <span class="text-danger">*</span></label>
+                        <label for="company">Company <span class="text-danger">*</span></label>
                         <input type="text" class="form-control pt-3" id="company" placeholder="Company name" name="company"
                             value="{{ old('company') }}">
                         @if ($errors->has('company'))
