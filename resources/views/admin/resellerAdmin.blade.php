@@ -55,7 +55,7 @@
                                     </td>
                                     <td>{{$user->phone}}</td>
                                     <td>{{$user->address}}</td>
-                                    <td>{{$user->product_name}}</td>
+                                    <td>{{$user->product->product_name}}</td>
                                     <td>{{$user->ref_code }}</td>
                                     <td>
                                         <div class="togglebutton">
