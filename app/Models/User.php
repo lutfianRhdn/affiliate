@@ -72,6 +72,11 @@ class User extends Authenticatable
         return null !== $this->role()->where('name', $role)->first();
     }
     
+    // relasi
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
     public function role()
     {
         return $this->belongsTo('App\Models\Role','role');
@@ -126,6 +131,7 @@ class User extends Authenticatable
             'role' => $data->role,
             'ref_code' => $ref_code,
             'address' => $data->address,
+            'company_id'=> $data->company_id
         ]);
 
         return $user;

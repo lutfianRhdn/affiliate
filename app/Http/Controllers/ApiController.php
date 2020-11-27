@@ -6,6 +6,7 @@ use App\Http\Resources\ErrorResource;
 use App\Http\Resources\ProductResource;
 use App\Mail\EmailConfirmation;
 use App\Models\Product;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Vinkla\Hashids\Facades\Hashids;
@@ -135,7 +136,9 @@ class ApiController extends Controller
         } while ($check != null);
 
         if ($check == null) {
-            $request->request->add(['product_id'=>$product->id,'role'=>'2']);
+            $role= Role::where('name','reseller')->get()->first();
+            // dd($product->company->id);
+            $request->request->add(['product_id'=>$product->id,'role'=> $role->id,'company_id'=>$product->company->id]);
             $user = $model_user->createUserAdmin($request, $ref_code, $request->password);
             $user->assignRole('reseller');
         }

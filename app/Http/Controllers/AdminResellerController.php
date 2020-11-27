@@ -33,11 +33,15 @@ class AdminResellerController extends Controller
 
     public function index()
     {
-        $model_product = new Product;
-        $product = $model_product->getData();
-        $user = new User;
-        $users = $user->getResellerData(); 
-        return view('admin.resellerAdmin', ['users' => $users, 'products' => $product,]);
+       $products = Product::all();
+        $users = User::all();
+        $reseller =[];
+        foreach ($users as $user ) {
+            if ($user->hasRole('reseller')) {
+                array_push($reseller,$user);
+            }
+        }
+        return view('admin.resellerAdmin', ['users' => $reseller, 'products' => $products]);
     }
 
     /**

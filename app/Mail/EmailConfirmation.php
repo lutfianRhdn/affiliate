@@ -33,7 +33,7 @@ class EmailConfirmation extends Mailable
     {   
         $user = new User;
         $data = User::find($this->user);
-        
+        // dd($data->company);
         return $this->view('auth.emailConfirmation', ["user" => $data, "pass" => $this->pass]);
     }
 }
