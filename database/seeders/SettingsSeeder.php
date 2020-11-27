@@ -20,7 +20,7 @@ class SettingsSeeder extends Seeder
             'label' => 'Percentage',
             'value' => '10',
             'product_id' => '1',
-            'company_id' => Company::where('company_name', 'affiliate')->get()->first()->id,
+            'company_id' => Company::where('name', 'affiliate')->get()->first()->id,
 
             'group' => 'admin',
             'updated_at' => now()
@@ -30,7 +30,7 @@ class SettingsSeeder extends Seeder
             'label' => 'Day of Settelment',
             'value' => '20',
             'product_id' => '1',
-            'company_id' => Company::where('company_name', 'affiliate')->get()->first()->id,
+            'company_id' => Company::where('name', 'affiliate')->get()->first()->id,
             'group' => 'admin',
             'updated_at' => now()
         ]);

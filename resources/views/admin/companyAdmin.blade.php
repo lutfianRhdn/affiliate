@@ -43,19 +43,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($companies as $company)
+                                @foreach ($adminCompany as $company)
                                 <tr>
                                     <td>{{$company->name}}</td>
                                     <td>{{$company->email}} <span
-                                        class="ml-2 badge badge-{{$company->register_status == '1' ? 'success' : 'warning'}}">{{$company->is_active == '1' ? 'Activated' : 'Not Activated'}}</span>
+                                        class="ml-2 badge badge-{{$company->register_status == '1' ? 'success' : 'warning'}}">{{$company->register_status == '1' ? 'Activated' : 'Not Activated'}}</span>
                                     </td>
-                                    <td>{{$company->company_name}}</td>
+                                    <td>{{$company->company->name}}</td>
                                     <td>{{$company->phone}}</td>
                                     <td>
                                         <div class="togglebutton">
                                             <label id="status">
                                                 <input type="checkbox" data-id="{{$company->id}}" id="change-status"
-                                                    {{ ($company->is_active == 1) ? 'checked' : ''}}>
+                                                    {{   ($company->register_status == 1 && $company->approve ==1 ) ? 'checked' : ''}}>
                                                 <span class="toggle"></span>
                                             </label>
                                         </div>
@@ -69,11 +69,13 @@
                                             <div class="ripple-container"></div>
                                         </a>
                                         
-                                        @elseif( $company->approve == 0 )) 
+                                        @elseif( $company->approve == 0 )
                                         <a rel="tooltip"
                                             class="btn btn-warning btn-fab btn-fab-mini btn-round approvalForm" href=""
                                             data-id="{{$company->id}}" data-placement="bottom" title="Approval"
-                                            data-toggle="modal" data-target="#approvalModal{{$company->id}}">
+                                            data-toggle="modal" data-target="#approvalModal{{$company->id}}" @if ($company->register_status ==0)
+                                            style="pointer-events:none; background:gray" 
+                                            @endif >
                                             <i class="material-icons">approval</i>
                                             <div class="ripple-container"></div>
                                         </a>
@@ -113,7 +115,7 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <p class="h5">Approve this company {{$company->name}} ?</p>
+                                                    <p class="h5">Approve this company {{$company->company->name}} ?</p>
                                                     <textarea name="approve_note" class="form-control approve_note"
                                                         id="approve-{{$company->id}}" placeholder="Reason"></textarea>
                                                 </div>
@@ -135,7 +137,7 @@
                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
-                                        <form action="{{ route('admin.company.destroy',$company->id) }}" method="POST">
+                                        <form action="{{ route('admin.company.destroy',$company->company->id) }}" method="POST">
                                                 @method('delete')
                                                 @csrf
                                                 <div class="modal-header">
@@ -165,7 +167,7 @@
                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
-                                        <form action="{{ route('admin.company.update',$company->id) }}" method="POST">
+                                        <form action="{{ route('admin.company.update',$company->company->id) }}" method="POST">
                                                 @method('patch')
                                                 @csrf
                                                 <div class="modal-header">
@@ -193,7 +195,7 @@
                                                     </div>
                                                     <div
                                                         class="form-group {{ $errors->has('email') ? ' has-danger' : '' }}">
-                                                        <label for="email">email <span
+                                                        <label for="email">Email <span
                                                                 class="text-danger">*</span></label>
                                                         <input type="text" class="form-control pt-3" id="email"
                                                             placeholder="Full email" name="email"
@@ -207,7 +209,7 @@
                                                     </div>
                                                     <div
                                                         class="form-group {{ $errors->has('company') ? ' has-danger' : '' }}">
-                                                        <label for="company">company <span
+                                                        <label for="company">Company <span
                                                                 class="text-danger">*</span></label>
                                                         <input type="text" class="form-control pt-3" id="company"
                                                             placeholder="Company Name" name="company"
@@ -272,7 +274,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group {{ $errors->has('name') ? ' has-danger' : '' }}">
-                        <label for="name">name <span class="text-danger">*</span></label>
+                        <label for="name">Name <span class="text-danger">*</span></label>
                         <input type="text" class="form-control pt-3" id="name" placeholder="Full Name" name="name"
                             value="{{ old('name') }}">
                         @if ($errors->has('name'))
@@ -282,7 +284,7 @@
                         @endif
                     </div>
                     <div class="form-group {{ $errors->has('company') ? ' has-danger' : '' }}">
-                        <label for="company">company <span class="text-danger">*</span></label>
+                        <label for="company">Company <span class="text-danger">*</span></label>
                         <input type="text" class="form-control pt-3" id="company" placeholder="Company name" name="company"
                             value="{{ old('company') }}">
                         @if ($errors->has('company'))

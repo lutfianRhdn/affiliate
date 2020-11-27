@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Helpers\LogActivity;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -42,6 +43,11 @@ class LoginController extends Controller
 
     public function login(Request $request) {
         $fieldData = $request->all();
+        // dd($fieldData);
+        $user = User::where('email',$fieldData['email'])->get()->first();
+        if($user->register_status == 0){
+            return redirect()->route('login')->with('error','Your provided information wrong!   ');
+        }
             if (auth()->attempt(array('email' => $fieldData['email'], 'password' => $fieldData['password'])))
             {
                 // dd(auth()->user()->hasRole('admin'));

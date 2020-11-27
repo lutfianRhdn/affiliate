@@ -136,7 +136,9 @@ class User extends Authenticatable
     $data['phone'] = str_replace("-", "", $data['phone']);
     $data['password'] = Hash::make($data['password']);
     // dd($data);
-       return  User::create($data);
+       $user=  User::create($data);
+       $user->assignRole('admin');
+       return $user;
     }
     public function getDataEmail($id)
     {

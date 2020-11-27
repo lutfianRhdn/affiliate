@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\EmailConfirmation;
+use App\Mail\EmailConfirmationCompany;
+use Illuminate\Support\Facades\Mail;
 use App\Models\Company;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-
+use Spatie\Permission\Models\Role;
 
 class CompanyController extends Controller
 {
@@ -17,7 +21,16 @@ class CompanyController extends Controller
     public function index()
     {
         $companies= Company::all();
-        return view('admin.companyAdmin',compact('companies'));
+        $users = User::all();
+$adminCompany =[];
+        foreach($users as $user){
+            if($user->hasRole('admin')){
+                array_push($adminCompany,$user);
+            }
+        }
+        // dd(); 
+        // dd(Role::with('users')->where('name','admin')->get()->user());
+        return view('admin.companyAdmin',compact('adminCompany'));
     
     }
 
@@ -41,14 +54,15 @@ class CompanyController extends Controller
     {
         $request->validate([
             'name'=>'required',
-            'email'=> 'required|unique:companies',
+            'email'=> 'required|unique:users',
             'company'=>'required',
             'phone'=>'required|min:8|max:12'
         ]);
 
-        $request->request->add(['password'=>Str::random(8)]);
+        $request->request->add(['password'=> Str::random(8)]);
         $company = new Company;
-        $company->addCompany($request->all());
+        $data = $company->addCompany($request->all());   
+        Mail::to($data->email)->send(new EmailConfirmation($data->id, $request->password));
         return redirect()->back();
     }
 
@@ -84,12 +98,8 @@ class CompanyController extends Controller
     public function update(Request $request, Company $company)
     {
         // dd($company);
-        $company->update([
-            'name'=>$request->name,
-            'email'=>$request->email,
-            'company_name'=>$request->company,
-            'phone'=>$request->phone,
-            ]);
+        $companyModel = new Company;
+        $companyModel->editCompany($company,$request);
             return redirect()->back();
     }
 
@@ -101,13 +111,20 @@ class CompanyController extends Controller
      */
     public function destroy(Company $company)
     {
-        $company->delete();
+        $users = User::with('company')->where('company_id',$company->id)->get();
+        // $users->first()->delete();
+        foreach ($users as $user ) {
+            if ($user->hasRole('admin')) {
+                $company->delete();
+                $user->delete();
+            }
+        }
         return redirect()->back();
     }
     // custom method
     public function approve(Request $request)
     {
-        $company = Company::find($request->id);
+        $company = User::find($request->id);
         $company->approve=1;
         $company->save();
         return true;

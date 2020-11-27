@@ -82,7 +82,7 @@ private $pass ='';
                 'regex:/[0-9]/',
                 'regex:/[@$!%*#?&]/'],
             'password_confirmation' => ['required_with:password','same:password'],
-            'company'=>['required'],
+            'company'=>['required','unique:companies,name'],
             'phone' => ['required', 'min:9', 'max:14'],
             'address' => ['required']
         ]);
@@ -101,32 +101,35 @@ private $pass ='';
         if ($validator->fails()) {
             return $validator->errors();
         }
-            // $company = Company::create(['name'=>$data['company']]);
-        // $data['company_id'] = $company->id;
-        $company = new company;
+        // dd($data);
+            $company = Company::create(['name'=>$data['company']]);
+        $data['company_id'] = $company->id;
+        $user = new user;
         $this->pass = $data['password'];
-        $this->guard()->login($company);
-        
-       return $company= $company->addCompany($data);
+        unset($data['company']);
+        $user = $user->CreateAdmin($data);
+        return $user;
+    
     }
-
 
     public function register(Request $request)
     {
         $this->validator($request->all())->validate();
-        event(new Registered($company = $this->create($request->all())));
-        Mail::to($company->email)->send(new EmailConfirmationCompany($company->id, $this->pass));
+    
+        event(new Registered($user = $this->create($request->all())));
+        Mail::to($user->email)->send(new EmailConfirmation($user->id, $this->pass));
         return redirect()->back();
     }
-
     public function emailConfirmation($email)
     {
         $user = new User;
         $productModel = new Product;
         $product= $user->getProductID($email);
+        $user=User::where('email',$email)->get()->first();
+        $user->register_status =1;
+        $user->save();
         if ($product) {
             $url = $productModel->getUrl($product->product_id);
-            # code...
         }else{
             $company = Company::where('email',$email)->get()->first();
             $company->is_active = 1;

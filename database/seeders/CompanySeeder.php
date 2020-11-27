@@ -16,25 +16,11 @@ class CompanySeeder extends Seeder
     public function run()
     {
         $adminAffiliate = Company::create([
-            'name'=> 'admin affiliate',
-            'email'=> 'admin@affiliate.com',
-            'company_name'=>'affiliate',
-            'phone'=> '08123456789',
-            'password'=>Hash::make('admin1234'),
-            'is_active' =>1,
-            'approve' =>1
+            'name'=> 'Affiliate',
         ]);
         $adminPagii = Company::create([
-            'name'=> 'admin pagii',
-            'email'=> 'admin@pagii.com',
-            'company_name'=>'pagii',
-            'phone'=> '08123456789',
-            'password'=>Hash::make('admin1234'),
-            'is_active'=> 1,
-            'approve'=> 1
+            'name'=> 'Pagii',
         ]);
-        $adminAffiliate->assignRole('admin-company');
-        $adminPagii->assignRole('admin-company');
 
     }
 }
