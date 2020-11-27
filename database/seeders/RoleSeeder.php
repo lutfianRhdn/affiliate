@@ -24,7 +24,7 @@ class RoleSeeder extends Seeder
             'created_at' => now()
             ]);
         $admin = Role::create([
-                'name'=>'admin-company',
+                'name'=>'admin',
                 'slug' => '',
                 'guard_name' => 'web',
                 'created_at' => now()
@@ -36,5 +36,6 @@ class RoleSeeder extends Seeder
             'created_at' => now()
         ]);
         $adminRole->syncPermissions(Permission::all());
+        $admin->syncPermissions(Permission::all());
     }
 }

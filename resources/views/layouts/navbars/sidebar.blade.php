@@ -4,6 +4,7 @@
 
       Tip 2: you can also add an image using data-image tag
   -->
+  {{-- {{dd(auth()->user()->getPermissionNames())}} --}}
   <div class="logo">
     <a href="" class="simple-text logo-normal">
       {{ __('Affiliate') }}
@@ -19,7 +20,7 @@
       </li>
       {{-- {{dd(auth()->user()->role())}} --}}
       
-      @can('user.view')
+      @if(auth()->user()->hasPermissionTo('user.view'))
 
       <li class="nav-item {{ ($activePage == 'reseller' || $activePage == 'admin') ? ' active' : '' }}">
         <a class="nav-link" data-toggle="collapse" href="#adminService" aria-expanded="true">
@@ -30,7 +31,7 @@
         </a>
         <div class="collapse {{ ($activePage == 'reseller' || $activePage == 'admin' || $activePage=='company') ? ' show' : '' }}" id="adminService">
           <ul class="nav">
-            @if(auth()->user()->hasRole(['super-admin']) ||auth()->user()->can('company.view'))
+            @if(auth()->user()->hasRole(['super-admin']) || auth()->user()->can('company.view'))
             <li class="nav-item{{ $activePage == 'company' ? ' active' : '' }}">
               <a class="nav-link" href="{{ route('admin.company.index') }}">
                 <span class="sidebar-mini"> CP </span>
@@ -38,7 +39,7 @@
               </a>
             </li>
             @endif
-            @if(auth()->user()->hasRole(['super-admin','admin-company']))
+            @if(auth()->user()->hasRole('super-admin')|| auth()->user()->hasRole('admin'))
             <li class="nav-item{{ $activePage == 'admin' ? ' active' : '' }}">
               <a class="nav-link" href="{{ route('admin.user.index') }}">
                 <span class="sidebar-mini"> AD </span>
@@ -46,19 +47,20 @@
               </a>
             </li>
             @endif
-            @can('user.view')
+      @if(auth()->user()->hasPermissionTo('user.view'))
             <li class="nav-item{{ $activePage == 'reseller' ? ' active' : '' }}">
               <a class="nav-link" href="{{ route('admin.reseller.index') }}">
                 <span class="sidebar-mini"> RS </span>
                 <span class="sidebar-normal">{{ __('Reseller') }} </span>
               </a>
             </li>
-            @endcan
+            @endif
           </ul>
         </div>
       </li>
-      @endcan
-      @can('role.view')
+      @endif
+
+      @if(auth()->user()->hasPermissionTo('role.view'))
 
       <li class="nav-item{{ $activePage == 'role' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('admin.role.index') }}">
@@ -66,16 +68,16 @@
             <p>{{ __('Role Management') }}</p>
         </a>
       </li>
-      @endcan
-      @can('product.view')
+      @endif
+      @if(auth()->user()->hasPermissionTo('product.view'))
       <li class="nav-item{{ $activePage == 'product' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('admin.product.index') }}">
           <i class="material-icons">content_paste</i>
             <p>{{ __('Product') }}</p>
         </a>
       </li>
-      @endcan
-     @if(auth()->user()->hasRole(['super-admin','admin-company']))
+      @endif
+     @if(auth()->user()->hasRole('super-admin')|| auth()->user()->hasRole('admin'))
 
       <li class="nav-item{{ $activePage == 'setting' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('admin.setting.index')}}">
@@ -84,7 +86,7 @@
         </a>
       </li> 
       @endif
-     @if(auth()->user()->hasRole(['super-admin','admin-company']))
+      @if(auth()->user()->hasRole('super-admin')|| auth()->user()->hasRole('admin'))
 
       <li class="nav-item{{ $activePage == 'log' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('admin.log.index')}}">
