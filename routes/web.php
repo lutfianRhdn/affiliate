@@ -43,7 +43,7 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 // ApiController
 
-Route::group(['middleware' => ['auth:company,web'],'prefix'=>'admin'], function () {
+Route::group(['middleware' => ['auth'],'prefix'=>'admin'], function () {
 	Route::get('', [HomeController::class, 'index'])->name('admin');
 	// Route::get('/user', [AdminUserController::class, 'index'])->name('admin.user')->middleware('auth');
 	// Route::get('/user/create', [AdminUserController::class, 'create']);
