@@ -22,14 +22,16 @@
                                 <tr>
                                     <th style="width: 10%">ID</th>
                                     <th>Name</th>
+                                    <th>Company</th>
                                     <th class="text-right">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($roles as $role)
                                 <tr>
-                                    <td>{{$role->id}}</td>
+                                    <td>{{$loop->index+1}}</td>
                                     <td>{{$role->name}}</td>
+                                    <td>{{$role->company->name}}</td>
                                     @can('role.delete')
                                     <td class="text-right">
                                         <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round" href=""
@@ -51,10 +53,10 @@
                                 </tr>
 
                                 {{-- edit modal --}}
-                                <div class="modal fade" id="editModal{{$role->id}}" tabindex="-1" role="dialog"
+                                <div class="modal fade bd-example-modal-lg"  id="editModal{{$role->id}}" tabindex="-1" role="dialog"
                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content mx-auto" >
                                             <form action="{{route('admin.role.update',[$role->id])}}" method="POST">
                                                 @method('patch')
                                                 @csrf
@@ -81,87 +83,7 @@
                                                         </div>
                                                         @endif
                                                     </div>
-                                                    <div class="bmd-form-group">
-                                                        <div class="form-group pl-2 d-flex">
-                                                            <div class="form-group w-100">
-                                                                <div class="row">
-                                                                    {{-- text --}}
-                                                                    <div class="col-4">
-                                                                        <p>#</p>
-                                                                        @foreach ($permissions as $permission)
-                                                                        <p class="text-capitalize">{{$permission}}
-                                                                            Management</p>
-                                                                        @endforeach
-
-                                                                    </div>
-                                                                    {{-- view --}}
-                                                                    <div class="col-2 m">
-                                                                        <div
-                                                                            class="d-flex flex-column justify-content-center align-items-center">
-                                                                            <p>View</p>
-                                                                            @foreach ($permissions as $permission)
-                                                                            <input type="checkbox"
-                                                                                name="permission-{{$permission}}-view"
-                                                                                class="mt-2 mb-3" id="" 
-                                                                                @if($role->hasPermissionTo($permission.'.view','web'))
-                                                                            checked
-                                                                            @endif>
-                                                                            @endforeach
-                                                                        </div>
-                                                                    </div>
-                                                                    {{-- create --}}
-                                                                    <div class="col-2">
-                                                                        <div
-                                                                            class="d-flex flex-column justify-content-center align-items-center">
-                                                                            <p>Create</p>
-                                                                            @foreach ($permissions as $permission)
-                                                                            <input type="checkbox"
-                                                                                name="permission-{{$permission}}-create"
-                                                                                class="mt-2 mb-3" id="" 
-                                                                                @if($role->hasPermissionTo($permission.'.create','web'))
-                                                                            checked
-                                                                            @endif
-                                                                            >
-                                                                            @endforeach
-                                                                        </div>
-                                                                    </div>
-                                                                    {{-- update --}}
-                                                                    <div class="col-2">
-                                                                        <div
-                                                                            class="d-flex flex-column justify-content-center align-items-center">
-                                                                            <p>Update</p>
-                                                                            @foreach ($permissions as $permission)
-                                                                            <input type="checkbox"
-                                                                                name="permission-{{$permission}}-edit"
-                                                                                class="mt-2 mb-3" id="" 
-                                                                                @if($role->hasPermissionTo($permission.'.edit','web'))
-                                                                            checked
-                                                                            @endif>
-
-                                                                            @endforeach
-                                                                        </div>
-                                                                    </div>
-                                                                    {{-- delete --}}
-                                                                    <div class="col-2">
-                                                                        <div
-                                                                            class="d-flex flex-column justify-content-center align-items-center">
-                                                                            <p>Delete</p>
-                                                                            @foreach ($permissions as $permission)
-                                                                            <input type="checkbox"
-                                                                                name="permission-{{$permission}}-delete"
-                                                                                class="mt-2 mb-3" id="" 
-                                                                                @if($role->hasPermissionTo($permission.'.delete','web'))
-                                                                            checked
-                                                                            @endif
-                                                                            >
-                                                                            @endforeach
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
+                                                  @include('pages.role_management_table',$roleNames )
 
                                                 </div>
                                                 <div class="modal-footer">
@@ -215,10 +137,8 @@
 </div>
 
 {{-- modal create --}}
-
-<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade bd-example-modal-lg" id="createModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <form action="{{ route('admin.role.store') }}" method="POST">
                 @csrf
@@ -230,8 +150,8 @@
                 </div>
                 <div class="modal-body">
                     <div class="bmd-form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
-                        <div class="form-group pl-2">
-                            <label for="name">Role Name</label>
+                        <div class="form-group pl-2 d-flex align-items-center">
+                            <label for="name" class="w-25">Role Name</label>
                             <input type="text" class="form-control" placeholder="Reseller" name="name"
                                 value="{{ old('name') }}">
 
@@ -241,78 +161,18 @@
                             <strong>{{ $errors->first('name') }}</strong>
                         </div>
                         @endif
-                        <div class="bmd-form-group">
-                            <div class="form-group pl-2 d-flex">
-                                <div class="form-group w-100">
-                                    <div class="row">
-                                        {{-- text --}}
-                                        <div class="col-4">
-                                            <p>#</p>
-                                            @foreach ($permissions as $permission)
-                                            <p class="text-capitalize">{{$permission}} Management</p>
-                                            @endforeach
-
-                                        </div>
-                                        {{-- view --}}
-                                        <div class="col-2 m">
-                                            <div class="d-flex flex-column justify-content-center align-items-center">
-                                                <p>View</p>
-                                                @foreach ($permissions as $permission)
-                                                <input type="checkbox" name="permission-{{$permission}}-view"
-                                                    class="mt-2 mb-3" id="" 
-                                                    @if($role->hasPermissionTo($permission.'.view','web'))
-                                                checked
-                                                @endif>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                        {{-- create --}}
-                                        <div class="col-2">
-                                            <div class="d-flex flex-column justify-content-center align-items-center">
-                                                <p>Create</p>
-                                                @foreach ($permissions as $permission)
-                                                <input type="checkbox" name="permission-{{$permission}}-create"
-                                                    class="mt-2 mb-3" id="" 
-                                                    @if($role->hasPermissionTo($permission.'.create','web'))
-                                                checked
-                                                @endif
-                                                >
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                        {{-- update --}}
-                                        <div class="col-2">
-                                            <div class="d-flex flex-column justify-content-center align-items-center">
-                                                <p>Update</p>
-                                                @foreach ($permissions as $permission)
-                                                <input type="checkbox" name="permission-{{$permission}}-edit"
-                                                    class="mt-2 mb-3" id="" 
-                                                    @if($role->hasPermissionTo($permission.'.edit','web'))
-                                                checked
-                                                @endif>
-
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                        {{-- delete --}}
-                                        <div class="col-2">
-                                            <div class="d-flex flex-column justify-content-center align-items-center">
-                                                <p>Delete</p>
-                                                @foreach ($permissions as $permission)
-                                                <input type="checkbox" name="permission-{{$permission}}-delete"
-                                                    class="mt-2 mb-3" id="" 
-                                                    @if($role->hasPermissionTo($permission.'.delete','web'))
-                                                checked
-                                                @endif
-                                                >
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                        @role('super-admin')
+                            <div class="form-group pl-2 d-flex align-items-center">
+                                <label for="company" class="w-25">Company Name</label>
+                                <select  class="form-control custom-select-2" style="width: 100%" placeholder="Reseller" name="company">
+                                    <option value="" selected disabled> Select Company</option>
+                                    @foreach ($companies as $company)
+                                        <option value="{{ $company->id }}" > {{$company->name}}</option>
+                                    @endforeach
+                                </select>
                             </div>
-
-                        </div>
+                        @endrole
+                        @include('pages.role_management_table',$roleNames)
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -331,7 +191,97 @@
     $(document).ready(function () {
         $('.permission-edit').select2();
         $('#permission-create').select2();
+        $('.custom-select-2').select2();
         $("#preloaders").fadeOut(1000);
+        // if user management view is checked
+        $('input[name=user-management-view]').on('click',()=>{
+            const company =$('input[name=permission-company-view')
+            const admin =$('input[name=permission-admin-view')
+            const reseller =$('input[name=permission-reseller-view')
+
+            if (company.prop('checked') == true) {
+                company.prop('checked',false)
+            }else{
+                company.prop('checked',true)
+            }
+            if (admin.prop('checked') == true) {
+                admin.prop('checked',false)
+            }else{
+                admin.prop('checked',true)
+            }
+            if (reseller.prop('checked') == true) {
+                reseller.prop('checked',false)
+            }else{
+                reseller.prop('checked',true)
+            }
+        })
+        // if user management create is checked
+        $('input[name=user-management-create]').on('click',()=>{
+            const company =$('input[name=permission-company-create')
+            const admin =$('input[name=permission-admin-create')
+            const reseller =$('input[name=permission-reseller-create')
+
+            if (company.prop('checked') == true && $(this).prop('checked')===true) {
+                company.prop('checked',false)
+            }else{
+                company.prop('checked',true)
+            }
+            if (admin.prop('checked') == true && $(this).prop('checked')===true) {
+                admin.prop('checked',false)
+            }else{
+                admin.prop('checked',true)
+            }
+            if (reseller.prop('checked') == true && $(this).prop('checked')===true) {
+                reseller.prop('checked',false)
+            }else{
+                reseller.prop('checked',true)
+            }
+        })
+        // if user management edit is checked
+        $('input[name=user-management-edit]').on('click',()=>{
+            const company =$('input[name=permission-company-edit')
+            const admin =$('input[name=permission-admin-edit')
+            const reseller =$('input[name=permission-reseller-edit')
+
+            if (company.prop('checked') == true) {
+                company.prop('checked',false)
+            }else{
+                company.prop('checked',true)
+            }
+            if (admin.prop('checked') == true) {
+                admin.prop('checked',false)
+            }else{
+                admin.prop('checked',true)
+            }
+            if (reseller.prop('checked') == true) {
+                reseller.prop('checked',false)
+            }else{
+                reseller.prop('checked',true)
+            }
+        })
+        // if user management delete is checked
+        $('input[name=user-management-delete]').on('click',()=>{
+            const company =$('input[name=permission-company-delete')
+            const admin =$('input[name=permission-admin-delete')
+            const reseller =$('input[name=permission-reseller-delete')
+
+            if (company.prop('checked') == true) {
+                company.prop('checked',false)
+            }else{
+                company.prop('checked',true)
+            }
+            if (admin.prop('checked') == true) {
+                admin.prop('checked',false)
+            }else{
+                admin.prop('checked',true)
+            }
+            if (reseller.prop('checked') == true) {
+                reseller.prop('checked',false)
+            }else{
+                reseller.prop('checked',true)
+            }
+        })
+
     });
 
 </script>

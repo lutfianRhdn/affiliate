@@ -15,7 +15,7 @@ class PermissionSeeder extends Seeder
     public function run()
     {
         $permissions= [
-            'role','user','product'
+            'role','admin','company','reseller','product','setting','log'
         ];
         $actions = [
             'view','create','edit','delete'
@@ -25,5 +25,7 @@ class PermissionSeeder extends Seeder
                     Permission::create(['name'=>$permission.'.'.$action]);
             }
         }
+        Permission::create(['name'=>'company.approve']);
+        Permission::create(['name'=>'reseller.approve']);
     }
 }

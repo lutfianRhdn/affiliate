@@ -9,18 +9,21 @@ use Vinkla\Hashids\Facades\Hashids;
 class Product extends Model
 {
     use HasFactory;
-    protected $fillable = ['', 'product_name', 'description','regex','permission_ip','url'];
+    protected $fillable = ['', 'product_name', 'description','regex','permission_ip','url','company_id'];
 
     public function company()
     {
         return $this->belongsTo(Company::class);
     }
 
-public function users()
-{
-    return $this->hasMany(User::class);
-}
-
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+    public function setting()
+    {
+        return $this->hasMany(Setting::class);
+    }
     public function getData()
     {
         $product = Product::all();
@@ -39,13 +42,18 @@ public function users()
         return $url;
     }
 
-    public function createProduct($request) {
+    public function createProduct(array $data) {
+        if (!array_key_exists('company',$data)) {
+            $data['company']= null;
+        }
+        $comId= getCompanyId($data['company']);
         $product = Product::create([
-            'product_name' => $request->product_name,
-            'description' => $request->description,
-            'regex' => $request->regex,
-            'url' => $request->urlProduct,
-            'permission_ip' => $request->permissionUrl
+            'product_name' => $data['product_name'],
+            'description' => $data['description'],
+            'regex' => $data['regex'],
+            'url' => $data['urlProduct'],
+            'permission_ip' => $data['permissionUrl'],
+            'company_id'=>$comId
         ]);
         $id = Hashids::encode($product->id);
         $product->code = view('pages.register_embed', compact('id'))->render(); 

@@ -20,8 +20,11 @@ class LogActivityController extends Controller
      */
     public function index()
     {
-        $logsModel = new ModelsLogActivity;
-        $logs = $logsModel->getData();
+        // $logsModel = new ModelsLogActivity;
+        $logs= ModelsLogActivity::all();
+        if (!auth()->user()->hasRole('super-admin')) {
+            $logs = ModelsLogActivity::where('company_id',getCompanyId())->get();
+        }
         return view('admin.logActivity', ["logs"=>$logs]);
     }
 

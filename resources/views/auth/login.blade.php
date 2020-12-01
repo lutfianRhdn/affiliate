@@ -5,7 +5,7 @@ Program'),
 @section('content')
 <div class="container">
     <div class="row align-items-center">
-        <div class="col-md-9 ml-auto mr-auto mb-3 text-center">
+        <div class="col-md-9 ml-auto mr-auto mb-3 text-center">a
             <h3>Welcome to Affiliate</h3>
         </div>
         <div class="col-lg-4 col-md-6 col-sm-8 ml-auto mr-auto">
@@ -18,6 +18,14 @@ Program'),
                         <h4 class="card-title"><strong>{{ __('Login') }}</strong></h4>
                     </div>
                     <div class="card-body mt-3">
+                        @if (Session::has('error'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{Session::get('error')}}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        @endif
                         @if (session('regis-succ'))
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             {{session('regis-succ')}}

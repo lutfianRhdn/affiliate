@@ -31,10 +31,12 @@
                                 </div>
                                 @endif
                             </div>
+                            @can('admin.create')
                             <div class="col-12 text-right">
                                 <a href="" class="btn btn-sm btn-primary" data-toggle="modal"
-                                    data-target="#createUserModal">Add new Admin</a>
+                                data-target="#createUserModal">Add new Admin</a>
                             </div>
+                            @endcan
                         </div>
                         <div class="">
                             <table class="table" id="table_admin">
@@ -43,7 +45,6 @@
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>Phone</th>
-                                        <th>Role</th>
                                         <th>Create Date</th>
                                         <th class="text-right no-sort">Actions</th>
                                     </tr>
@@ -52,27 +53,49 @@
                                     @foreach ($users as $user)
                                     <tr>
                                         <td>{{$user->name}}</td>
-                                        <td>{{$user->email}}</td>
-                                        <td>{{$user->phone}}</td>
-                                        <td>
-                                            {{$user->role == '1' ? ' Admin' : 'Reseller'}}
+                                        <td>{{$user->email}}
                                             <span
-                                                class="ml-2 badge badge-{{$user->register_status == '1' ? 'success' : 'warning'}}">{{$user->register_status == '1' ? 'Activated' : 'Not Activated'}}</span>
+                                            class="ml-2 badge badge-{{$user->register_status == '1' ? 'success' : 'warning'}}">{{$user->register_status == '1' ? 'Activated' : 'Not Activated'}}</span>
                                         </td>
+                                        <td>{{$user->phone}}</td>
                                         <td>{{  Carbon\Carbon::parse($user->created_at)->format('d/m/Y')}}</td>
                                         <td class="td-actions text-right">
+                                            @if($user->approve == 1)
+                                        <a rel="tooltip" class="btn btn-primary btn-fab btn-fab-mini btn-round" href=""
+                                            data-placement="bottom" title="Approved">
+                                            <i class="material-icons">check_circle</i>
+                                            <div class="ripple-container"></div>
+                                        </a>
+                                        
+                                        @elseif( $user->approve == 0 )
+                                        <a rel="tooltip"
+                                            class="btn btn-warning btn-fab btn-fab-mini btn-round approvalForm" href=""
+                                            data-id="{{$user->id}}" data-placement="bottom" title="Approval"
+                                            data-toggle="modal" data-target="#approvalModal{{$user->id}}" @if ($user->register_status ==0)
+                                            style="pointer-events:none; background:gray" 
+                                            @endif >
+                                            <i class="material-icons">approval</i>
+                                            <div class="ripple-container"></div>
+                                        </a>
+                                        @endif
+                                            @can('admin.delete')
+                                                
                                             <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round"
-                                                href="" data-placement="bottom" title="Delete" data-toggle="modal"
-                                                data-target="#deleteModal{{$user->id}}">
-                                                <i class="material-icons">delete</i>
-                                                <div class="ripple-container"></div>
-                                            </a>
-                                            <a rel="tooltip" class="btn btn-primary btn-fab btn-fab-mini btn-round"
-                                                href="" data-placement="bottom" title="Edit" data-toggle="modal"
-                                                data-target="#editUserModal{{$user->id}}">
-                                                <i class="material-icons">edit</i>
-                                                <div class="ripple-container"></div>
-                                            </a>
+                                            href="" data-placement="bottom" title="Delete" data-toggle="modal"
+                                            data-target="#deleteModal{{$user->id}}">
+                                            <i class="material-icons">delete</i>
+                                            <div class="ripple-container"></div>
+                                        </a>
+                                        @endcan
+                                        @can('admin.edit')
+                                            
+                                        <a rel="tooltip" class="btn btn-primary btn-fab btn-fab-mini btn-round"
+                                        href="" data-placement="bottom" title="Edit" data-toggle="modal"
+                                        data-target="#editUserModal{{$user->id}}">
+                                        <i class="material-icons">edit</i>
+                                        <div class="ripple-container"></div>
+                                    </a>
+                                    @endcan
                                         </td>
                                     </tr>
 
@@ -106,6 +129,38 @@
                                             </div>
                                         </div>
                                     </div>
+                                      {{-- modal approval --}}
+                                <div class="modal fade " id="approvalModal{{$user->id}}" tabindex="-1" role="dialog"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <form action="/admin/approval/{{$user->id}}" method="POST">
+                                                @csrf
+                                                <input type="hidden" name="id" id="user-id" value="{{$user->id}}">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Approval user</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p class="h5">Approve this user {{$user->name}} ?</p>
+                                                    <textarea name="approve_note" class="form-control approve_note"
+                                                        id="approve-{{$user->id}}" placeholder="Reason"></textarea>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button"
+                                                        class="btn btn-secondary ejectApproval">No</button>
+                                                    <button type="button" class="btn btn-danger submitEject"
+                                                        data-dismiss="modal">Submit Eject</button>
+                                                    <button type="button" class="btn btn-primary submitApproved"
+                                                        data-dismiss="modal">Yes</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
 
                                     {{-- modal edit --}}
                                     <div class="modal fade" id="editUserModal{{$user->id}}" tabindex="-1" role="dialog"
@@ -248,40 +303,28 @@
                         </div>
                         @endif
                     </div>
-                    <div class="bmd-form-group{{ $errors->has('password') ? ' has-danger' : '' }} mt-3">
+                    @role('super-admin')
+                    <div class="bmd-form-group{{ $errors->has('company') ? ' has-danger' : '' }} mt-3">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">
-                                    <i class="material-icons">lock_outline</i>
+                                    <i class="material-icons">business</i>
                                 </span>
                             </div>
-                            <input type="password" name="password" id="password" class="form-control"
-                                placeholder="{{ __('Password') }}" required>
+                            <select name="company" id="company" class=" form-control w-100 custom-select-2" style="width: 88%">
+                                <option value="" disabled selected>Select Company</option>
+                                @foreach ($companies as $company)
+                            <option value="{{ $company->id }}">{{$company->name}}</option>
+                                @endforeach
+                            </select>
                         </div>
-                        @if ($errors->has('password'))
-                        <div id="password-error" class="error text-danger pl-3" for="password" style="display: block;">
-                            <strong>{{ $errors->first('password') }}</strong>
+                        @if ($errors->has('company'))
+                        <div id="company-error" class="error text-danger pl-3" for="company" style="display: block;">
+                            <strong>{{ $errors->first('company') }}</strong>
                         </div>
                         @endif
                     </div>
-                    <div class="bmd-form-group{{ $errors->has('password_confirmation') ? ' has-danger' : '' }} mt-3">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    <i class="material-icons">lock_outline</i>
-                                </span>
-                            </div>
-                            <input type="password" name="password_confirmation" id="password_confirmation"
-                                class="form-control" placeholder="{{ __('Confirm Password...') }}" required>
-                        </div>
-                        @if ($errors->has('password_confirmation'))
-                        <div id="password_confirmation-error" class="error text-danger pl-3" for="password_confirmation"
-                            style="display: block;">
-                            <strong>{{ $errors->first('password_confirmation') }}</strong>
-                        </div>
-                        @endif
-                    </div>
-                    <input type="hidden" name="role" value="1">
+                    @endrole
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -317,6 +360,73 @@
             $("#createUserModal").html("");
         });
         $('.custom-select').selectpicker();
+        $('.custom-select-2').select2();
+        $('.approvalForm').click(function () {
+            $("input[name='id']").val($(this).attr("data-id")),
+                $('.submitEject').hide();
+            $('.approve_note').hide();
+            $('.ejectApproval').show();
+        });
+
+        $(".ejectApproval").click(function () {
+            $('.approve_note').attr('required', 'true');
+            $('.approve_note').show();
+            $('.ejectApproval').hide();
+            $('.submitEject').show();
+        });
+
+        $('.submitApproved').click(function () {
+            $.ajax({
+                url: '{{route("approveCompany")}}',
+                type: 'POST',
+                data: {
+                    _token: $("input[name='_token']").val(),
+                    id: $("input[name='id']").val(),
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $('.alert-approval').append(
+                        '<div class="alert alert-success alert-dismissible fade show" role="alert">' +
+                        data.success +
+                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>'
+                    );
+                    location.reload();
+                },
+                error: function (status) {
+                    console.log(status);
+                },
+                complete: function () {
+                    alreadyloading = false;
+                }
+            });
+        });
+
+        $('.submitEject').click(function () {
+            $.ajax({
+                url: '{{route("getApproval")}}',
+                type: 'POST',
+                data: {
+                    _token: $("input[name='_token']").val(),
+                    id: $("input[name='id']").val(),
+                    approve_note: $("#approve-" + $("input[name='id']").val()).val(),
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $('.alert-approval').append(
+                        '<div class="alert alert-success alert-dismissible fade show" role="alert">' +
+                        data.success +
+                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>'
+                    );
+                    location.reload();
+                },
+                error: function (xhr, status) {
+                    console.log(status);
+                },
+                complete: function () {
+                    alreadyloading = false;
+                }
+            });
+        });
     });
 
 </script>

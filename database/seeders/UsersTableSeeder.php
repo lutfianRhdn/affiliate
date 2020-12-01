@@ -2,6 +2,7 @@
 namespace Database\Seeders;
 
 use App\Models\Company;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
@@ -19,7 +20,7 @@ class UsersTableSeeder extends Seeder
         $user = User::create([
         'name' => 'Admin Affiliate',
         'email' => 'admin@affiliate.com',
-        'role' => '1',
+        'role' => '2',
         'phone' => '08123456789',
         'register_status' => '1',
         'company_id' => Company::where('name', 'affiliate')->get()->first()->id,
@@ -27,6 +28,10 @@ class UsersTableSeeder extends Seeder
         'password' => Hash::make('admin1234'),
         'created_at' => now(),
         ]);
+        $admin = Role::create(['name'=>'admin-affiliate','company_id'=>Company::where('name','affiliate')->first()->id]);
+        $admin->syncPermissions(Role::where('name','copy-admin')->get()->first()->getAllPermissions());
+        Role::create(['name'=>'reseller-affiliate','company_id'=>Company::where('name','affiliate')->first()->id]);
+        $user->assignRole('admin','admin-affiliate');
         $superUser = User::create([
             'name' => 'super Admin',
             'email' => 'admin@admin.com',

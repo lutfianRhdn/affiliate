@@ -45,69 +45,36 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::group(['middleware' => ['auth'],'prefix'=>'admin'], function () {
 	Route::get('', [HomeController::class, 'index'])->name('admin');
-	// Route::get('/user', [AdminUserController::class, 'index'])->name('admin.user')->middleware('auth');
-	// Route::get('/user/create', [AdminUserController::class, 'create']);
-	// Route::delete('/{user}', [AdminUserController::class, 'destroy'])->middleware('auth');
-	// Route::get('/{user}/edit', [AdminUserController::class, 'edit']);
-	// Route::patch('/{user}', [AdminUserController::class, 'update'])->middleware('auth');
-
+	// search bycompany
+	Route::get('/user/{company}', [AdminUserController::class, 'searchByCompany'])->name('admin.user.company');
+	Route::get('/reseller/{company}', [AdminResellerController::class, 'searchByCompany'])->name('admin.reseller.company');
+	Route::get('/role/{company}', [RoleController::class, 'searchByCompany'])->name('admin.role.company');
+	Route::get('/product/{company}', [ProductController::class, 'searchByCompany'])->name('admin.product.company');
 // route resouce
-	Route::resource('/company', CompanyController::class, ["as" => "admin"])->middleware('role:super-admin');
-	Route::resource('/user', AdminUserController::class, ["as" => "admin"])->middleware('role:super-admin');
+	Route::resource('/company', CompanyController::class, ["as" => "admin"]);
+	Route::resource('/user', AdminUserController::class, ["as" => "admin"]);
 	Route::resource('/role', RoleController::class, ["as" => "admin"]);
 	Route::resource('/product', ProductController::class, ["as" => "admin"]);
 	Route::resource('/setting', SettingController::class, ["as" => "admin"]);
 	Route::resource('/log', LogActivityController::class, ["as" => "admin"]);
+	Route::resource('/reseller', AdminResellerController::class, ["as" => "admin"]);
 
 // custom route
 	Route::post('/approval', [AdminResellerController::class, 'getApproval'])->name('getApproval');
 	Route::post('/approvalCompany', [CompanyController::class, 'approve'])->name('approveCompany');
 	Route::get('/status', [AdminResellerController::class, 'getStatus'])->name('getStatus');
-	Route::resource('/reseller', AdminResellerController::class, ["as" => "admin"]);
 	Route::get('/get-city', [AdminResellerController::class, 'getCity']);
 	Route::get('/get-city-edit', [AdminResellerController::class, 'getCityEdit']);
 	Route::patch('/{product}', [ProductController::class, 'updateCode'])->name('admin.product.updateCode');
 });
 
 // reseller route
-Route::group(['middleware' => ['auth','role:reseller']], function () {
+Route::group(['middleware' => ['auth']], function () {
 	Route::get('/reseller', [ResellerController::class, 'index'])->name('reseller');
 });
 
 
 
-// Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home')->middleware('auth');
-
-
-// Route::group(['middleware' => 'auth'], function () {
-// 	Route::get('table-list', function () {
-// 		return view('pages.table_list');
-// 	})->name('table');
-
-// 	Route::get('typography', function () {
-// 		return view('pages.typography');
-// 	})->name('typography');
-
-// 	Route::get('icons', function () {
-// 		return view('pages.icons');
-// 	})->name('icons');
-
-// 	Route::get('map', function () {
-// 		return view('pages.map');
-// 	})->name('map');
-
-// 	Route::get('notifications', function () {
-// 		return view('pages.notifications');
-// 	})->name('notifications');
-
-// 	Route::get('rtl-support', function () {
-// 		return view('pages.language');
-// 	})->name('language');
-
-// 	Route::get('upgrade', function () {
-// 		return view('pages.upgrade');
-// 	})->name('upgrade');
-// });
 
 Route::group(['middleware' => 'auth'], function () {
 	// Route::resource('user', 'App\Http\Controllers\UserController', ['except' => ['show']]);

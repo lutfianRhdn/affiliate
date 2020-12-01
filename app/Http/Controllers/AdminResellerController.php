@@ -5,6 +5,7 @@ use App\Mail\KonfirmasiEmail;
 use App\Mail\EmailApproval;
 use App\Mail\EmailConfirmation;
 use App\Models\City;
+use App\Models\Company;
 use App\Models\Product;
 use App\Models\Province;
 use App\Models\User;
@@ -25,15 +26,18 @@ class AdminResellerController extends Controller
 
     public function __construct()
     {
-        $this->middleware(['permission:user.view'])->only('index');
-        $this->middleware('permission:user.create')->only('store');
-        $this->middleware('permission:user.edit')->only('update');
-        $this->middleware('permission:user.delete')->only('destroy');
+        $this->middleware(['permission:reseller.view'])->only('index');
+        $this->middleware('permission:reseller.create')->only('store');
+        $this->middleware('permission:reseller.edit')->only('update');
+        $this->middleware('permission:reseller.delete')->only('destroy');
     }
 
     public function index()
     {
-       $products = Product::all();
+$products = Product::all();
+        if (!auth()->user()->hasRole('super-admin')) {
+            $products = Product::where('company_id',getCompanyId())->get();
+        }
         $users = User::all();
         $reseller =[];
         foreach ($users as $user ) {
@@ -62,7 +66,6 @@ class AdminResellerController extends Controller
      */
     public function store(Request $request)
     {
-        // // dd($request);
         $this->validate($request, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -84,7 +87,9 @@ class AdminResellerController extends Controller
         } while ($check != null);
 
         if ($check == null) {
-            $user = $model_user->createUserAdmin($request, $ref_code, $pass);
+            $request->request->add(['password'=>$pass,'ref_code'=>$ref_code]);
+            $user = $model_user->createReseller($request->all());
+            
         }
 
         Mail::to($user['email'])->send(new EmailConfirmation($user->id, $pass));
@@ -152,6 +157,23 @@ class AdminResellerController extends Controller
         User::destroy($request->id);
         addToLog("Menghapus akun" . $request->email);
         return redirect("/admin/reseller")->with('status', 'Data berhasil dihapus');
+    }
+
+    // custom
+    public function searchByCompany($company)
+    {
+        $companies = Company::where('name',$company)->get()->first();
+        $products = Product::all();
+
+        $users =[];
+        if ($companies->count()>0) {
+            foreach ($companies->users as $user) {
+                if($user->hasRole('reseller')){
+                    array_push($users,$user);
+                }
+            }
+        }
+        return view('admin.resellerAdmin', ['users' => $users, 'products' => $products]);
     }
 
     public function getApproval(Request $request)

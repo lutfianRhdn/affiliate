@@ -101,13 +101,8 @@ private $pass ='';
         if ($validator->fails()) {
             return $validator->errors();
         }
-        // dd($data);
-            $company = Company::create(['name'=>$data['company']]);
-        $data['company_id'] = $company->id;
-        $user = new user;
-        $this->pass = $data['password'];
-        unset($data['company']);
-        $user = $user->CreateAdmin($data);
+        $company = new Company;
+        $user= $company->addCompany($data);
         return $user;
     
     }
@@ -118,7 +113,7 @@ private $pass ='';
     
         event(new Registered($user = $this->create($request->all())));
         Mail::to($user->email)->send(new EmailConfirmation($user->id, $this->pass));
-        return redirect()->back();
+        return redirect()->back()->with('success','Your Account has been Successfully Registered, please Check Email for Activation');
     }
     public function emailConfirmation($email)
     {

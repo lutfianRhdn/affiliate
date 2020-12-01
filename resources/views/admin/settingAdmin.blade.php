@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="content h-100">
-        <div class="row h-100 justify-content-center align-items-center">
+        <div class="row h-100 justify-content-center">
             @foreach ($setting as $product_id => $setting_list)
             <div class="col-md-6">
                 <div class="card">

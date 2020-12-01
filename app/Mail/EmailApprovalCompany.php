@@ -2,13 +2,13 @@
 
 namespace App\Mail;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\User;
 
-class EmailConfirmation extends Mailable
+class EmailApprovalCompany extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -17,11 +17,9 @@ class EmailConfirmation extends Mailable
      *
      * @return void
      */
-
-    public function __construct($user, $pass)
+    public function __construct($userId)
     {
-        $this->user = $user;
-        $this->pass = $pass;
+        $this->userId = $userId;
     }
 
     /**
@@ -30,9 +28,8 @@ class EmailConfirmation extends Mailable
      * @return $this
      */
     public function build()
-    {   
-        $user = new User;
-        $data = User::find($this->user);
-        return $this->view('auth.emailConfirmation', ["user" => $data, "pass" => $this->pass]);
+    {
+        $user = User::find($this->userId); 
+        return $this->view('auth.emailApprovalCompany',compact('user'));
     }
 }

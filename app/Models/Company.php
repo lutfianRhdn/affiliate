@@ -28,13 +28,12 @@ class Company extends Model
     }
     public function roles()
     {
-        $this->hasMany(Role::class);
+        return $this->hasMany(Role::class);
     }
 
     // custom method
     public function addCompany( $data)
     {
-        // dd($data);
         $company =Company::create([
             'name'=>$data['company']
         ]);
@@ -47,13 +46,18 @@ class Company extends Model
             'role'=>'2',
             'company_id'=>$company->id
         ]);
-        $user->assignRole('admin');
+        $adminCompany = Role::create(['name'=>'admin-'.$data['company'],'company_id'=>$company->id]);
+        // $adminCompany = Role::create(['name'=>'admin-'.$data['company'],'company_id'=>$company->id]);
+        $resellerCompany = Role::create(['name'=>'reseller-'.$data['company'],'company_id'=>$company->id]);
+        $permissionForAdmin = Role::where('name','copy-admin')->get()->first();
+        $adminCompany->syncPermissions($permissionForAdmin->getAllPermissions());
+        $user->assignRole('admin',$adminCompany->name);
+        
         return $user;
     }
 
     public function editCompany($company,$data)
     {
-        // dd($data);
         $company->update([
             'name'=>$data->company
         ]);

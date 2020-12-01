@@ -17,7 +17,7 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-       $adminRole = Role::create([
+       $superAdminRole = Role::create([
             'name' => 'super-admin',
             'slug' => '',
             'guard_name'=>'web',
@@ -29,13 +29,27 @@ class RoleSeeder extends Seeder
                 'guard_name' => 'web',
                 'created_at' => now()
             ]);
-           $resellerRole= Role::create([
+
+        $adminRole = Role::create([
+                'name'=>'copy-admin',
+                'slug' => '',
+                'guard_name' => 'web',
+                'created_at' => now()
+            ]);
+
+           $reseller= Role::create([
                 'name' => 'reseller',
                 'slug' => '',
                 'guard_name'=>'web',
             'created_at' => now()
         ]);
-        $adminRole->syncPermissions(Permission::all());
-        $admin->syncPermissions(Permission::all());
+           $resellerRole= Role::create([
+                'name' => 'copy-reseller',
+                'slug' => '',
+                'guard_name'=>'web',
+            'created_at' => now()
+        ]);
+        $superAdminRole->syncPermissions(Permission::all());
+        $adminRole->syncPermissions(Permission::whereNotIn('name',['admin.delete'.'admin.edit'])->get());
     }
 }
