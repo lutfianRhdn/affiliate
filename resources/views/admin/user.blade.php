@@ -313,7 +313,7 @@
                             </div>
                             <select name="company" id="company" class=" form-control w-100 custom-select-2" style="width: 88%">
                                 <option value="" disabled selected>Select Company</option>
-                                @foreach (getAllCompanies() as $company)
+                                @foreach ($companies as $company)
                             <option value="{{ $company->id }}">{{$company->name}}</option>
                                 @endforeach
                             </select>

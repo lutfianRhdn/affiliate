@@ -37,6 +37,7 @@ class RoleController extends Controller
         $roles = Role::whereNotIn('name',['super-admin','copy-admin','copy-reseller','admin','reseller']);
                $roles= filterData($roles);
         $roleNames = getRoleName($this->routes);
+        $companies = getAllCompanies();
         return view('admin.role', compact('roles','roleNames'));
     }
 

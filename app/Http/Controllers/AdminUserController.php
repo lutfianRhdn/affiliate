@@ -31,13 +31,14 @@ class AdminUserController extends Controller
         $users = User::whereNotIn('role',[1]);
         $userAdmin= [];
         $users= filterData($users);
+        $companies= getAllCompanies();
         foreach($users as $user){
             if ($user->hasRole('admin')) {
                 array_push($userAdmin,$user);
             }
         }
         $users =$userAdmin ;
-        return view('admin.user', compact('users'));
+        return view('admin.user', compact('users','companies'));
     }
 
     public function create() {

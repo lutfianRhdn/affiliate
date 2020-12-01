@@ -307,7 +307,7 @@
                                 <label for="company">Company Name</label>
                                 <select class="form-control pl-2 custom-select-2" style="width: 100%"  name="company">
                                     <option value="" selected disabled >Select Company</option>
-                                    @foreach (getAllCompanies() as $company)
+                                    @foreach ($companies as $company)
                                     <option value="{{ $company->id }}" >{{$company->name}}</option>
                                         
                                     @endforeach
