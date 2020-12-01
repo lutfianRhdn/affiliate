@@ -24,7 +24,7 @@
                             </div>
                             @endif
                         </div>
-                        @can('user.create')
+                        @can('reseller.create')
                         <div class="col-12 text-right">
                             <a href="" class="btn btn-sm btn-primary" data-toggle="modal"
                                 data-target="#createUserModal">Add new Reseller</a>
@@ -89,7 +89,7 @@
                                             <div class="ripple-container"></div>
                                         </a>
                                         @endif
-                                        @can('user.delete')
+                                        @can('reseller.delete')
                                         <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round" href=""
                                             data-placement="bottom" title="Delete" data-toggle="modal"
                                             data-target="#deleteModal{{$user->id}}">
@@ -97,7 +97,7 @@
                                             <div class="ripple-container"></div>
                                         </a>
                                         @endcan
-                                        @can('user.edit')
+                                        @can('reseller.edit')
                                         <a rel="tooltip" class="btn btn-primary btn-fab btn-fab-mini btn-round" href=""
                                             data-placement="bottom" title="Edit" data-toggle="modal"
                                             data-target="#editUserModal{{$user->id}}">

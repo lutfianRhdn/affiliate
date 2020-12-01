@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -24,6 +25,11 @@ class ProductController extends Controller
     public function index()
     {
         $product = Product::all();
+        if (!auth()->user()->hasRole('super-admin')) {
+            $product = Product::where('company_id',auth()->user()->company->id)->get();
+        }
+        
+        // dd($product);
         return view('admin.product', compact('product'));
     }
 
@@ -56,7 +62,7 @@ class ProductController extends Controller
         
         $productModel = new Product;
         // dd($request);
-        $productModel->createProduct($request);
+        $productModel->createProduct($request->all());
 
         addToLog("Menambahkan product ".$request->product_name);
         return redirect(route('admin.product.index'))->with('status', 'Data inserted successfully');
@@ -126,5 +132,15 @@ class ProductController extends Controller
         Product::destroy($product->id);
         addToLog("Delete product ".$product->product_name);
         return redirect(route('admin.product.index'))->with('status', 'Item deleted successfully');
+    }
+    // custom
+
+    public function searchByCompany($company)
+    {
+        $companies = Company::where('name',$company)->get()->first();
+        $product= $companies->products;
+        return view('admin.product', compact('product'));
+
+        
     }
 }

@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Gate;
-use Spatie\Permission\Models\Role;
+use App\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Vinkla\Hashids\Facades\Hashids;
 
@@ -17,8 +20,13 @@ class RoleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function __construct()
+    protected $router;
+    protected $routes;
+
+    public function __construct(Router $router)
     {
+        $this->router = $router;
+        $this->routes = $router->getRoutes();
         $this->middleware('permission:role.view')->only('index');
         $this->middleware('permission:role.create')->only('store');
         $this->middleware('permission:role.edit')->only('update');
@@ -26,11 +34,11 @@ class RoleController extends Controller
     }
     public function index()
     {
-        $roles = Role::all();
-        $permissions = [
-            'role','user','product'
-        ];
-        return view('admin.role', compact('roles','permissions'));
+        $roles = Role::whereNotIn('name',['super-admin','copy-admin','copy-reseller','admin','reseller']);
+               $roles= filterData($roles);
+        $roleNames = getRoleName($this->routes);
+    //    dd($roles[4]->company);
+        return view('admin.role', compact('roles','roleNames'));
     }
 
     /**
@@ -51,13 +59,19 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, ['name' => ['required']]);
-        $role = Role::create(['name' => $request->name,'guard_name'=>'web']);
+        $this->validate($request, ['name' => ['required','unique:roles']]);
+        $roleModel = new Role;
+        $role= $roleModel->createRole($request->all());
         // delete all permission
         $keys = $request->keys();
         unset($keys[0], $keys[1]);
+        if (auth()->user()->hasRole('super-admin')) {
+            unset($keys[2]);
+        }
+        // dd($keys);
         foreach ($keys as $key) {
             $roleName = explode('-', $key);
+            // dd($roleName);
             $role->givePermissionTo($roleName[1] . '.' . $roleName[2]);
         }
         addToLog("Add Role " . $request->name);
@@ -127,5 +141,14 @@ class RoleController extends Controller
         Role::destroy($role->id);
         addToLog('Delete role ' . $role->name);
         return redirect(route('admin.role.index'));
+    }
+    // custom
+    public function searchByCompany($company)
+    {
+        $companies = Company::where('name',$company)->get()->first();
+        $roles= $companies->roles;
+        $roleNames = getRoleName($this->routes);
+
+        return view('admin.role', compact('roles','roleNames'));
     }
 }

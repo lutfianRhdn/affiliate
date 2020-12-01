@@ -55,32 +55,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
     
-    public function authorizeRoles($roles)
-    {
-        if (is_array($roles)) {
-            return $this->hasAnyRole($roles) || abort(401, 'This action is unauthorized.');
-        }
-        return $this->hasRole($roles) || abort(401, 'This action is unauthorized.');
-    }
-
-    public function hasAnyRole($roles)
-    {
-        return null !== $this->role()->whereIn('name', $roles)->first();
-    }
-    public function hasRole($role)
-    {
-        return null !== $this->role()->where('name', $role)->first();
-    }
+   
     
     // relasi
     public function product()
     {
         return $this->belongsTo(Product::class);
     }
-    public function role()
-    {
-        return $this->belongsTo('App\Models\Role','role');
-    }
+   
 
     public function company()
     {
@@ -111,40 +93,52 @@ class User extends Authenticatable
             'role' => $data['role'],
             'ref_code' => $ref_code,
             'address' => $data['address'],
+            'company_id' =>getCompanyId()
         ]);
         $role = Role::find($data['role']);
         
-        $user->assignRole($role->name);
         // dd($user)
         return $user;
     }
 
-    public function createUserAdmin($data, $ref_code, $password)
+    public function createReseller($data)
     {
-        $phone = str_replace("-", "", $data->phone);
-        $user = User::create([
-            'name' => $data->name,
-            'email' => $data->email,
-            'phone' => $phone,
-            'product_id' => $data->product_id,
-            'password' => Hash::make($password),
-            'role' => $data->role,
-            'ref_code' => $ref_code,
-            'address' => $data->address,
-            'company_id'=> $data->company_id
-        ]);
-
+        $phone = str_replace("-", "", $data['phone']);
+        $data['password'] = Hash::make($data['password']);
+        $data['role']=3;
+        $data['company_id']= getCompanyId($data['company_id']);
+        // dd($data);
+        $user = User::create($data);
+        $company = Company::find(getCompanyId($data['company_id']));
+        foreach ($company->roles as $role) {
+            if(strpos($role->name,'reseller-') !== false){
+                $user->assignRole(['reseller',$role->name]);
+            }
+        }
         return $user;
     }
 
     public function CreateAdmin($data)
     {
-    $data['phone'] = str_replace("-", "", $data['phone']);
-    $data['password'] = Hash::make($data['password']);
-    // dd($data);
-       $user=  User::create($data);
-       $user->assignRole('admin');
-       return $user;
+        if (!array_key_exists('company',$data)) {
+            $data['company'] =null;
+        }
+        $comId= getCompanyId($data['company']);
+        $data['phone'] = str_replace("-", "", $data['phone']);
+        $data['password'] = Hash::make($data['password']);
+        $data['role'] =2;
+        $data['company_id'] =$comId;
+    
+        $roles = Role::all();
+        $company = Company::find($comId);
+
+        $user=  User::create($data);
+        foreach ($company->roles as $role) {
+            if(strpos($role->name,'admin-') !== false){
+                $user->assignRole(['admin',$role->name]);
+            }
+        }
+        return $user;
     }
     public function getDataEmail($id)
     {

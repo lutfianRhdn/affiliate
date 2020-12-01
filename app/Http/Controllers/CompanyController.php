@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\EmailApproval;
+use App\Mail\EmailApprovalCompany;
 use App\Mail\EmailConfirmation;
 use App\Mail\EmailConfirmationCompany;
 use Illuminate\Support\Facades\Mail;
@@ -21,13 +23,20 @@ class CompanyController extends Controller
     public function index()
     {
         $companies= Company::all();
-        $users = User::all();
-$adminCompany =[];
-        foreach($users as $user){
-            if($user->hasRole('admin')){
-                array_push($adminCompany,$user);
-            }
+        $users = User::whereHas('roles',function($role){
+            $role->where('name','admin');
+        })->get()->groupBy('company_id');
+        $adminCompany =[];
+        foreach ($users as $user ) {
+            array_push($adminCompany,$user->first());
+            // dd($user->first());
         }
+        // dd($adminCompany);
+        // foreach($users as $user){
+        //     if($user->hasRole('admin')){
+        //         array_push($adminCompany,$user);
+        //     }
+        // }
         // dd(); 
         // dd(Role::with('users')->where('name','admin')->get()->user());
         return view('admin.companyAdmin',compact('adminCompany'));
@@ -55,7 +64,7 @@ $adminCompany =[];
         $request->validate([
             'name'=>'required',
             'email'=> 'required|unique:users',
-            'company'=>'required',
+            'company'=>'required|unique:companies,name',
             'phone'=>'required|min:8|max:12'
         ]);
 
@@ -127,6 +136,7 @@ $adminCompany =[];
         $company = User::find($request->id);
         $company->approve=1;
         $company->save();
-        return true;
+        Mail::to($company->email)->send(new EmailApprovalCompany($company->id));
+        return true; 
     }
 }

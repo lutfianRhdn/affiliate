@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+// use Illuminate\Support\Facades\Input;
+use Illuminate\Support\MessageBag;
 
 class LoginController extends Controller
 {
@@ -45,8 +47,11 @@ class LoginController extends Controller
         $fieldData = $request->all();
         // dd($fieldData);
         $user = User::where('email',$fieldData['email'])->get()->first();
-        if($user->register_status == 0){
-            return redirect()->route('login')->with('error','Your provided information wrong!   ');
+        if(!empty($user)){
+            if ($user->register_status == 0) {
+                return redirect()->route('login')->with('error','Your Account not activated or not yet approved!   ');
+                # code...
+            }
         }
             if (auth()->attempt(array('email' => $fieldData['email'], 'password' => $fieldData['password'])))
             {
@@ -62,7 +67,11 @@ class LoginController extends Controller
             }
             else
             {
-                return redirect()->route('login')->with('error','Your provided information wrong!');
+                $message = new MessageBag([
+                    'email'=>['Email and/or password invalid'],
+                    // 'password'=>['Email and/or password invalid']
+                ]);
+                return redirect()->route('login')->withErrors($message)->withInput($request->only('email','remember'));
             }
     }
 }

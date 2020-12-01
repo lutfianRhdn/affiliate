@@ -138,13 +138,14 @@ class ApiController extends Controller
         if ($check == null) {
             $role= Role::where('name','reseller')->get()->first();
             // dd($product->company->id);
-            $request->request->add(['product_id'=>$product->id,'role'=> $role->id,'company_id'=>$product->company->id]);
-            $user = $model_user->createUserAdmin($request, $ref_code, $request->password);
-            $user->assignRole('reseller');
+            $request->request->add(['product_id'=>$product->id,'role'=> $role->id,'company_id'=>$product->company->id,'ref_code'=>$ref_code]);
+            // dd($request->all());
+            $user = $model_user->createReseller($request->all());
+            $user->assignRole('reseller','reseller-'.$product->company->name);
         }
         Mail::to($user->email)->send(new EmailConfirmation($user->id, $request->password));
-        addToLog("Menambahkan Reseller" . $request->email);
-            $user->givePermissionTo($user->getPermissionsViaRoles());
+        addToLog("Menambahkan Reseller" . $request->email,$product->company->id);
+            // $user->givePermissionTo($user->getPermissionsViaRoles());
             return response()->json(['status'=>'success']);
         }
     }

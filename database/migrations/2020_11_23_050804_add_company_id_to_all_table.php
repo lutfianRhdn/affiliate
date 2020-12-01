@@ -16,22 +16,42 @@ class AddCompanyIdToAllTable extends Migration
         // users table
         Schema::table('users', function (Blueprint $table) {
             $table->bigInteger('company_id')->unsigned()->after('role')->nullable();
+            $table->foreign('company_id')
+            ->references('id')
+            ->on('companies')
+            ->onDelete('cascade');
         });
         // products table
         Schema::table('products', function (Blueprint $table) {
-            $table->bigInteger('company_id')->after('code')->nullable();
+            $table->bigInteger('company_id')->unsigned()->after('code')->nullable();
+            $table->foreign('company_id')
+            ->references('id')
+            ->on('companies')
+            ->onDelete('cascade');
         });
         // roles table
         Schema::table('roles', function (Blueprint $table) {
-            $table->bigInteger('company_id')->after('guard_name')->nullable();
-        });
-        // permissions table
-        Schema::table('permissions', function (Blueprint $table) {
-            $table->bigInteger('company_id')->after('guard_name')->nullable();
+            $table->bigInteger('company_id')->unsigned()->after('guard_name')->nullable();
+            $table->foreign('company_id')
+            ->references('id')
+            ->on('companies')
+            ->onDelete('cascade');
+            
         });
         // permissions table
         Schema::table('settings', function (Blueprint $table) {
-            $table->bigInteger('company_id')->after('product_id')->nullable();
+            $table->bigInteger('company_id')->unsigned()->after('product_id')->nullable();
+            $table->foreign('company_id')
+            ->references('id')
+            ->on('companies')
+            ->onDelete('cascade');
+        });
+        Schema::table('log_activities', function (Blueprint $table) {
+            $table->bigInteger('company_id')->unsigned()->after('user_id')->nullable();
+            $table->foreign('company_id')
+            ->references('id')
+            ->on('companies')
+            ->onDelete('cascade');
         });
 
     }
@@ -44,7 +64,20 @@ class AddCompanyIdToAllTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->dropColumn('company_id');
         });
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropColumn('company_id');
+        });
+        Schema::table('settings', function (Blueprint $table) {
+            $table->dropColumn('company_id');
+        });
+        Schema::table('roles', function (Blueprint $table) {
+            $table->dropColumn('company_id');
+        });
+        Schema::table('log_activities', function (Blueprint $table) {
+            $table->dropColumn('company_id');
+        });
+      
     }
 }

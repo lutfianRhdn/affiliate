@@ -13,4 +13,8 @@ class Setting extends Model
     {
         return $this->belongsToMany(Company::class);
     }
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

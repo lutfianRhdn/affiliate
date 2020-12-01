@@ -1,6 +1,7 @@
 @extends('layouts.app', ['activePage' => 'company', 'titlePage' => __('Company Management')])
 
 @section('content')
+
 <div id="preloaders" class="preloader"></div>
 <div class="content">
     <div class="row">
@@ -22,7 +23,7 @@
                             </div>
                             @endif
                         </div>
-                        @can('user.create')
+                        @can('company.create')
                         <div class="col-12 text-right">
                             <a href="" class="btn btn-sm btn-primary" data-toggle="modal"
                                 data-target="#createcompanyModal">Add new Company</a>
@@ -35,6 +36,10 @@
                                 <tr>
                                     <th>Name</th>
                                     <th>Email</th>
+                                    <th>Ad</th>
+                                    <th>Re</th>
+                                    <th>Role</th>
+                                    <th>Pr</th>
                                     <th>Company</th>
                                     <th>Phone</th>
                                     <th class="no-sort">Status</th>
@@ -43,11 +48,50 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                
                                 @foreach ($adminCompany as $company)
+                                    @php
+                                        $countAdmin=0;
+                                        $countReseller=0;
+                                        // dd($company->company->users[10]);
+                                        foreach ($company->company->users as $user) {
+                                            if ($user->hasRole('admin')) {
+                                                $countAdmin++;
+                                            }
+                                            else if ($user->hasRole('reseller')) {
+                                                $countReseller++;
+                                            }
+
+                                        }         
+                                    @endphp
+                                {{-- {{dd($company->products)}} --}}
                                 <tr>
                                     <td>{{$company->name}}</td>
                                     <td>{{$company->email}} <span
                                         class="ml-2 badge badge-{{$company->register_status == '1' ? 'success' : 'warning'}}">{{$company->register_status == '1' ? 'Activated' : 'Not Activated'}}</span>
+                                    </td>
+                                    <td>
+                                    <a href="{{ route('admin.user.company',$company->company->name) }}">
+                                        {{ $countAdmin}}
+                                    </a>
+                                </td>
+                                    <td>
+                                        <a href="{{ route('admin.reseller.company',$company->company->name) }}">
+
+                                        {{$countReseller}}
+                                        </a>
+                                    </td>
+                                    
+                                    <td>
+                                        <a href="{{ route('admin.role.company',$company->company->name) }}">
+                                        
+                                            {{ $company->company->roles->count() }}
+                                        </a>
+                                        </td>
+                                    <td>
+                                        <a href="{{ route('admin.product.company',$company->company->name) }}">
+                                        {{ $company->company->products->count() }}
+                                        </a>
                                     </td>
                                     <td>{{$company->company->name}}</td>
                                     <td>{{$company->phone}}</td>
@@ -80,7 +124,7 @@
                                             <div class="ripple-container"></div>
                                         </a>
                                         @endif
-                                        @can('user.delete')
+                                        @can('company.delete')
                                         <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round" href=""
                                             data-placement="bottom" title="Delete" data-toggle="modal"
                                             data-target="#deleteModal{{$company->id}}">
@@ -88,7 +132,7 @@
                                             <div class="ripple-container"></div>
                                         </a>
                                         @endcan
-                                        @can('user.edit')
+                                        @can('company.edit')
                                         <a rel="tooltip" class="btn btn-primary btn-fab btn-fab-mini btn-round" href=""
                                             data-placement="bottom" title="Edit" data-toggle="modal"
                                             data-target="#editcompanyModal{{$company->id}}">

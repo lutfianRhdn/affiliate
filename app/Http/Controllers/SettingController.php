@@ -17,6 +17,13 @@ class SettingController extends Controller
     {
         $setting = Setting::all()->groupBy('product_id');
         $products = Product::all();
+        // dd(auth()->user()->hasRole('super-admin'));
+        if (!auth()->user()->hasRole('super-admin')) {
+            $setting = Setting::where('company_id',getCompanyId())->get()->groupBy('product_id');
+            $products = Product::where('company_id',getCompanyId())->get();
+            # code...
+        }
+
         return view('admin.settingAdmin', ['setting' => $setting, 'products' => $products]);
     }
 
