@@ -5,7 +5,7 @@ Program'),
 @section('content')
 <div class="container">
     <div class="row align-items-center">
-        <div class="col-md-9 ml-auto mr-auto mb-3 text-center">a
+        <div class="col-md-9 ml-auto mr-auto mb-3 text-center">
             <h3>Welcome to Affiliate</h3>
         </div>
         <div class="col-lg-4 col-md-6 col-sm-8 ml-auto mr-auto">
