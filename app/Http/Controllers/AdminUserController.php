@@ -110,7 +110,8 @@ class AdminUserController extends Controller
                 array_push($users,$user);
             }
         }
-        return view('admin.user', ['users' => $users]);
+        $companies = getAllCompanies();
+        return view('admin.user', compact('users','companies'));
     }
     public function approve(Request $request)
     {

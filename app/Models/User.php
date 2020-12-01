@@ -102,9 +102,16 @@ class User extends Authenticatable
 
     public function createReseller($data)
     {
-        $phone = str_replace("-", "", $data['phone']);
+        $data['phone'] = str_replace("-", "", $data['phone']);
         $data['password'] = Hash::make($data['password']);
         $data['role']=3;
+        if (!array_key_exists('company_id',$data)) {
+            $data['company_id'] = null;
+            if (auth()->user()->hasRole('super-admin')) {
+                $product = Product::find($data['product_id']);
+                $data['company_id']=$product->company_id;
+            }
+        }
         $data['company_id']= getCompanyId($data['company_id']);
         $user = User::create($data);
         $company = Company::find(getCompanyId($data['company_id']));
