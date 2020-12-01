@@ -38,7 +38,7 @@ class RoleController extends Controller
                $roles= filterData($roles);
         $roleNames = getRoleName($this->routes);
         $companies = getAllCompanies();
-        return view('admin.role', compact('roles','roleNames'));
+        return view('admin.role', compact('roles','roleNames','companies'));
     }
 
     /**
