@@ -146,7 +146,7 @@ class RoleController extends Controller
         $companies = Company::where('name',$company)->get()->first();
         $roles= $companies->roles;
         $roleNames = getRoleName($this->routes);
-
-        return view('admin.role', compact('roles','roleNames'));
+        $companies=getAllCompanies();
+        return view('admin.role', compact('roles','roleNames','companies'));
     }
 }

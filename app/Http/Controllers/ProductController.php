@@ -138,7 +138,8 @@ class ProductController extends Controller
     {
         $companies = Company::where('name',$company)->get()->first();
         $product= $companies->products;
-        return view('admin.product', compact('product'));
+        $companies = getAllCompanies();
+        return view('admin.product', compact('product','companies'));
 
         
     }
