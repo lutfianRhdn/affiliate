@@ -34,7 +34,6 @@ class Company extends Model
     // custom method
     public function addCompany( $data)
     {
-        // dd($data);
         $company =Company::create([
             'name'=>$data['company']
         ]);
@@ -50,7 +49,6 @@ class Company extends Model
         $adminCompany = Role::create(['name'=>'admin-'.$data['company'],'company_id'=>$company->id]);
         // $adminCompany = Role::create(['name'=>'admin-'.$data['company'],'company_id'=>$company->id]);
         $resellerCompany = Role::create(['name'=>'reseller-'.$data['company'],'company_id'=>$company->id]);
-        // dd($adminCompany->name); 
         $permissionForAdmin = Role::where('name','copy-admin')->get()->first();
         $adminCompany->syncPermissions($permissionForAdmin->getAllPermissions());
         $user->assignRole('admin',$adminCompany->name);
@@ -60,7 +58,6 @@ class Company extends Model
 
     public function editCompany($company,$data)
     {
-        // dd($data);
         $company->update([
             'name'=>$data->company
         ]);

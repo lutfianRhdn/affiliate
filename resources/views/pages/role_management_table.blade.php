@@ -1,14 +1,10 @@
-{{-- {{dd($role =[])}} --}}
-<div class="bmd-form-group">
     <div class="form-group pl-2 d-flex">
         <div class="form-group w-100">
             <div class="row">
                 {{-- text --}}
                 <div class="col-4">
                     <p>#</p>
-                    {{-- {{dd($roleNames)}} --}}
                     @foreach ($roleNames as $roleName)
-                    {{-- {{dd($roleName)}} --}}
                     @if (is_array($roleName))
                     <p class="text-capitalize">User Management</p>
                     <ul class="text-capitalize">

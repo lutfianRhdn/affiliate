@@ -4,7 +4,6 @@
 
       Tip 2: you can also add an image using data-image tag
   -->
-  {{-- {{dd(auth()->user()->getPermissionNames())}} --}}
   <div class="logo">
     <a href="" class="simple-text logo-normal">
       {{ __('Affiliate') }}
@@ -18,7 +17,6 @@
           <p>{{ __('Dashboard') }}</p>
         </a>
       </li>
-      {{-- {{dd(auth()->user()->role())}} --}}
       
       @if(
       auth()->user()->hasPermissionTo('company.view')|| 

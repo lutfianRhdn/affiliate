@@ -45,7 +45,6 @@ class LoginController extends Controller
 
     public function login(Request $request) {
         $fieldData = $request->all();
-        // dd($fieldData);
         $user = User::where('email',$fieldData['email'])->get()->first();
         if(!empty($user)){
             if ($user->register_status == 0) {
@@ -55,7 +54,6 @@ class LoginController extends Controller
         }
             if (auth()->attempt(array('email' => $fieldData['email'], 'password' => $fieldData['password'])))
             {
-                // dd(auth()->user()->hasRole('admin'));
                 if (auth()->user()->hasRole('admin') && auth()->user()->register_status == 1) {
                     addToLog("Login");
                     return redirect()->route('admin');

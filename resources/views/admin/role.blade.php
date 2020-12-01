@@ -1,7 +1,6 @@
 @extends('layouts.app', ['activePage' => 'role', 'titlePage' => __('Role Management')])
 
 @section('content')
-{{-- {{dd($roleNames)}} --}}
 <div id="preloaders" class="preloader"></div>
 <div class="content">
     <div class="row">
@@ -32,7 +31,6 @@
                                 <tr>
                                     <td>{{$loop->index+1}}</td>
                                     <td>{{$role->name}}</td>
-                                    {{-- {{dd($role->company)}} --}}
                                     <td>{{$role->company->name}}</td>
                                     @can('role.delete')
                                     <td class="text-right">
