@@ -29,7 +29,6 @@ class ProductController extends Controller
             $product = Product::where('company_id',auth()->user()->company->id)->get();
         }
         
-        // dd($product);
         return view('admin.product', compact('product'));
     }
 
@@ -61,7 +60,6 @@ class ProductController extends Controller
         ]);
         
         $productModel = new Product;
-        // dd($request);
         $productModel->createProduct($request->all());
 
         addToLog("Menambahkan product ".$request->product_name);

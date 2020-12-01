@@ -37,7 +37,6 @@ class RoleController extends Controller
         $roles = Role::whereNotIn('name',['super-admin','copy-admin','copy-reseller','admin','reseller']);
                $roles= filterData($roles);
         $roleNames = getRoleName($this->routes);
-    //    dd($roles[4]->company);
         return view('admin.role', compact('roles','roleNames'));
     }
 
@@ -68,10 +67,8 @@ class RoleController extends Controller
         if (auth()->user()->hasRole('super-admin')) {
             unset($keys[2]);
         }
-        // dd($keys);
         foreach ($keys as $key) {
             $roleName = explode('-', $key);
-            // dd($roleName);
             $role->givePermissionTo($roleName[1] . '.' . $roleName[2]);
         }
         addToLog("Add Role " . $request->name);

@@ -8,7 +8,6 @@
                 <div class="card">
                     <div class="card-header card-text card-header-primary">
                         <h4 class="card-title">@foreach ($products as $prod)
-                            {{-- {{dd($prod)}} --}}
                             {{$product_id == $prod->id ? $prod->product_name : ''}}
                             @endforeach</h4>
                     </div>

@@ -13,11 +13,9 @@ use App\Models\LogActivity as ModelsLogActivity;
         $log = [];
         $log['subject'] = $subject;
         $log['user_id'] = auth()->check() ? auth()->user()->id : null ;
-        // dd(auth()->user());
         $log['company_id']= $companyId;   
         if ( auth()->check() ?(!auth()->user()->hasRole('super-admin')):false) {
             $log['company_id']= getCompanyId();
-            # code...
         }
         ModelsLogActivity::create($log);
     }
@@ -26,7 +24,6 @@ use App\Models\LogActivity as ModelsLogActivity;
         $routes = collect($router)->map(function ($route){
             return $route->getName();
         });
-        // dd($routes);
         $router =[];
         foreach ($routes as $route ) {
             if(strpos($route,'admin.',0) !== false){

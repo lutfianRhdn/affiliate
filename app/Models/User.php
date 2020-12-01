@@ -97,7 +97,6 @@ class User extends Authenticatable
         ]);
         $role = Role::find($data['role']);
         
-        // dd($user)
         return $user;
     }
 
@@ -107,7 +106,6 @@ class User extends Authenticatable
         $data['password'] = Hash::make($data['password']);
         $data['role']=3;
         $data['company_id']= getCompanyId($data['company_id']);
-        // dd($data);
         $user = User::create($data);
         $company = Company::find(getCompanyId($data['company_id']));
         foreach ($company->roles as $role) {

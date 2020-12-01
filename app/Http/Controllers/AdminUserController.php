@@ -37,7 +37,6 @@ class AdminUserController extends Controller
             }
         }
         $users =$userAdmin ;
-        // dd($userAdmin);
         return view('admin.user', compact('users'));
     }
 

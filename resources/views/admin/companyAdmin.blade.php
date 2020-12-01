@@ -53,7 +53,6 @@
                                     @php
                                         $countAdmin=0;
                                         $countReseller=0;
-                                        // dd($company->company->users[10]);
                                         foreach ($company->company->users as $user) {
                                             if ($user->hasRole('admin')) {
                                                 $countAdmin++;
@@ -64,7 +63,6 @@
 
                                         }         
                                     @endphp
-                                {{-- {{dd($company->products)}} --}}
                                 <tr>
                                     <td>{{$company->name}}</td>
                                     <td>{{$company->email}} <span

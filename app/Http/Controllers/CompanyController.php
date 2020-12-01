@@ -29,16 +29,7 @@ class CompanyController extends Controller
         $adminCompany =[];
         foreach ($users as $user ) {
             array_push($adminCompany,$user->first());
-            // dd($user->first());
         }
-        // dd($adminCompany);
-        // foreach($users as $user){
-        //     if($user->hasRole('admin')){
-        //         array_push($adminCompany,$user);
-        //     }
-        // }
-        // dd(); 
-        // dd(Role::with('users')->where('name','admin')->get()->user());
         return view('admin.companyAdmin',compact('adminCompany'));
     
     }
@@ -106,7 +97,6 @@ class CompanyController extends Controller
      */
     public function update(Request $request, Company $company)
     {
-        // dd($company);
         $companyModel = new Company;
         $companyModel->editCompany($company,$request);
             return redirect()->back();
