@@ -34,11 +34,12 @@ class RoleController extends Controller
     }
     public function index()
     {
-        $roles = Role::whereNotIn('name',['super-admin','copy-admin','copy-reseller','admin','reseller']);
-               $roles= filterData($roles);
+        $roles= filterData('\App\Models\Role')->whereNotIn('name',['super-admin','admin','reseller']);
         $roleNames = getRoleName($this->routes);
-        $companies = getAllCompanies();
-        return view('admin.role', compact('roles','roleNames','companies'));
+        if (!auth()->user()->hasRole('super-admin')) {
+            unset($roleNames[1][0]);
+        }
+        return view('admin.role', compact('roles','roleNames'));
     }
 
     /**
@@ -146,7 +147,6 @@ class RoleController extends Controller
         $companies = Company::where('name',$company)->get()->first();
         $roles= $companies->roles;
         $roleNames = getRoleName($this->routes);
-        $companies=getAllCompanies();
-        return view('admin.role', compact('roles','roleNames','companies'));
+        return view('admin.role', compact('roles','roleNames'));
     }
 }

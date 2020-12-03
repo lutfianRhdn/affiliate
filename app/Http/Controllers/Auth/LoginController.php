@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 // use Illuminate\Support\Facades\Input;
 use Illuminate\Support\MessageBag;
 
@@ -47,13 +48,13 @@ class LoginController extends Controller
         $fieldData = $request->all();
         $user = User::where('email',$fieldData['email'])->get()->first();
         if(!empty($user)){
-            if ($user->register_status == 0) {
+            if ($user->register_status == 0 && $user->approve ==0) {
                 return redirect()->route('login')->with('error','Your Account not activated or not yet approved!   ');
-                # code...
             }
         }
             if (auth()->attempt(array('email' => $fieldData['email'], 'password' => $fieldData['password'])))
             {
+                Cookie::queue(Cookie::forget('user'));
                 if (auth()->user()->hasRole('admin') && auth()->user()->register_status == 1) {
                     addToLog("Login");
                     return redirect()->route('admin');

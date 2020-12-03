@@ -46,15 +46,23 @@ use App\Models\LogActivity as ModelsLogActivity;
         return $router;
     }
 
-    function filterData($data){
-        if (!auth()->user()->hasRole('super-admin')) {
-            $data->where('company_id',auth()->user()->company->id);
+    function filterData($models){
+        $data= $models::where('company_id',null)->get();
+        // $data= $models::all();
+        if (!auth()->user()->hasRole('super-admin') && auth()->user()->company !== null) {
+            $data = $models::where('company_id',auth()->user()->company->id)->get();
         }
-        return $data->get();
+        return $data;
     }
     function getCompanyId($companyId = null){
             if ($companyId !==null) {
                return $companyId;
+            }
+            if (auth()->user()->hasRole('super-admin')) {
+             return null;
+            }
+            if (auth()->user()->company ==null) {
+                return null;
             }
         return auth()->user()->company->id;
     }

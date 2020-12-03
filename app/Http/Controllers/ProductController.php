@@ -29,7 +29,6 @@ class ProductController extends Controller
         if (!auth()->user()->hasRole('super-admin')) {
             $product = Product::where('company_id',auth()->user()->company->id)->get();
         }
-        
         return view('admin.product', compact('product','companies'));
     }
 

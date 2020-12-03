@@ -28,17 +28,16 @@ class AdminUserController extends Controller
 
     public function index()
     {
-        $users = User::whereNotIn('role',[1]);
         $userAdmin= [];
-        $users= filterData($users);
-        $companies= getAllCompanies();
+        $users= filterData('\App\Models\User');
+        // $companies= getAllCompanies();
         foreach($users as $user){
             if ($user->hasRole('admin')) {
                 array_push($userAdmin,$user);
             }
         }
         $users =$userAdmin ;
-        return view('admin.user', compact('users','companies'));
+        return view('admin.user', compact('users'));
     }
 
     public function create() {
@@ -110,8 +109,8 @@ class AdminUserController extends Controller
                 array_push($users,$user);
             }
         }
-        $companies = getAllCompanies();
-        return view('admin.user', compact('users','companies'));
+        // $companies = getAllCompanies();
+        return view('admin.user', compact('users'));
     }
     public function approve(Request $request)
     {
