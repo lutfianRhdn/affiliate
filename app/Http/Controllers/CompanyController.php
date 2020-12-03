@@ -10,8 +10,10 @@ use Illuminate\Support\Facades\Mail;
 use App\Models\Company;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Cookie;
 
 class CompanyController extends Controller
 {
@@ -20,12 +22,19 @@ class CompanyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('permission:company.view')->only('index');
+        $this->middleware('permission:company.create')->only('create');
+        $this->middleware('permission:company.edit')->only('update');
+        $this->middleware('permission:company.delete')->only('destroy');
+    }
     public function index()
     {
         $companies= Company::all();
         $users = User::whereHas('roles',function($role){
             $role->where('name','admin');
-        })->get()->groupBy('company_id');
+        })->where('users.company_id','!=',null)->get()->groupBy('company_id');
         $adminCompany =[];
         foreach ($users as $user ) {
             array_push($adminCompany,$user->first());
@@ -128,5 +137,16 @@ class CompanyController extends Controller
         $company->save();
         Mail::to($company->email)->send(new EmailApprovalCompany($company->id));
         return true; 
+    }
+    public function switchAccount(Request $request)
+    {
+        $user = User::find($request->user_id);
+        Cookie::queue(Cookie::make('user',auth()->user()->id));
+        if (!auth()->user()->hasRole('super-admin')) {
+            Cookie::queue(Cookie::forget('user'));
+        }
+        Auth::logout($user);
+        Auth::login($user);
+        return redirect()->route('admin');
     }
 }

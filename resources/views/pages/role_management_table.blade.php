@@ -6,15 +6,15 @@
                     <p>#</p>
                     @foreach ($roleNames as $roleName)
                     @if (is_array($roleName))
-                    <p class="text-capitalize">User Management</p>
-                    <ul class="text-capitalize">
-
+                    User Management
                         @foreach ($roleName as $userManagement)
-                        <p class="text-capitalize">
-                            {{$userManagement}} Management
-                        </p>
+                        <div class="d-flex align-self-end">
+                            <i class="material-icons">subdirectory_arrow_right</i>
+                            <p class="text-capitalize">
+                                {{$userManagement}} Management
+                            </p>
+                        </div>
                         @endforeach
-                    </ul>
                     @else
 
                     <p class="text-capitalize">

@@ -133,14 +133,22 @@ class User extends Authenticatable
         $data['password'] = Hash::make($data['password']);
         $data['role'] =2;
         $data['company_id'] =$comId;
-    
         $roles = Role::all();
         $company = Company::find($comId);
 
         $user=  User::create($data);
-        foreach ($company->roles as $role) {
-            if(strpos($role->name,'admin-') !== false){
-                $user->assignRole(['admin',$role->name]);
+        if (auth()->user()->hasRole('super-admin')) {
+            $roles = Role::where('company_id',null)->get();
+            foreach($roles as $role){
+                if(strpos($role->name,'admin-')!== false) {
+                    $user->assignRole('admin',$role->name);
+                };
+            }
+        }else{
+            foreach ($company->roles as $role) {
+                if(strpos($role->name,'admin-') !== false){
+                    $user->assignRole(['admin',$role->name]);
+                }
             }
         }
         return $user;

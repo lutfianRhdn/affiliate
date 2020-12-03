@@ -169,7 +169,7 @@
                                             @if ($user->product)
                                             Product : {{$user->product_name}}
                                             @else
-                                            Company : {{$user->company->name}}
+                                            Company : {{$user->company !== null ? $user->company->name : 'Admin-Affiliate'}}
                                             @endif
                                             <br>
                                             @if ($user->address)

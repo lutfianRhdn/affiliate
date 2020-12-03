@@ -22,7 +22,6 @@
                                 <tr>
                                     <th style="width: 10%">ID</th>
                                     <th>Name</th>
-                                    <th>Company</th>
                                     <th class="text-right">Action</th>
                                 </tr>
                             </thead>
@@ -31,12 +30,17 @@
                                 <tr>
                                     <td>{{$loop->index+1}}</td>
                                     <td>{{$role->name}}</td>
-                                    <td>{{$role->company->name}}</td>
                                     @can('role.delete')
+                                    
                                     <td class="text-right">
                                         <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round" href=""
                                             data-placement="bottom" title="Delete" data-toggle="modal"
-                                            data-target="#deleteModal{{$role->id}}">
+                                            @if ($role->name== 'copy-admin' || $role->name == 'copy-reseller')
+                                                style="pointer-events:none; background:gray"
+                                              @else
+                                              data-target="#deleteModal{{$role->id}}"
+                                              @endif
+                                              >
                                             <i class="material-icons">delete</i>
                                             <div class="ripple-container"></div>
                                         </a>
@@ -74,7 +78,12 @@
                                                             <label for="name " class="w-100">Role Name</label>
                                                             <input type="text" class="form-control"
                                                                 placeholder="Reseller" name="name"
-                                                                value="{{ $role->name }}">
+                                                                value="{{ $role->name }}" 
+                                                                @if ($role->name == 'copy-admin' || $role->name= 'copy-reseller')
+                                                                    disabled
+                                                                    readonly
+                                                                @endif
+                                                                >
                                                         </div>
                                                         @if ($errors->has('name'))
                                                         <div id="name-error" class="error text-danger" for="name"
@@ -160,18 +169,6 @@
                             <strong>{{ $errors->first('name') }}</strong>
                         </div>
                         @endif
-                        @role('super-admin')
-                        <div class="form-group pl-2 d-flex align-items-center">
-                            <label for="company" class="w-25">Company Name</label>
-                            <select class="form-control custom-select-2" style="width: 100%" placeholder="Reseller"
-                                name="company">
-                                <option value="" selected disabled> Select Company</option>
-                                @foreach ($companies as $company)
-                                <option value="{{ $company->id }}"> {{$company->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        @endrole
                         @include('pages.role_management_table',$roleNames)
                     </div>
                 </div>

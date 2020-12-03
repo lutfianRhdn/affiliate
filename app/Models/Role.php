@@ -26,8 +26,15 @@ class Role extends \Spatie\Permission\Models\Role
             $data['company'] =null;
         }
         $comId= getCompanyId($data['company']);
+        $roleuser = Role::whereHas('users',function($user){
+            $user->where('id',auth()->user()->id);
+        })->get();
         $company = Company::find($comId);
-        $role = Role::create(['name' => $data['name'].'-'.$company->name,'company_id'=>$comId]);
+        if (auth()->user()->hasRole('super-admin')) {
+            $role = Role::create(['name'=>$data['name']]);
+        }else {
+            $role = Role::create(['name' => $data['name'].'-'.$company->name,'company_id'=>$comId]);
+        }
         return $role;
     }
 }

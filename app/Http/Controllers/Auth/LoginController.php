@@ -47,9 +47,8 @@ class LoginController extends Controller
         $fieldData = $request->all();
         $user = User::where('email',$fieldData['email'])->get()->first();
         if(!empty($user)){
-            if ($user->register_status == 0) {
+            if ($user->register_status == 0 && $user->approve ==0) {
                 return redirect()->route('login')->with('error','Your Account not activated or not yet approved!   ');
-                # code...
             }
         }
             if (auth()->attempt(array('email' => $fieldData['email'], 'password' => $fieldData['password'])))

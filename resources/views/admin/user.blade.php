@@ -303,28 +303,7 @@
                         </div>
                         @endif
                     </div>
-                    @role('super-admin')
-                    <div class="bmd-form-group{{ $errors->has('company') ? ' has-danger' : '' }} mt-3">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    <i class="material-icons">business</i>
-                                </span>
-                            </div>
-                            <select name="company" id="company" class=" form-control w-100 custom-select-2" style="width: 88%">
-                                <option value="" disabled selected>Select Company</option>
-                                @foreach ($companies as $company)
-                            <option value="{{ $company->id }}">{{$company->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        @if ($errors->has('company'))
-                        <div id="company-error" class="error text-danger pl-3" for="company" style="display: block;">
-                            <strong>{{ $errors->first('company') }}</strong>
-                        </div>
-                        @endif
-                    </div>
-                    @endrole
+                   
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

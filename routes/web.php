@@ -44,6 +44,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 // ApiController
 
 Route::group(['middleware' => ['auth'],'prefix'=>'admin'], function () {
+	Route::post('/swithaccount', [CompanyController::class,'switchAccount'])->name('account.switch');
 	Route::get('', [HomeController::class, 'index'])->name('admin');
 	// search bycompany
 	Route::get('/user/{company}', [AdminUserController::class, 'searchByCompany'])->name('admin.user.company');

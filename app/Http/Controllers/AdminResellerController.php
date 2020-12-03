@@ -34,11 +34,13 @@ class AdminResellerController extends Controller
 
     public function index()
     {
-$products = Product::all();
+$products = filterData('\App\Models\Product');
+$users = filterData('\App\Models\User');
         if (!auth()->user()->hasRole('super-admin')) {
             $products = Product::where('company_id',getCompanyId())->get();
+            $users= User::where('company_id',getCompanyId())->get();
         }
-        $users = User::all();
+        
         $reseller =[];
         foreach ($users as $user ) {
             if ($user->hasRole('reseller')) {
