@@ -58,10 +58,10 @@ use App\Models\LogActivity as ModelsLogActivity;
             if ($companyId !==null) {
                return $companyId;
             }
-            if (auth()->user()->hasRole('super-admin')) {
-             return null;
+            if (auth()->check() ==true ? auth()->user()->hasRole('super-admin'): false) {
+                return null;
             }
-            if (auth()->user()->company ==null) {
+            if (auth()->check() == false ? true : auth()->user()->company == null ) {
                 return null;
             }
         return auth()->user()->company->id;

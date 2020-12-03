@@ -38,7 +38,6 @@
                                     <th>Product Name</th>
                                     <th>Description</th>
                                     <th>Regex</th>
-                                    <th>Company</th>
                                     <th>URL</th>
                                     <th>Permission Url</th>
                                     <th class="no-sort">Code</th>
@@ -51,7 +50,6 @@
                                     <td>{{$product->product_name}}</td>
                                     <td>{{$product->description}}</td>
                                     <td>{{$product->regex}}</td>
-                                    <td>{{$product->company->name}}</td>
                                     <td>{{$product->url}}</td>
                                     <td>{{$product->permission_ip}}</td>
                                     <td><a rel="tooltip" class="btn btn-info btn-fab btn-fab-mini btn-round" href=""
@@ -301,20 +299,6 @@
                         </div>
                         @endif
                     </div>
-                    @role('super-admin')
-                        <div class="bmd-form-group{{ $errors->has('company') ? ' has-danger' : '' }}">
-                            <div class="form-group pl-2">
-                                <label for="company">Company Name</label>
-                                <select class="form-control pl-2 custom-select-2" style="width: 100%"  name="company">
-                                    <option value="" selected disabled >Select Company</option>
-                                    @foreach ($companies as $company)
-                                    <option value="{{ $company->id }}" >{{$company->name}}</option>
-                                        
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    @endrole
                     <div class="mt-2 bmd-form-group{{ $errors->has('desc') ? ' has-danger' : '' }}">
                         <div class="form-group pl-2">
                             <label for="desc">Description</label>
