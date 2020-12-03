@@ -107,7 +107,7 @@ class User extends Authenticatable
         $data['role']=3;
         if (!array_key_exists('company_id',$data)) {
             $data['company_id'] = null;
-            if (auth()->user()->hasRole('super-admin')) {
+            if (auth()->check() ==true ? auth()->user()->hasRole('super-admin'): false) {
                 $product = Product::find($data['product_id']);
                 $data['company_id']=$product->company_id;
             }
@@ -115,9 +115,12 @@ class User extends Authenticatable
         $data['company_id']= getCompanyId($data['company_id']);
         $user = User::create($data);
         $company = Company::find(getCompanyId($data['company_id']));
-        foreach ($company->roles as $role) {
-            if(strpos($role->name,'reseller-') !== false){
-                $user->assignRole(['reseller',$role->name]);
+        if ($company !==null) {
+            # code...
+            foreach ($company->roles as $role) {
+                if(strpos($role->name,'reseller-') !== false){
+                    $user->assignRole(['reseller',$role->name]);
+                }
             }
         }
         return $user;

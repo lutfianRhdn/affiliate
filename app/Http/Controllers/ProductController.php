@@ -24,7 +24,7 @@ class ProductController extends Controller
 
     public function index()
     {
-        $product = Product::all();
+        $product =filterData('\App\Models\Product');
         $companies = getAllCompanies();
         if (!auth()->user()->hasRole('super-admin')) {
             $product = Product::where('company_id',auth()->user()->company->id)->get();

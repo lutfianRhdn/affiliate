@@ -55,6 +55,22 @@ class Product extends Model
             'permission_ip' => $data['permissionUrl'],
             'company_id'=>$comId
         ]);
+            Setting::create([
+                'key'=>'persentage',
+                'label'=>'Persentage',
+                'value'=>10,
+                'product_id'=>$product->id,
+                'company_id'=> $comId,
+                'group'=>'admin'
+            ]);
+            Setting::create([
+                'key'=>'day of settelment',
+                'label'=>'Day of Settelment',
+                'value'=>10,
+                'product_id'=>$product->id,
+                'company_id'=> $comId,
+                'group'=>'admin'
+            ]);
         $id = Hashids::encode($product->id);
         $product->code = view('pages.register_embed', compact('id'))->render(); 
         $product->save();

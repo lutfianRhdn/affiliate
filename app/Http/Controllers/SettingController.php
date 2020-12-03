@@ -15,8 +15,8 @@ class SettingController extends Controller
      */
     public function index()
     {
-        $setting = Setting::all()->groupBy('product_id');
-        $products = Product::all();
+        $setting = filterData('\App\Models\Setting')->groupBy('product_id');
+        $products = filterData('\App\Models\Product');
         if (!auth()->user()->hasRole('super-admin')) {
             $setting = Setting::where('company_id',getCompanyId())->get()->groupBy('product_id');
             $products = Product::where('company_id',getCompanyId())->get();
