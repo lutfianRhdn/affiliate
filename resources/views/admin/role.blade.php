@@ -80,7 +80,7 @@
                                                                 placeholder="Reseller" name="name"
                                                                 value="{{ $role->name }}" 
                                                                 @if (strpos($role->name,'copy-')!==false)
-                                                                    disabled
+                                                                    readonly
                                                                 @endif
                                                                 >
                                                         </div>
