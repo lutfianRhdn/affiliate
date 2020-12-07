@@ -46,12 +46,13 @@ class Company extends Model
             'role'=>'2',
             'company_id'=>$company->id
         ]);
+        $superAdminCompany = Role::create(['name'=>'super-admin-'.$data['company'],'company_id'=>$company->id]);
         $adminCompany = Role::create(['name'=>'admin-'.$data['company'],'company_id'=>$company->id]);
         // $adminCompany = Role::create(['name'=>'admin-'.$data['company'],'company_id'=>$company->id]);
         $resellerCompany = Role::create(['name'=>'reseller-'.$data['company'],'company_id'=>$company->id]);
-        $permissionForAdmin = Role::where('name','copy-admin')->get()->first();
-        $adminCompany->syncPermissions($permissionForAdmin->getAllPermissions());
-        $user->assignRole('admin',$adminCompany->name);
+        $permissionForAdmin = Role::where('name','copy-super-admin')->get()->first();
+        $superAdminCompany->syncPermissions($permissionForAdmin->getAllPermissions());
+        $user->assignRole('super-admin-company',$superAdminCompany->name);
         
         return $user;
     }

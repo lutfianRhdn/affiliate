@@ -6,34 +6,26 @@
                     <p>#</p>
                     @foreach ($roleNames as $roleName)
                     @if (is_array($roleName))
-                    User Management
                         @foreach ($roleName as $userManagement)
-                        <div class="d-flex align-self-end">
-                            <i class="material-icons">subdirectory_arrow_right</i>
                             <p class="text-capitalize">
                                 {{$userManagement}} Management
-                            </p>
-                        </div>
                         @endforeach
                     @else
-
                     <p class="text-capitalize">
                         {{$roleName}}
                     </p>
                     @endif
                     @endforeach
-
                 </div>
                 {{-- view --}}
                 <div class="col-2">
                     <div class="d-flex flex-column justify-content-center align-items-center">
                         <p>View</p>
-                        <input type="checkbox" name="user-management-view" class="mt-2 mb-3" id="">
                         @foreach ($roleNames as $roleName)
                         @if (is_array($roleName))
 
                         @foreach ($roleName as $roleView)
-                        <input type="checkbox" name="permission-{{$roleView}}-view" class="mt-2 mb-3 ml-5" id=""
+                        <input type="checkbox" name="permission-{{$roleView}}-view" class="mt-2 mb-3 " id=""
                             @if($role->hasPermissionTo($roleView.'.view','web'))
                         checked
                         @endif>
@@ -53,12 +45,11 @@
                 <div class="col-2">
                     <div class="d-flex flex-column justify-content-center align-items-center">
                         <p>Create</p>
-                        <input type="checkbox" name="user-management-create" class="mt-2 mb-3" id="">
                         @foreach ($roleNames as $roleName)
                         @if (is_array($roleName))
 
                         @foreach ($roleName as $rolecreate)
-                        <input type="checkbox" name="permission-{{$rolecreate}}-create" class="mt-2 mb-3 ml-5" id=""
+                        <input type="checkbox" name="permission-{{$rolecreate}}-create" class="mt-2 mb-3 " id=""
                             @if($role->hasPermissionTo($rolecreate.'.create','web'))
                         checked
                         @endif>
@@ -77,12 +68,11 @@
                 <div class="col-2">
                     <div class="d-flex flex-column justify-content-center align-items-center">
                         <p>Update</p>
-                        <input type="checkbox" name="user-management-edit" class="mt-2 mb-3" id="">
                         @foreach ($roleNames as $roleName)
                         @if (is_array($roleName))
 
                         @foreach ($roleName as $roleEdit)
-                        <input type="checkbox" name="permission-{{$roleEdit}}-edit" class="mt-2 mb-3 ml-5" id=""
+                        <input type="checkbox" name="permission-{{$roleEdit}}-edit" class="mt-2 mb-3 " id=""
                             @if($role->hasPermissionTo($roleEdit.'.edit','web'))
                         checked
                         @endif>
@@ -101,12 +91,11 @@
                 <div class="col-2">
                     <div class="d-flex flex-column justify-content-center align-items-center">
                         <p>Delete</p>
-                        <input type="checkbox" name="user-management-delete" class="mt-2 mb-3" id="">
                         @foreach ($roleNames as $roleName)
                         @if (is_array($roleName))
 
                         @foreach ($roleName as $roledelete)
-                        <input type="checkbox" name="permission-{{$roledelete}}-delete" class="mt-2 mb-3 ml-5" id=""
+                        <input type="checkbox" name="permission-{{$roledelete}}-delete" class="mt-2 mb-3 " id=""
                             @if($role->hasPermissionTo($roledelete.'.delete','web'))
                         checked
                         @endif>
