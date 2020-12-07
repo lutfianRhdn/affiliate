@@ -18,7 +18,7 @@
 </head>
 
 <body class="off-canvas-sidebar">
-    <div class="page-header login-page header-filter" filter-color="black" style="background-image: url('img/background.jpg'); background-size: cover; background-position: top center;align-items: center;" data-color="purple">
+    <div class="page-header login-page header-filter" filter-color="black" style="background-image: url('img/background.png'); background-size: cover; background-position: top center;align-items: center;" data-color="purple">
         <div class="container">
             <div class="row align-items-center  my-auto justify-content-center" style="height:100vh">
                 <div class="col-md-9  text-center ">

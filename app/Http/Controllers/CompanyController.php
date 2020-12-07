@@ -33,7 +33,7 @@ class CompanyController extends Controller
     {
         $companies= Company::all();
         $users = User::whereHas('roles',function($role){
-            $role->where('name','admin');
+            $role->where('name','super-admin-company');
         })->where('users.company_id','!=',null)->get()->groupBy('company_id');
         $adminCompany =[];
         foreach ($users as $user ) {

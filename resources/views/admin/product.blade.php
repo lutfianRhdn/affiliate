@@ -37,7 +37,7 @@
                                 <tr>
                                     <th>Product Name</th>
                                     <th>Description</th>
-                                    <th>Regex</th>
+                                    <th>Product Code</th>
                                     <th>URL</th>
                                     <th>Permission Url</th>
                                     <th class="no-sort">Code</th>
@@ -119,7 +119,7 @@
                                                     <div
                                                         class="bmd-form-group{{ $errors->has('regex') ? ' has-danger' : '' }}">
                                                         <div class="form-group pl-2">
-                                                            <label for="regex">Regex</label>
+                                                            <label for="regex">Product Code</label>
                                                             <input type="text" class="form-control"
                                                                 placeholder="nama product" name="regex"
                                                                 oninput="this.value = this.value.toUpperCase()"
@@ -289,7 +289,7 @@
                     </div>
                     <div class="bmd-form-group{{ $errors->has('regex') ? ' has-danger' : '' }}">
                         <div class="form-group pl-2">
-                            <label for="regex">Regex</label>
+                            <label for="regex">Product Code</label>
                             <input type="text" class="form-control pl-2" placeholder="ABCD" name="regex"
                                 value="{{ old('regex') }}" oninput="this.value = this.value.toUpperCase()">
                         </div>

@@ -35,7 +35,7 @@
                                     <td class="text-right">
                                         <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round" href=""
                                             data-placement="bottom" title="Delete" data-toggle="modal"
-                                            @if ($role->name== 'copy-admin' || $role->name == 'copy-reseller')
+                                            @if (strpos($role->name,'copy-')!== false)
                                                 style="pointer-events:none; background:gray"
                                               @else
                                               data-target="#deleteModal{{$role->id}}"
@@ -79,9 +79,8 @@
                                                             <input type="text" class="form-control"
                                                                 placeholder="Reseller" name="name"
                                                                 value="{{ $role->name }}" 
-                                                                @if ($role->name == 'copy-admin' || $role->name= 'copy-reseller')
+                                                                @if (strpos($role->name,'copy-')!==false)
                                                                     disabled
-                                                                    readonly
                                                                 @endif
                                                                 >
                                                         </div>

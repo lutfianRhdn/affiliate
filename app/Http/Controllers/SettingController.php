@@ -15,14 +15,13 @@ class SettingController extends Controller
      */
     public function index()
     {
-        $setting = filterData('\App\Models\Setting')->groupBy('product_id');
+        $settings = filterData('\App\Models\Setting')->groupBy('product.id');
         $products = filterData('\App\Models\Product');
         if (!auth()->user()->hasRole('super-admin')) {
             $setting = Setting::where('company_id',getCompanyId())->get()->groupBy('product_id');
             $products = Product::where('company_id',getCompanyId())->get();
         }
-
-        return view('admin.settingAdmin', ['setting' => $setting, 'products' => $products]);
+        return view('admin.settingAdmin', ['settings' => $settings, 'products' => $products]);
     }
 
     /**
@@ -75,10 +74,19 @@ class SettingController extends Controller
      * @param  \App\Models\Setting  $setting
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Setting $setting)
+    public function update(Request $request,$id)
     {
+        $keys =[];
+        $keys =array_keys($request->all());
+        unset($keys[0],$keys[1]);
+        foreach($keys as $key){
+            $setting = Setting::where('product_id',$id)
+            ->where('key',str_replace('_',' ',$key))->first();
+            $setting->value = $request->$key;
+            $setting->save();
+        }
         $this->validate($request, [
-            'key' => 'required',
+            'persentage' => 'required',
             'value' => 'required',
             'label' => 'required',
             'product_id' => 'required'

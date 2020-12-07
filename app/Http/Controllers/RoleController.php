@@ -34,7 +34,12 @@ class RoleController extends Controller
     }
     public function index()
     {
-        $roles= filterData('\App\Models\Role')->whereNotIn('name',['super-admin','admin','reseller']);
+        $roles= filterData('\App\Models\Role')->whereNotIn('name',['super-admin','admin','reseller','super-admin-company', 'super-admin']);
+        foreach($roles as $key=>$role){
+            if (strpos($role->name,'super-admin-')!== false) {
+                unset($roles[$key]);
+            }
+        }
         $roleNames = getRoleName($this->routes);
         if (!auth()->user()->hasRole('super-admin')) {
             unset($roleNames[1][0]);
