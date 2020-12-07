@@ -51,6 +51,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($users as $user)
+                                    
                                     <tr>
                                         <td>{{$user->name}}</td>
                                         <td>{{$user->email}}
@@ -167,7 +168,7 @@
                                         aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
-                                                <form action="/admin/user/{{ $user->id }}" method="POST">
+                                                <form action="{{ route('admin.user.update',$user->id) }}" method="POST">
                                                     @method('patch')
                                                     @csrf
                                                     <div class="modal-header">
@@ -216,7 +217,35 @@
                                                             </div>
                                                             @endif
                                                         </div>
-                                                        <input type="hidden" name="role" value="1">
+                                                        <div
+                                                            class="bmd-form-group{{ $errors->has('role') ? ' has-danger' : '' }} mt-3">
+                                                            <div class="input-group d-flex">
+                                                                <div class="input-group-prepend">
+                                                                    <span class="input-group-text">
+                                                                        <i class="material-icons">admin_panel_settings</i>
+                                                                    </span>
+                                                                </div>
+                                                                <select  name="role[]" class="custom-select-2" style="width: 85%" multiple required>
+                                                                    @foreach ($roles as $role)
+                                                                    
+                                                                        <option  id="" value="{{$role->name}}"
+                                                                            @foreach ($user->getRoleNames() as $roleName)
+                                                                                
+                                                                            @if ($role->name == $roleName)
+                                                                            selected
+                                                                            @endif
+                                                                            @endforeach
+                                                                            >{{$role->name}}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                            @if ($errors->has('role'))
+                                                            <div id="role-error" class="error text-danger pl-3"
+                                                                for="role" style="display: block;">
+                                                                <strong>{{ $errors->first('role') }}</strong>
+                                                            </div>
+                                                            @endif
+                                                        </div>
 
                                                     </div>
                                                     <div class="modal-footer">

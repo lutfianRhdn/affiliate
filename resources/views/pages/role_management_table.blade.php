@@ -31,6 +31,7 @@
                         @endif>
                         @endforeach
                         @else
+                      
                         <input type="checkbox" name="permission-{{$roleName}}-view" class="mt-2 mb-3" id=""
                             @if($role->hasPermissionTo($roleName.'.view','web'))
                         checked
@@ -55,10 +56,16 @@
                         @endif>
                         @endforeach
                         @else
-                        <input type="checkbox" name="permission-{{$roleName}}-create" class="mt-2 mb-3" id=""
-                            @if($role->hasPermissionTo($roleName.'.create','web'))
-                        checked
-                        @endif>
+                        @if ($roleName !=='role')
+                            <input type="checkbox" name="permission-{{$roleName}}-create" class="mt-2 mb-3" id=""
+                                @if($role->hasPermissionTo($roleName.'.create','web'))
+                                    checked
+                                @endif>
+
+                            @else
+                            <p class="text-white">x</p>
+                        @endif
+                        
                         @endif
 
                         @endforeach
@@ -101,10 +108,14 @@
                         @endif>
                         @endforeach
                         @else
+                        @if ($roleName !=='role')
                         <input type="checkbox" name="permission-{{$roleName}}-delete" class="mt-2 mb-3" id=""
                             @if($role->hasPermissionTo($roleName.'.delete','web'))
                         checked
                         @endif>
+                            @else
+                            <p class="text-white">x</p>
+                        @endif
                         @endif
 
                         @endforeach

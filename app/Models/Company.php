@@ -34,6 +34,7 @@ class Company extends Model
     // custom method
     public function addCompany( $data)
     {
+        
         $company =Company::create([
             'name'=>$data['company']
         ]);
@@ -50,8 +51,9 @@ class Company extends Model
         $adminCompany = Role::create(['name'=>'admin-'.$data['company'],'company_id'=>$company->id]);
         // $adminCompany = Role::create(['name'=>'admin-'.$data['company'],'company_id'=>$company->id]);
         $resellerCompany = Role::create(['name'=>'reseller-'.$data['company'],'company_id'=>$company->id]);
-        $permissionForAdmin = Role::where('name','copy-super-admin')->get()->first();
-        $superAdminCompany->syncPermissions($permissionForAdmin->getAllPermissions());
+        $permissionForAdmin = Role::where('name','super-admin')->get()->first();
+        $permission = $permissionForAdmin->permissions()->whereNotIn('name',['company.view','company.edit','company.create','company.delete'])->get();
+        $superAdminCompany->syncPermissions($permission);
         $user->assignRole('super-admin-company',$superAdminCompany->name);
         
         return $user;

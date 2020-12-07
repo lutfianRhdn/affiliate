@@ -1,27 +1,27 @@
     <form action="{{url('/')}}/register/{{$id}}" id="RegForm" method="POST">
         <div>
             <label for="name">name : </label>
-            <input type="text" name="name" id="name">
+        <input type="text" name="name-{{$id}}" id="name-{{$id}}">
         </div>
         <div>
             <label for="email">email : </label>
-            <input type="text" name="email" id="email">
+            <input type="text" name="email-{{$id}}" id="email-{{$id}}">
         </div>
         <div>
             <label for="password">password : </label>
-            <input type="password" name="password" id="password">
+            <input type="password" name="password-{{$id}}" id="password-{{$id}}">
         </div>
         <div>
             <label for="confirmPassword">confirm Password : </label>
-            <input type="password" name="password_confirmation" id="confirm_password">
+            <input type="password" name="password_confirmation-{{$id}}" id="confirm_password-{{$id}}">
         </div>
         <div>
             <label for="phone">phone : </label>
-            <input type="text" name="phone" id="phone">
+            <input type="text" name="phone-{{$id}}" id="phone-{{$id}}">
         </div>
         <div>
             <label for="address">address : </label>
-            <input type="text" name="address" id="address">
+            <input type="text" name="address-{{$id}}" id="address-{{$id}}">
         </div>
         <button type="submit">submit</button>
     </form>

@@ -327,8 +327,8 @@
                     </div>
                     <div class="bmd-form-group">
                         <div class="form-group pl-2">
-                            <label for="product_name">URL</label>
-                            <input type="text" class="form-control pl-2" placeholder="https://sample.com"
+                            <label for="product_name">Thank You Page </label>
+                            <input type="text" class="form-control pl-2" placeholder="https://sample.com/thanksyou"
                                 name="urlProduct" value="{{ old('url') }}">
                         </div>
                     </div>

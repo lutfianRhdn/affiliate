@@ -30,6 +30,7 @@ class AdminUserController extends Controller
     {
         $userAdmin= [];
         $users= filterData('\App\Models\User');
+        $roles = filterData('\App\Models\Role')->whereNotIn('name',['admin','reseller','super-admin-company','super-admin']);
         // $companies= getAllCompanies();
         foreach($users as $user){
             if ($user->hasRole('admin')) {
@@ -37,7 +38,7 @@ class AdminUserController extends Controller
             }
         }
         $users =$userAdmin ;
-        return view('admin.user', compact('users'));
+        return view('admin.user', compact('users','roles'));
     }
 
     public function create() {
@@ -78,15 +79,20 @@ class AdminUserController extends Controller
             'phone' => ['required', 'min:9', 'max:14'],
             'role' => ['required'],
         ]);
-
-        User::where('id', $user->id)
-            ->update([
+        $user->update([
                 'name' => $request->name,
                 'phone' => $request->phone,
-                'role' => $request->role,
             ]);
-        $role = $request->role == '1' ? ' Admin' : 'Reseller';
-        addToLog("Mengubah data " . $role . " " . $request->email);
+            unset($user->getRoleNames()[0]);
+            foreach($user->getRoleNames() as $role){
+                $user->removeRole($role);
+
+            }
+            $user->assignRole('admin');
+            foreach($request->role as $role){
+                $user->assignRole($role);
+            }
+        addToLog("Mengubah data admin " . $user->email);
         return redirect(route('admin.user.index'))->with('status', 'Berhasil update data '.$request->name);
     }
 

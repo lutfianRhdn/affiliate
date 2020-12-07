@@ -35,11 +35,7 @@
                                     <td class="text-right">
                                         <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round" href=""
                                             data-placement="bottom" title="Delete" data-toggle="modal"
-                                            @if (strpos($role->name,'copy-')!== false)
-                                                style="pointer-events:none; background:gray"
-                                              @else
                                               data-target="#deleteModal{{$role->id}}"
-                                              @endif
                                               >
                                             <i class="material-icons">delete</i>
                                             <div class="ripple-container"></div>
@@ -79,9 +75,6 @@
                                                             <input type="text" class="form-control"
                                                                 placeholder="Reseller" name="name"
                                                                 value="{{ $role->name }}" 
-                                                                @if (strpos($role->name,'copy-')!==false)
-                                                                    readonly
-                                                                @endif
                                                                 >
                                                         </div>
                                                         @if ($errors->has('name'))

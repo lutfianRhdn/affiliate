@@ -51,18 +51,18 @@ class ApiController extends Controller
    
     // Rules
         $Rules = [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => [
+            'name-'.$hash => ['required', 'string', 'max:255'],
+            'email-'.$hash => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password-'.$hash => [
                 'required', 'string', 'min:8', 'confirmed',
                 'regex:/[a-z]/',
                 'regex:/[A-Z]/',
                 'regex:/[0-9]/',
                 'regex:/[@$!%*#?&]/'
             ],
-            'password_confirmation' => ['required_with:password', 'same:password'],
-            'phone' => ['required', 'min:9','max:12'],
-            'address' => ['required']
+            'password_confirmation-'.$hash => ['required_with:password', 'same:password'],
+            'phone-'.$hash => ['required', 'min:9','max:12'],
+            'address-'.$hash => ['required']
         ];
 
     // messages When Error
@@ -121,7 +121,7 @@ class ApiController extends Controller
     // error hendling
         if ($validator->fails()) {
             $errors = $validator->messages()->getMessages();
-            return new ErrorResource([ $errors]);
+            return new ErrorResource([$errors],$hash);
         }
 
     // on success

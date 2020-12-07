@@ -12,16 +12,23 @@ class ErrorResource extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
+private $errors=[];
+
+    public function __construct($errors,$hash)
+    {
+        $this->errors= $errors;
+        $this->hash=$hash;
+    }
     public function toArray($request)
     {
         $errors = [];
 
-        foreach($this->resource as  $error){
+        foreach($this->errors as  $error){
             $keys = array_keys($error);
             $text = $error;
             foreach($keys as  $key ){
                 $text= $error[$key][0];
-                $errors += [$key=>$text];
+                $errors += [ str_replace('-'.$this->hash,'',$key)=>$text];
             }
         }
         $collection = collect($errors);
