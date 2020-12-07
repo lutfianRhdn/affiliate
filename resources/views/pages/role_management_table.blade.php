@@ -56,7 +56,7 @@
                         @endif>
                         @endforeach
                         @else
-                        @if ($roleName !=='role')
+                        @if ($roleName !=='setting')
                             <input type="checkbox" name="permission-{{$roleName}}-create" class="mt-2 mb-3" id=""
                                 @if($role->hasPermissionTo($roleName.'.create','web'))
                                     checked
@@ -108,7 +108,7 @@
                         @endif>
                         @endforeach
                         @else
-                        @if ($roleName !=='role')
+                        @if ($roleName !=='setting')
                         <input type="checkbox" name="permission-{{$roleName}}-delete" class="mt-2 mb-3" id=""
                             @if($role->hasPermissionTo($roleName.'.delete','web'))
                         checked
