@@ -29,27 +29,20 @@ class RoleSeeder extends Seeder
                 'guard_name' => 'web',
                 'created_at' => now()
             ]);
-
-        $adminRole = Role::create([
-                'name'=>'copy-admin',
+        $admin = Role::create([
+                'name'=>'super-admin-company',
                 'slug' => '',
                 'guard_name' => 'web',
                 'created_at' => now()
             ]);
-
+     
            $reseller= Role::create([
                 'name' => 'reseller',
                 'slug' => '',
                 'guard_name'=>'web',
             'created_at' => now()
         ]);
-           $resellerRole= Role::create([
-                'name' => 'copy-reseller',
-                'slug' => '',
-                'guard_name'=>'web',
-            'created_at' => now()
-        ]);
+           
         $superAdminRole->syncPermissions(Permission::all());
-        $adminRole->syncPermissions(Permission::whereNotIn('name',['admin.delete'.'admin.edit'])->get());
     }
 }

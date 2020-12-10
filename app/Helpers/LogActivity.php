@@ -55,15 +55,15 @@ use App\Models\LogActivity as ModelsLogActivity;
         return $data;
     }
     function getCompanyId($companyId = null){
-            if ($companyId !==null) {
-               return $companyId;
-            }
-            if (auth()->check() ==true ? auth()->user()->hasRole('super-admin'): false) {
-                return null;
-            }
-            if (auth()->check() == false ? true : auth()->user()->company == null ) {
-                return null;
-            }
+        if ($companyId !==null) {
+            return $companyId;
+        }
+        if (auth()->check() ==true ? auth()->user()->hasRole('super-admin'): false) {
+            return null;
+        }
+        if (auth()->check() == false ? true : auth()->user()->company == null ) {
+            return null;
+        }
         return auth()->user()->company->id;
     }
     function getAllCompanies()

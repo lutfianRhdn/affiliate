@@ -23,7 +23,7 @@ class ProductSeeder extends Seeder
             'regex' => 'PAGII',
             'permission_ip'=> 'http://intern-pagii.smtapps.net/',
             'url'=>'http://pagii.co',
-            'company_id'=>Company::where('name','pagii')->get()->first()->id,
+            'company_id'=>Company::where('name','affiliate')->get()->first()->id,
             'created_at' => now()
         ]);
         $id = Hashids::encode($pagii->id);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ErrorResource;
 use App\Http\Resources\ProductResource;
 use App\Mail\EmailConfirmation;
+use App\Models\Client;
 use App\Models\Product;
 use App\Models\Role;
 use App\Models\User;
@@ -13,6 +14,7 @@ use Vinkla\Hashids\Facades\Hashids;
 use Illuminate\Support\Facades\Mail;
 
 use Illuminate\Support\Facades\Validator;
+use PhpParser\Node\Stmt\TryCatch;
 
 class ApiController extends Controller
 {
@@ -153,6 +155,36 @@ class ApiController extends Controller
         addToLog("Menambahkan Reseller" . $request->email, $product->company !== null ?$product->company->id :null);
             // $user->givePermissionTo($user->getPermissionsViaRoles());
             return response()->json(['status'=>'success']);
+        }
+        public function ClientApi(Request $request,$hash)
+        {
+            $id = Hashids::decode($hash);
+            $product = Product::find($id)->first();    
+            if (!$product) {
+                return response()->json([
+                    'status' => 'error',
+                    'error' => 'application is not registered'
+                ]);
+            }
+            $Messages=[
+                'required'=>[
+                    'type'=>'required',
+                    'message'=>'The :attribute is required'
+                ]
+            ];
+            try {
+                $request->validate([
+                    'name'=>['required'],
+                ],$Messages);
+                
+            } catch (Throwable $th) {
+                throw $th;
+            }
+            $clientModel = new Client;
+            // return($product->id);
+            $request->request->add(['product_id'=>$product->id,'status'=>0]);
+            $clientModel->createClient($request->all());
+            return response()->json(['status'=>'success','data'=>['name'=>$request->name]]);
         }
     }
 

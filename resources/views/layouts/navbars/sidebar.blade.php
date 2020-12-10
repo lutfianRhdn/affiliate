@@ -98,6 +98,14 @@
         </a>
       </li>
       @endcan
+      @role('reseller')
+      <li class="nav-item{{ $activePage == 'client' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('reseller.client.index')}}">
+          <i class="material-icons">receipt_long</i>
+            <p>{{ __('Transaction') }}</p>
+        </a>
+      </li>
+      @endrole
     </ul>
   </div>
 </div>

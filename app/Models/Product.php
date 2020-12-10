@@ -24,6 +24,11 @@ class Product extends Model
     {
         return $this->hasMany(Setting::class);
     }
+public function clients()
+{
+    return $this->hasMany(Client::class);
+}
+
     public function getData()
     {
         $product = Product::all();

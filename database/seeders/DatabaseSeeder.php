@@ -20,5 +20,7 @@ class DatabaseSeeder extends Seeder
         // $this->call(ProvinceCitySeeder::class);
         $this->call(ProductSeeder::class);
         $this->call(SettingsSeeder::class);
+        $this->call(ResellerSeeder::class);
+        \App\Models\Client::factory()->count(100)->create();
     }
 }

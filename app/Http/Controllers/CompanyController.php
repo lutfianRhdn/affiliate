@@ -145,7 +145,7 @@ class CompanyController extends Controller
         if (!auth()->user()->hasRole('super-admin')) {
             Cookie::queue(Cookie::forget('user'));
         }
-        Auth::logout($user);
+        // Auth::logout($user);
         Auth::login($user);
         return redirect()->route('admin');
     }
