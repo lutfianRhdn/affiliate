@@ -35,6 +35,18 @@ class RoleSeeder extends Seeder
                 'guard_name' => 'web',
                 'created_at' => now()
             ]);
+        $admin = Role::create([
+                'name'=>'admin-super',
+                'slug' => '',
+                'guard_name' => 'web',
+                'created_at' => now()
+            ]);
+        $admin = Role::create([
+                'name'=>'reseller-super',
+                'slug' => '',
+                'guard_name' => 'web',
+                'created_at' => now()
+            ]);
      
            $reseller= Role::create([
                 'name' => 'reseller',
