@@ -58,7 +58,7 @@
             function (settings, data, dataIndex) {
                 var min = $('#startedAt').val().split('-');
                 var max = $('#endedAt').val().split('-');
-                var dateData = data[3].split('-') ; // use data for the age column
+                var dateData = data[4].split('-') ; // use data for the age column
                 const minDate = new Date( min[0], min[1] , min[2]).getTime();
                 const date = new Date( dateData[2], dateData[1], dateData[0]).getTime();
                 const maxDate = new Date( max[0], max[1] , max[2]).getTime();
