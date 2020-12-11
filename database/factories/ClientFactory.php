@@ -26,7 +26,9 @@ class ClientFactory extends Factory
             'name'=> $this->faker->name,
             'total_payment'=> 100000,
             'status'=>rand(0,1),
-            'product_id'=>Product::all()->random()->id
+            'product_id'=>Product::all()->random()->id,
+            'payment_date'=> $this->faker->date(),
+            'company'=> $this->faker->company
         ];
     }
 }

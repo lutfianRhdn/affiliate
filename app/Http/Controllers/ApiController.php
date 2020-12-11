@@ -156,6 +156,10 @@ class ApiController extends Controller
             // $user->givePermissionTo($user->getPermissionsViaRoles());
             return response()->json(['status'=>'success']);
         }
+        public function TransactionClient(Request $request)
+        {
+            
+        }
         public function ClientApi(Request $request,$hash)
         {
             $id = Hashids::decode($hash);
@@ -170,11 +174,16 @@ class ApiController extends Controller
                 'required'=>[
                     'type'=>'required',
                     'message'=>'The :attribute is required'
+                ],
+                'date_format'=>[
+                    'type'=>'inValid',
+                    'message'=> 'The :atribute does not match the format Y-m-d, ex:2020-12-04.'
                 ]
             ];
             try {
                 $request->validate([
                     'name'=>['required'],
+                    'payment_date'=>['required','date_format:Y-m-d']
                 ],$Messages);
                 
             } catch (Throwable $th) {
