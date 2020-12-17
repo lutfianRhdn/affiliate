@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -14,8 +15,11 @@ class ClientController extends Controller
      */
     public function index()
     {
-      $clients=Client::where('product_id',auth()->user()->product->id)->get();
-        return view('reseller.index',compact('clients'));
+        $clients = Client::where('user_id',auth()->user()->id)
+        ->where('product_id',auth()->user()->product->id)
+        ->get();
+        // dd($clients);
+        return view('reseller.clients',compact('clients'));
     }
 
     /**
@@ -79,8 +83,25 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Client $client)
     {
-        //
+    //  $clients= [];   
+        if ($client->transactions->count() ==0) {
+            // dd('can');
+            $client->delete();
+        return redirect()->back()->with(['success'=>'delete client success']);
+        }
+            return redirect()->back()->with(['error'=>'this field have relasion cant delete']);
+    }
+    public function transaction()
+    {
+    
+        $transactions=Transaction::whereHas('client',function($q){
+            $q->where('user_id',auth()->user()->id)
+            ->where('product_id',auth()->user()->product->id);
+        })->get();
+        
+        // dd($transactions);
+        return view('reseller.transaction',compact('transactions'));
     }
 }

@@ -71,17 +71,12 @@ Route::get('/get-city', [AdminResellerController::class, 'getCity']);
 Route::get('/get-city-edit', [AdminResellerController::class, 'getCityEdit']);
 Route::patch('/{product}', [ProductController::class, 'updateCode'])->name('admin.product.updateCode');
 });
-Route::group(['prefix' => 'reseller'], function () {
-	Route::resource('/client', ClientController::class,["as"=>"reseller"]);
-});
+	Route::group(['prefix' => 'reseller'], function () {
+		Route::resource('/client', ClientController::class,["as"=>"reseller"]);
+		Route::get('/transaction', [ClientController::class,'transaction'],["as"=>"reseller"])->name('reseller.client.transaction');
+	});
 
 });
-
-// reseller route
-Route::group(['middleware' => ['auth']], function () {
-	Route::get('/reseller', [ResellerController::class, 'index'])->name('reseller');
-});
-
 
 
 

@@ -101,6 +101,12 @@
       @role('reseller')
       <li class="nav-item{{ $activePage == 'client' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('reseller.client.index')}}">
+          <i class="material-icons">supervisor_account</i>
+            <p>{{ __('Clients') }}</p>
+        </a>
+      </li>
+      <li class="nav-item{{ $activePage == 'transaction' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('reseller.client.transaction')}}">
           <i class="material-icons">receipt_long</i>
             <p>{{ __('Transaction') }}</p>
         </a>

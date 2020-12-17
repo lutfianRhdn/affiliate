@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'client', 'titlePage' => __('Client Management')])
+@extends('layouts.app', ['activePage' => 'transaction', 'titlePage' => __('Client Management')])
 
 @section('content')
 <div id="preloaders" class="preloader"></div>
@@ -32,16 +32,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($clients as $client)
+                        @foreach ($transactions as $transaction)
                         <tr>
                             <td>{{$loop->index+1}}</td>
-                            <td>{{$client->name}}</td>
-                            <td>{{$client->company}}</td>
-                            <td>Rp.{{$client->total_payment == null ?'0':$client->total_payment}}</td>
-                            <td>{{date('d-m-Y', strtotime($client->payment_date))}}</td>
-                            <td>{{$client->status ==false ?"hasn't paid" :'has paid '}}</td>
+                            <td>{{$transaction->client->name}}</td>
+                            <td>{{$transaction->client->company}}</td>
+                            <td>Rp.{{$transaction->total_payment == null ?'0':$transaction->total_payment}}</td>
+                            <td>{{date('d-m-Y', strtotime($transaction->payment_date))}}</td>
+                            <td>{{$transaction->status ==false ?"hasn't paid" :'has paid '}}</td>
                         </tr>
-
                         @endforeach
                     </tbody>
                 </table>

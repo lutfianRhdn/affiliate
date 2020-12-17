@@ -26,10 +26,12 @@ use App\Models\LogActivity as ModelsLogActivity;
         });
         $router =[];
         foreach ($routes as $route ) {
-            if(strpos($route,'admin.',0) !== false){
+            if(strpos($route,'admin.',0) !== false || strpos($route,'reseller.',0)!==false){
                 if(strpos($route,'.index') !== false){
-                    $removeAdminUrl= str_replace('admin.','',$route);
-                    $urlName = str_replace('.index','',$removeAdminUrl);
+                    $removeAdminUrl= explode('.',$route) ;
+                    // dd($removeAdminUrl);
+                    unset($removeAdminUrl[0]);
+                    $urlName = $removeAdminUrl[1];
                     // add management word in role,company,product,user 
                     if ($urlName== 'user') {
                         $urlName = ['company','admin','reseller'];

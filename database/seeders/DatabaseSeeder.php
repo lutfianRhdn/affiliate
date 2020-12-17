@@ -22,5 +22,6 @@ class DatabaseSeeder extends Seeder
         $this->call(SettingsSeeder::class);
         $this->call(ResellerSeeder::class);
         \App\Models\Client::factory()->count(100)->create();
+        \App\Models\Transaction::factory()->count(50)->create();
     }
 }

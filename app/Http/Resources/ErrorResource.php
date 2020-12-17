@@ -22,12 +22,14 @@ private $errors=[];
     public function toArray($request)
     {
         $errors = [];
-
         foreach($this->errors as  $error){
             $keys = array_keys($error);
             $text = $error;
             foreach($keys as  $key ){
+                // return(str_replace('-'.$this->hash,'',$key));
                 $text= $error[$key][0];
+                // return $text['message'];
+                $text['message']=str_replace('-'.strtolower( preg_replace('/(?<!\ )[A-Z]/', ' $0', $this->hash)),'',$text['message']);
                 $errors += [ str_replace('-'.$this->hash,'',$key)=>$text];
             }
         }

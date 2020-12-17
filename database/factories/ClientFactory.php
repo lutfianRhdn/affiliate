@@ -4,6 +4,9 @@ namespace Database\Factories;
 
 use App\Models\Client;
 use App\Models\Product;
+use App\Models\User;
+use Illuminate\Support\Str;
+
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ClientFactory extends Factory
@@ -24,10 +27,9 @@ class ClientFactory extends Factory
     {
         return [
             'name'=> $this->faker->name,
-            'total_payment'=> 100000,
-            'status'=>rand(0,1),
             'product_id'=>Product::all()->random()->id,
-            'payment_date'=> $this->faker->date(),
+            'user_id'=>User::whereHas('roles',function($q){$q->where('name','reseller');})->get()->random()->id,
+            'unic_code'=>Str::random(6),
             'company'=> $this->faker->company
         ];
     }

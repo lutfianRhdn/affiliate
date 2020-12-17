@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddPaymentDateAndCompanyToClientsTable extends Migration
+class RemoveStatusPaymentDateTotalPaymentToClientsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,9 @@ class AddPaymentDateAndCompanyToClientsTable extends Migration
     public function up()
     {
         Schema::table('clients', function (Blueprint $table) {
-            $table->date('payment_date')->nullable();
-            $table->string('company')->nullable();
+            $table->dropColumn('total_payment');
+            $table->dropColumn('status');
+            $table->dropColumn('payment_date');
         });
     }
 
@@ -27,8 +28,9 @@ class AddPaymentDateAndCompanyToClientsTable extends Migration
     public function down()
     {
         Schema::table('clients', function (Blueprint $table) {
-            $table->dropColumn('payment_date');
-            $table->dropColumn('company');
+            $table->string('total_payment');
+            $table->boolean('status');
+            $table->date('payment_date');
         });
     }
 }

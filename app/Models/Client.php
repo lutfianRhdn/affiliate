@@ -17,4 +17,8 @@ class Client extends Model
     {
         return Client::create($data);
     }
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
 }

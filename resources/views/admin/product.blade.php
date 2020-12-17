@@ -24,13 +24,13 @@
                             @endif
                         </div>
                         @can('product.create')
-                            
+
                         <div class="col-12 text-right">
                             <a href="" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#createModal">Add
                                 Product</a>
                         </div>
-                            @endcan
-                        </div>
+                        @endcan
+                    </div>
                     <div class="table-responsive">
                         <table class="table" id="tableProduct">
                             <thead class="text-primary">
@@ -38,7 +38,7 @@
                                     <th>Product Name</th>
                                     <th>Description</th>
                                     <th>Product Code</th>
-                                    <th>URL</th>
+                                    <th>Redirect</th>
                                     <th>Permission Url</th>
                                     <th class="no-sort">Code</th>
                                     <th class="text-right no-sort">Actions</th>
@@ -59,8 +59,14 @@
                                             <div class="ripple-container"></div>
                                         </a>
                                     </td>
-                                    
+
                                     <td class="td-actions text-right">
+                                        <a rel="tooltip" class="btn btn-primary btn-fab btn-fab-mini btn-round" href=""
+                                            data-original-title="" data-placement="bottom" title="Docs Api"
+                                            data-toggle="modal" data-target="#docsApiModal{{$product->id}}">
+                                            <i class="material-icons">http</i>
+                                            <div class="ripple-container"></div>
+                                        </a>
                                         @can('product.delete')
                                         <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round" href=""
                                             data-placement="bottom" title="Delete" data-toggle="modal"
@@ -68,16 +74,16 @@
                                             <i class="material-icons">delete</i>
                                             <div class="ripple-container"></div>
                                         </a>
-                                    @endcan
-@can('product.edit')
-    
-                                        <a rel="tooltip" class="btn btn-primary btn-fab btn-fab-mini btn-round" href=""
+                                        @endcan
+
+                                        @can('product.edit')
+                                        <a rel="tooltip" class="btn btn-warning btn-fab btn-fab-mini btn-round" href=""
                                             data-original-title="" data-placement="bottom" title="Edit"
                                             data-toggle="modal" data-target="#editModal{{$product->id}}">
                                             <i class="material-icons">edit</i>
                                             <div class="ripple-container"></div>
                                         </a>
-@endcan
+                                        @endcan
 
                                     </td>
                                 </tr>
@@ -180,82 +186,193 @@
                                                         <div class="form-group pl-2">
                                                             <textarea class="form-control" id="codeInput" rows="20"
                                                                 placeholder="{{ !empty($product->code) ? '' : 'Product Code' }}"
-                                                                name="code">{{ !empty($product->code) ? $product->code : ''}}</textarea>
-                                                        </div>
-                                                    </div> --}}
+                                                    name="code">{{ !empty($product->code) ? $product->code : ''}}</textarea>
                                                 </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-dismiss="modal">Close</button>
-                                                    <button type="submit" class="btn btn-primary">Update</button>
-                                                </div>
-                                            </form>
-                                        </div>
+                                        </div> --}}
                                     </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Update</button>
+                                    </div>
+                                    </form>
                                 </div>
+                    </div>
+                </div>
 
-                <!-- Modal Code -->
-                <div class="modal fade" id="codeModal{{$product->id}}" tabindex="-1" role="dialog"
-                    aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-lg" role="document">
+                <!-- Modal docs Api -->
+                @php
+                $hashId = Hashids::encode($product->id);
+                @endphp
+                <div class="modal fade" id="docsApiModal{{$product->id}}" tabindex="-1" role="dialog"
+                    aria-labelledby="docsApiModal{{$product->id}}Label" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLongTitle">Code</h5>
+                                <h5 class="modal-title" id="docsApiModal{{$product->id}}Label">Docs Api</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <div class="mt-2 bmd-form-group">
-                                    <div class="form-group pl-2">
-                                        <textarea class="form-control" id="codeInput" rows="20"
-                                            placeholder="{{ !empty($product->code) ? '' : 'Product Code' }}" name="code"
-                                            readonly>{{ !empty($product->code) ? $product->code : ''}}</textarea>
+                              
+                        <div class="my-2">
+                            <h5>Create Clients </h5>
+                            <div class=" p-1 px-3 d-flex justify-content-between align-items-center border-0 rounded"
+                                style="background:#e9ecef">
+                                <p class=" apiCreateClients my-auto" id="apiCreateClients-{{$hashId}}">
+                                    {{url('/')}}/api/client/register/{{$hashId}} </p>
+                                <button class="copyTextButtonClients btn btn-sm btn-default"
+                                    id="buttonClients-{{$hashId}}" rel="tooltip" data-original-title=""
+                                    data-placement="bottom" title="copy">Copy</button>
+                            </div>
+                            {{-- required field --}}
+                            <div class="mt-3">
+                                <h6>The Field must be sent</h6>
+                                {{-- table --}}
+                                <div class="mx-3">
+                                    <b>
+                                        <div class="row text-center border-bottom border-dark ">
+                                            <div class="col-4 py-1">Name</div>
+                                            <div class="col-4 py-1">Type</div>
+                                            <div class="col-4 py-1">Desc</div>
+                                        </div>
+                                    </b>
+                                    <div class="row text-center " style="background:#e9ecef">
+                                        <div class="col-4 py-1">Name</div>
+                                        <div class="col-4 py-1">String</div>
+                                        <div class="col-4 py-1">Required</div>
+                                    </div>
+                                    <div class="row text-center ">
+                                        <div class="col-4 py-1">refCode</div>
+                                        <div class="col-4 py-1">String</div>
+                                        <div class="col-4 py-1">Ref Code Reseller</div>
+                                    </div>
+                                    <div class="row text-center " style="background:#e9ecef">
+                                        <div class="col-4 py-1">unic_code</div>
+                                        <div class="col-4 py-1">String</div>
+                                        <div class="col-4 py-1">unic Id from client</div>
+                                    </div>
+                                    <div class="row text-center ">
+                                        <div class="col-4 py-1">Company</div>
+                                        <div class="col-4 py-1">string</div>
+                                        <div class="col-4 py-1">Optional</div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button class="btn btn-primary" id="btnCopy" data-dismiss="modal">Copy
-                                    code</button>
+
+                        </div>
+                        <div class="my-2">
+                            <h5>Transaction Clients </h5>
+                            <div class=" p-1 px-3 d-flex justify-content-between align-items-center border-0 rounded"
+                                style="background:#e9ecef">
+                                <p class=" apiTransactionClients my-auto" id="apiTransactionClients-{{$hashId}}">
+                                    {{url('/')}}/api/client/transaction/{{$hashId}} </p>
+                                <button class="copyTextButtonTransaction btn btn-sm btn-default"
+                                    id="buttonApiTransaction-{{$hashId}}" rel="tooltip" data-original-title=""
+                                    data-placement="bottom" title="copy">Copy</button>
+                            </div>
+                             {{-- required field --}}
+                             <div class="mt-3">
+                                <h6>The Field must be sent</h6>
+                                {{-- table --}}
+                                <div class="mx-3">
+                                    <b>
+                                        <div class="row text-center border-bottom border-dark ">
+                                            <div class="col-4 py-1">Name</div>
+                                            <div class="col-4 py-1">Type</div>
+                                            <div class="col-4 py-1">Desc</div>
+                                        </div>
+                                    </b>
+                                   
+                                    <div class="row text-center ">
+                                        <div class="col-4 py-1">payment_date</div>
+                                        <div class="col-4 py-1">date</div>
+                                        <div class="col-4 py-1">format : Y-m-d</div>
+                                    </div>
+                                    <div class="row text-center " style="background:#e9ecef">
+                                        <div class="col-4 py-1">unic_code</div>
+                                        <div class="col-4 py-1">String</div>
+                                        <div class="col-4 py-1">unic Id from client</div>
+                                    </div>
+                                    <div class="row text-center ">
+                                        <div class="col-4 py-1">total_payment</div>
+                                        <div class="col-4 py-1">number</div>
+                                        <div class="col-4 py-1">required</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                {{-- modal delete --}}
-                <div class="modal fade" id="deleteModal{{$product->id}}" tabindex="-1" role="dialog"
-                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <form action="{{ route('admin.product.destroy', $product->id)}}" method="POST">
-                                @method('delete')
-                                @csrf
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Delete items</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <p class="h5">Are you sure want to permanently remove this item?
-                                    </p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                                    <button type="submit" class="btn btn-danger">Yes</button>
-                                </div>
-                            </form>
-                        </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
                     </div>
                 </div>
-
-                @endforeach
-                </tbody>
-                </table>
             </div>
         </div>
+        <!-- Modal Code -->
+        <div class="modal fade" id="codeModal{{$product->id}}" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Code</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mt-2 bmd-form-group">
+                            <div class="form-group pl-2">
+                                <textarea class="form-control" id="codeInput" rows="20"
+                                    placeholder="{{ !empty($product->code) ? '' : 'Product Code' }}" name="code"
+                                    readonly>{{ !empty($product->code) ? $product->code : ''}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button class="btn btn-primary" id="btnCopy" data-dismiss="modal">Copy
+                            code</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- modal delete --}}
+        <div class="modal fade" id="deleteModal{{$product->id}}" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form action="{{ route('admin.product.destroy', $product->id)}}" method="POST">
+                        @method('delete')
+                        @csrf
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Delete items</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p class="h5">Are you sure want to permanently remove this item?
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                            <button type="submit" class="btn btn-danger">Yes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        @endforeach
+        </tbody>
+        </table>
     </div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -359,6 +476,45 @@
         $("#preloaders").fadeOut(1000);
         $(document).on('click', '#btnCopy', function () {
             copytext($('#codeInput').val(), this);
+        });
+        $(document).on('click', '.copyTextButton', function () {
+            console.log(this);
+            const target = `#apiCreateReseller-${this.id.split('-')[1]}`
+            copytext($(target).html(), this);
+            // target.css('background','gray')
+            $('#' + this.id)
+                .addClass('btn-success')
+                .removeClass('btn-default')
+                .html("copied")
+            setTimeout(() => {
+                $(this).removeClass('btn-success').addClass('btn-default').html('copy')
+            }, 1500)
+        });
+        $(document).on('click', '.copyTextButtonClients', function () {
+            console.log(this);
+            const target = `#apiCreateClients-${this.id.split('-')[1]}`
+            copytext($(target).html(), this);
+            // target.css('background','gray')
+            $('#' + this.id)
+                .addClass('btn-success')
+                .removeClass('btn-default')
+                .html("copied")
+            setTimeout(() => {
+                $(this).removeClass('btn-success').addClass('btn-default').html('copy')
+            }, 1500)
+        });
+        $(document).on('click', '.copyTextButtonTransaction', function () {
+            console.log(this);
+            const target = `#apiTransactionClients-${this.id.split('-')[1]}`
+            copytext($(target).html(), this);
+            // target.css('background','gray')
+            $('#' + this.id)
+                .addClass('btn-success')
+                .removeClass('btn-default')
+                .html("copied")
+            setTimeout(() => {
+                $(this).removeClass('btn-success').addClass('btn-default').html('copy')
+            }, 1500)
         });
 
     });
