@@ -45,10 +45,10 @@
                             <td>{{$client->name}}</td>
                             <td>{{$client->company}}</td>
                             <td>{{$client->unic_code}}</td>
-                            <td>{{ $client->description }}</td>
+                            <td>{{ $client->description }} </td>
                             <td>
                                 <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round" href=""
-                                @if ($client->transactions->count() == 0)
+                                @if ($client->transactions->count() != 0)
                                     style="pointer-events:none; background:gray"
                                 @endif
                                 data-placement="bottom" title="Delete"data-toggle="modal"
