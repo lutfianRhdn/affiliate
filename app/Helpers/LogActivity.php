@@ -29,7 +29,6 @@ use App\Models\LogActivity as ModelsLogActivity;
             if(strpos($route,'admin.',0) !== false || strpos($route,'reseller.',0)!==false){
                 if(strpos($route,'.index') !== false){
                     $removeAdminUrl= explode('.',$route) ;
-                    // dd($removeAdminUrl);
                     unset($removeAdminUrl[0]);
                     $urlName = $removeAdminUrl[1];
                     // add management word in role,company,product,user 

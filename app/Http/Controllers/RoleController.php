@@ -41,7 +41,6 @@ class RoleController extends Controller
             }
         }
         $roleNames = getRoleName($this->routes);
-        // dd($roleNames);
         if (!auth()->user()->hasRole('super-admin')) {
             unset($roleNames[1][0]);
         }
@@ -70,7 +69,6 @@ class RoleController extends Controller
         $roleModel = new Role;
         $role= $roleModel->createRole($request->all());
         // delete all permission
-        dd($request);
         
         $keys = $request->keys();
         unset($keys[0], $keys[1]);

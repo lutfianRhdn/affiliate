@@ -18,7 +18,6 @@ class ClientController extends Controller
         $clients = Client::where('user_id',auth()->user()->id)
         ->where('product_id',auth()->user()->product->id)
         ->get();
-        // dd($clients);
         return view('reseller.clients',compact('clients'));
     }
 
@@ -40,7 +39,10 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $client = new Client;
+        $request->request->add(['user_id'=>auth()->user()->id,'product_id'=>auth()->user()->product->id]);
+        $client->createClient($request->all());
+        return redirect()->back()->with(['success'=>'Create Client Successfuly']);
     }
 
     /**
@@ -72,9 +74,10 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Client $client)
     {
-        //
+        $client->update($request->all());
+        return redirect()->back()->with(['success'=>'Success Update data '.$client->name]);
     }
 
     /**
@@ -87,7 +90,6 @@ class ClientController extends Controller
     {
     //  $clients= [];   
         if ($client->transactions->count() ==0) {
-            // dd('can');
             $client->delete();
         return redirect()->back()->with(['success'=>'delete client success']);
         }
@@ -101,7 +103,6 @@ class ClientController extends Controller
             ->where('product_id',auth()->user()->product->id);
         })->get();
         
-        // dd($transactions);
         return view('reseller.transaction',compact('transactions'));
     }
 }

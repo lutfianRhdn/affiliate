@@ -26,6 +26,11 @@
                     </button>
                 </div>
                 @endif
+                <div class="d-flex justify-content-end mt-4">
+                    <button type="button" class="btn btn-success " data-toggle="modal" data-target="#modalCreate">
+                        Add Client
+                    </button>
+                </div>
                 <table class="table">
                     <thead>
                         <tr class="text-primary">
@@ -56,10 +61,17 @@
                                 <i class="material-icons">delete</i>
                                 <div class="ripple-container"></div>
                                 </a>
+                                <a rel="tooltip" class="btn btn-warning btn-fab btn-fab-mini btn-round" href=""
+                               
+                                data-placement="bottom" title="Delete"data-toggle="modal"
+                                data-target="#modalEdit-{{$loop->index+1}}">
+                                <i class="material-icons">edit</i>
+                                <div class="ripple-container"></div>
+                                </a>
                             </td>
                            
                         </tr>
-                        <!-- Modal -->
+                        <!-- Modal delete -->
                         <div class="modal fade" id="modalDelete-{{$loop->index+1}}" tabindex="-1" role="dialog"
                             aria-labelledby="modalDeleteLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
@@ -87,6 +99,44 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- Modal edit -->
+                        <div class="modal fade" id="modalEdit-{{$loop->index+1}}" tabindex="-1" role="dialog"
+                            aria-labelledby="modalEditLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalEditLabel">Modal Edit {{ $client->name }}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form action="{{route('reseller.client.update',$client->id)}}" method="post">
+                                        @method('PUT')
+                                        @csrf
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="Name">Name</label>
+                                            <input type="text" class="form-control" id="Name" name="name" placeholder="" value="{{$client->name}}">
+                                          </div>
+                                        <div class="form-group">
+                                            <label for="Company">Company</label>
+                                            <input type="text" class="form-control" id="Company" name="company" placeholder="" value="{{$client->company}}">
+                                          </div>
+                                        <div class="form-group">
+                                            <label for="uniqueCode">Unique Code</label>
+                                            <input type="text" class="form-control" id="uniqueCode" name="unic_code" placeholder="" value="{{$client->unic_code }}">
+                                          </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-warning">Update</button>
+                                    </div>
+                                </form>
+
+                                </div>
+                            </div>
+                        </div>
                         @endforeach
                     </tbody>
                 </table>
@@ -95,6 +145,40 @@
     </div>
 </div>
 
+<!-- Modal Create -->
+<div class="modal fade" id="modalCreate" tabindex="-1" role="dialog" aria-labelledby="modalCreateLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalCreateLabel">Modal Create</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="{{route('reseller.client.store')}}" method="post">
+            @csrf
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="Name">Name</label>
+                    <input type="text" class="form-control" id="Name" name="name" placeholder="Enter Client Name..." value="{{ old('name')}}">
+                  </div>
+                <div class="form-group">
+                    <label for="Company">Company</label>
+                    <input type="text" class="form-control" id="Company" name="company" placeholder="Enter Client Company..." value="{{old('company')}}">
+                  </div>
+                <div class="form-group">
+                    <label for="uniqueCode">Unique Code</label>
+                    <input type="text" class="form-control" id="uniqueCode" name="unic_code" placeholder="Enter Client Unique code" value="{{old('unic_code') }}">
+                  </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
 @endsection
 
 @push('js')

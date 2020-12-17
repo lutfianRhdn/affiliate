@@ -21,7 +21,7 @@ class TransactionResource extends JsonResource
             'transaction'=>[
                 'total_payment'=>$this->transactions->last()->total_payment,
                 'payment_date'=> date('d-M-Y',strtotime($this->transactions->last()->payment_date)),
-                'total_transaction'=>$this->transaction->count()
+                'total_transaction'=>$this->transactions->count()
             ]
         ];
     }

@@ -33,22 +33,22 @@ class ApiController extends Controller
                     'error' => 'application is not registered'
                 ]);
             }
-        // check origin url
-        // set allowed url
+            // check origin url
+            // set allowed url
             $allowedHosts = explode(',', env('ALLOWED_DOMAINS'));
             $productUrl = parse_url($product->permission_ip, PHP_URL_HOST);
             array_push($allowedHosts, $productUrl);
-        // get url hit 
+            // get url hit 
             $requestHost = parse_url($request->headers->get('origin'),
                 PHP_URL_HOST
             );
-        // if url request came from != alowed url
-            // if (!in_array($requestHost, $allowedHosts, False)) {
-            //     return response(['status'=>'Forbiden','error'=>403],403);
-            // }
+            // if url request came from != alowed url
+            if (!in_array($requestHost, $allowedHosts, False)) {
+                return response(['status'=>'Forbiden','error'=>403],403);
+            }
             
     
-        // Rules
+            // Rules
             $Rules = [
                 'name-'.$hash => ['required', 'string', 'max:255'],
                 'email-'.$hash => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -64,7 +64,7 @@ class ApiController extends Controller
                 'address-'.$hash => ['required']
             ];
 
-        // messages When Error
+            // messages When Error
             $Messages= [
                 'required'=>[
                     'type'=> 'required',
@@ -99,31 +99,19 @@ class ApiController extends Controller
                     'type'=>'limited',
                     'message'=> 'The :attribute value :input is not between :min - :max.'
                 ],
-                // 'password.min'  => [
-                //     'code' => 'password_min_:min',
-                //     'msg' => 'The password must be at least :min characters.',
-                // ],
-                // '*.max'=>[
-                //     'type'=>'size',
-                //     'message'=> 'The password must be at least :max characters.'
-                // ],
-                // '*.email'=>[
-                //     'type'=>'inValid',
-                //     'message'=> 'The password must be at least :max characters.'
-                // ],
                 
             ];
 
-        // vallidate
+            // vallidate
             $validator = Validator::make($request->all(), $Rules,$Messages);
 
-        // error hendling
+            // error hendling
             if ($validator->fails()) {
                 $errors = $validator->messages()->getMessages();
                 return response(new ErrorResource([$errors],$hash),400);
             }
 
-        // on success
+            // on success
             $permitted_chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
             $random = substr(str_shuffle($permitted_chars), 0, 6);
             $model_user = new User;
@@ -167,6 +155,7 @@ class ApiController extends Controller
             $rules=[
                 'total_payment'=>['required','numeric'],
                 'unic_code'=>['required'],
+                'ref_code'=>['required'],
                 'payment_date'=>['required','date_format:Y-m-d'],
             ];
             $messages=[
@@ -184,8 +173,19 @@ class ApiController extends Controller
                 ]
             ];
                 $this->validate($request,$rules,$messages);
-        $client = $product->clients->where('unic_code',$request->unic_code)->first();
-            // return $client->transactions;
+                
+                try {
+                    $user=User::where('ref_code',$request->ref_code)->firstOrFail();
+                } catch (\Throwable $excaption ) {
+                    return response([
+                    'status'=>'error',
+                    'error'=>[
+                        'status'=>500,
+                        'message'=>$excaption->getMessage()
+                    ]
+                ],500);
+                }
+            $client = $user->product->find($id)->first()->clients->where('unic_code',$request->unic_code)->first();
             $client->transactions()->create([
                 'total_payment'=>$request->total_payment,
                 'payment_date'=> $request->payment_date,
