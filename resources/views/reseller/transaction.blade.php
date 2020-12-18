@@ -28,7 +28,6 @@
                             <th>Company</th>
                             <th>Total Payment</th>
                             <th>Payment Date</th>
-                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -39,7 +38,6 @@
                             <td>{{$transaction->client->company}}</td>
                             <td>Rp.{{$transaction->total_payment == null ?'0':$transaction->total_payment}}</td>
                             <td>{{date('d-m-Y', strtotime($transaction->payment_date))}}</td>
-                            <td>{{$transaction->status ==false ?"hasn't paid" :'has paid '}}</td>
                         </tr>
                         @endforeach
                     </tbody>

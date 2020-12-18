@@ -228,7 +228,7 @@
                             </div>
                             {{-- required field --}}
                             <div class="mt-3">
-                                <h6>The Field must be sent</h6>
+                                <p>The Field must be sent with <b>POST</b> Method</p>
                                 {{-- table --}}
                                 <div class="mx-3">
                                     <b>
@@ -239,12 +239,12 @@
                                         </div>
                                     </b>
                                     <div class="row text-center " style="background:#e9ecef">
-                                        <div class="col-4 py-1">Name</div>
+                                        <div class="col-4 py-1">name</div>
                                         <div class="col-4 py-1">String</div>
                                         <div class="col-4 py-1">Required</div>
                                     </div>
                                     <div class="row text-center ">
-                                        <div class="col-4 py-1">refCode</div>
+                                        <div class="col-4 py-1">ref_code</div>
                                         <div class="col-4 py-1">String</div>
                                         <div class="col-4 py-1">Ref Code Reseller</div>
                                     </div>
@@ -254,7 +254,12 @@
                                         <div class="col-4 py-1">unic Id from client</div>
                                     </div>
                                     <div class="row text-center ">
-                                        <div class="col-4 py-1">Company</div>
+                                        <div class="col-4 py-1">company</div>
+                                        <div class="col-4 py-1">string</div>
+                                        <div class="col-4 py-1">Optional</div>
+                                    </div>
+                                    <div class="row text-center ">
+                                        <div class="col-4 py-1">description</div>
                                         <div class="col-4 py-1">string</div>
                                         <div class="col-4 py-1">Optional</div>
                                     </div>
@@ -274,12 +279,12 @@
                             </div>
                              {{-- required field --}}
                              <div class="mt-3">
-                                <h6>The Field must be sent</h6>
+                                <p>The Field must be sent with <b>POST</b> Method</p>
                                 {{-- table --}}
                                 <div class="mx-3">
                                     <b>
                                         <div class="row text-center border-bottom border-dark ">
-                                            <div class="col-4 py-1">Name</div>
+                                            <div class="col-4 py-1">name</div>
                                             <div class="col-4 py-1">Type</div>
                                             <div class="col-4 py-1">Desc</div>
                                         </div>
@@ -300,13 +305,17 @@
                                         <div class="col-4 py-1">number</div>
                                         <div class="col-4 py-1">required</div>
                                     </div>
+                                    <div class="row text-center ">
+                                        <div class="col-4 py-1">ref_code</div>
+                                        <div class="col-4 py-1">string</div>
+                                        <div class="col-4 py-1">Ref Code Reseller</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
                     </div>
                 </div>
             </div>

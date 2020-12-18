@@ -189,7 +189,6 @@ class ApiController extends Controller
             $client->transactions()->create([
                 'total_payment'=>$request->total_payment,
                 'payment_date'=> $request->payment_date,
-                'status'=>1
             ]);
 
             return ['status'=>'success','data'=>(new TransactionResource($client))];
@@ -205,7 +204,7 @@ class ApiController extends Controller
                 ]);
             }
             $rules=[
-                'refCode'=>['required'],
+                'ref_code'=>['required'],
                 'unic_code'=>['required'],
                 'name'=>['required'],
             ];
@@ -216,7 +215,7 @@ class ApiController extends Controller
                 ]
             ];
                 $this->validate($request,$rules,$messages);
-            $reseller = User::where('ref_code',$request->refCode)->get();
+            $reseller = User::where('ref_code',$request->ref_code)->get();
             if ($reseller->count() ==0) {
                 return response([
                     'status'=>'error',

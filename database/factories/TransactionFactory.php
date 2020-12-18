@@ -25,7 +25,6 @@ class TransactionFactory extends Factory
         return [
             'total_payment'=> rand(1,9) . '0000',
             'payment_date'=> $this->faker->dateTimeBetween('-5 years','now'),
-            'status'=>rand(0,1),
             'client_id'=>Client::all()->random()->id
         ];
     }

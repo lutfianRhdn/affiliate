@@ -17,6 +17,7 @@ class ClientController extends Controller
     {
         $clients = Client::where('user_id',auth()->user()->id)
         ->where('product_id',auth()->user()->product->id)
+        ->orderBy('id','desc')
         ->get();
         return view('reseller.clients',compact('clients'));
     }
