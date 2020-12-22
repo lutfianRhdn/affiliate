@@ -26,11 +26,13 @@
                     </button>
                 </div>
                 @endif
+                @if (Cookie::get('reseller'))
                 <div class="d-flex justify-content-end mt-4">
                     <button type="button" class="btn btn-success " data-toggle="modal" data-target="#modalCreate">
                         Add Client
                     </button>
                 </div>
+                @endif
                 <table class="table">
                     <thead>
                         <tr class="text-primary">
@@ -39,7 +41,9 @@
                             <th>Company</th>
                             <th>Unique Id</th>
                             <th>desc</th>
+                            @if (Cookie::get('reseller'))                                
                             <th>Action</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -51,24 +55,27 @@
                             <td>{{$client->company}}</td>
                             <td>{{$client->unic_code}}</td>
                             <td>{{ $client->description }} </td>
+                            @if (Cookie::get('reseller'))
                             <td>
-                                <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round" href=""
-                                @if ($client->transactions->count() != 0)
+                                    <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round" href=""
+                                        
+                                    @if ($client->transactions->count() != 0)
                                     style="pointer-events:none; background:gray"
-                                @endif
-                                data-placement="bottom" title="Delete"data-toggle="modal"
-                                data-target="#modalDelete-{{$loop->index+1}}">
-                                <i class="material-icons">delete</i>
-                                <div class="ripple-container"></div>
-                                </a>
-                                <a rel="tooltip" class="btn btn-warning btn-fab btn-fab-mini btn-round" href=""
-                               
-                                data-placement="bottom" title="Delete"data-toggle="modal"
-                                data-target="#modalEdit-{{$loop->index+1}}">
-                                <i class="material-icons">edit</i>
-                                <div class="ripple-container"></div>
+                                    @endif
+                                    data-placement="bottom" title="Delete"data-toggle="modal"
+                                    data-target="#modalDelete-{{$loop->index+1}}">
+                                    <i class="material-icons">delete</i>
+                                    <div class="ripple-container"></div>
+                                    </a>
+                                    <a rel="tooltip" class="btn btn-warning btn-fab btn-fab-mini btn-round" href=""
+                                    
+                                    data-placement="bottom" title="Delete"data-toggle="modal"
+                                    data-target="#modalEdit-{{$loop->index+1}}">
+                                    <i class="material-icons">edit</i>
+                                    <div class="ripple-container"></div>
                                 </a>
                             </td>
+                            @endif
                            
                         </tr>
                         <!-- Modal delete -->

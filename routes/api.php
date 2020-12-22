@@ -24,3 +24,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('/client/register/{hash}',[ApiController::class,'RegisterClientApi']);
 Route::post('/client/transaction/{hash}', [ApiController::class,'TransactionClientApi']);
+Route::delete('/client/delete/{hash}', [ApiController::class,'DeleteClientApi']);
+Route::put('/client/update/{hash}', [ApiController::class,'updateClientApi']);

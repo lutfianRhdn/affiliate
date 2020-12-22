@@ -68,6 +68,15 @@
                                     </td>
                                     <td>{{  Carbon\Carbon::parse($user->created_at)->format('d/m/Y')}}</td>
                                     <td class="td-actions text-right">
+                                        <form action="{{ route('account.switch.reseller') }}" method="post" class="d-inline">
+                                            @csrf
+                                            <input type="hidden" value="{{$user->id}}" name="user_id" >
+                                            <button class="btn btn-success btn-fab btn-fab-mini btn-round " 
+                                                title="Login as {{ $user->name }}" data-placement="bottom" >
+                                                <i class="material-icons text-white">login</i>
+                                                <div class="ripple-container"></div>
+                                            </button>
+                                        </form>
                                         @if($user->approve == 1)
                                         <a rel="tooltip" class="btn btn-primary btn-fab btn-fab-mini btn-round" href=""
                                             data-placement="bottom" title="Approved">

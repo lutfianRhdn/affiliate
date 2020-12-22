@@ -54,7 +54,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('/reseller/{company}', [AdminResellerController::class, 'searchByCompany'])->name('admin.reseller.company');
 	Route::get('/role/{company}', [RoleController::class, 'searchByCompany'])->name('admin.role.company');
 	Route::get('/product/{company}', [ProductController::class, 'searchByCompany'])->name('admin.product.company');
-// route resouce
+	// route resouce
 	Route::resource('/company', CompanyController::class, ["as" => "admin"]);
 	Route::resource('/user', AdminUserController::class, ["as" => "admin"]);
 	Route::resource('/role', RoleController::class, ["as" => "admin"]);
@@ -63,19 +63,20 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::resource('/log', LogActivityController::class, ["as" => "admin"]);
 	Route::resource('/reseller', AdminResellerController::class, ["as" => "admin"]);
 	
-// custom route
-Route::post('/approval', [AdminResellerController::class, 'getApproval'])->name('getApproval');
-Route::post('/approvalCompany', [CompanyController::class, 'approve'])->name('approveCompany');
-Route::get('/status', [AdminResellerController::class, 'getStatus'])->name('getStatus');
-Route::get('/get-city', [AdminResellerController::class, 'getCity']);
-Route::get('/get-city-edit', [AdminResellerController::class, 'getCityEdit']);
-Route::patch('/{product}', [ProductController::class, 'updateCode'])->name('admin.product.updateCode');
+	// custom route
+	Route::post('/approval', [AdminResellerController::class, 'getApproval'])->name('getApproval');
+	Route::post('/approvalCompany', [CompanyController::class, 'approve'])->name('approveCompany');
+	Route::get('/status', [AdminResellerController::class, 'getStatus'])->name('getStatus');
+	Route::get('/get-city', [AdminResellerController::class, 'getCity']);
+	Route::get('/get-city-edit', [AdminResellerController::class, 'getCityEdit']);
+	Route::patch('/{product}', [ProductController::class, 'updateCode'])->name('admin.product.updateCode');
 });
-	Route::group(['prefix' => 'reseller'], function () {
-		Route::get('', [HomeController::class, 'index'])->name('reseller');
-		Route::resource('/client', ClientController::class,["as"=>"reseller"]);
-		Route::get('/transaction', [ClientController::class,'transaction'],["as"=>"reseller"])->name('reseller.client.transaction');
-	});
+Route::group(['prefix' => 'reseller'], function () {
+	Route::get('', [HomeController::class, 'index'])->name('reseller');
+	Route::resource('/client', ClientController::class,["as"=>"reseller"]);
+	Route::get('/transaction', [ClientController::class,'transaction'],["as"=>"reseller"])->name('reseller.client.transaction');
+	Route::post('/swithaccount/reseller', [ResellerController::class,'switchAccount'])->name('account.switch.reseller');
+});
 
 });
 
