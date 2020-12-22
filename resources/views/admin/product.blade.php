@@ -355,7 +355,7 @@
                         </div>
                         {{-- edit client --}}
                         <div class="my-2">
-                            <h5>Delete Clients </h5>
+                            <h5>Edit Clients </h5>
                             <div class=" p-1 px-3 d-flex justify-content-between align-items-center border-0 rounded"
                                 style="background:#e9ecef">
                                 <p class=" apiTransactionClients my-auto" id="apiTransactionClients-{{$hashId}}">
