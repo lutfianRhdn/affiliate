@@ -27,10 +27,13 @@ class ApiController extends Controller
         $product = Product::find($id)->first();
 
         if (!$product) {
-            return response()->json([
+        return response([
                 'status' => 'error',
-                'error' => 'application is not registered'
-            ]);
+                'error' => [
+                    'status'=>404,
+                    'message'=>'application is not registered'
+                ]
+            ],404);
         }
         // check origin url
         // set allowed url
@@ -145,10 +148,13 @@ class ApiController extends Controller
         $id = Hashids::decode($hash);
         $product = Product::find($id)->first();    
         if (!$product) {
-            return response()->json([
+        return response([
                 'status' => 'error',
-                'error' => 'application is not registered'
-            ]);
+                'error' => [
+                    'status'=>404,
+                    'message'=>'application is not registered'
+                ]
+            ],404);
         }
         $rules=[
             'total_payment'=>['required','numeric'],
@@ -208,17 +214,24 @@ class ApiController extends Controller
             'payment_date'=> $request->payment_date,
         ]);
 
-        return ['status'=>'success','data'=>(new TransactionResource($client->first()))];
+        return response([
+        'status'=>'success',
+        'status_code'=>200,
+        'data'=>(new TransactionResource($client->first()))
+    ],200);
     }
     public function RegisterClientApi(Request $request,$hash)
     {
         $id = Hashids::decode($hash);
         $product = Product::find($id)->first();    
         if (!$product) {
-            return response()->json([
+        return response([
                 'status' => 'error',
-                'error' => 'application is not registered'
-            ]);
+                'error' => [
+                    'status'=>404,
+                    'message'=>'application is not registered'
+                ]
+            ],404);
         }
         $rules=[
             'ref_code'=>['required'],
@@ -242,17 +255,24 @@ class ApiController extends Controller
         $request->request->add(['user_id'=>$reseller->first()->id,'product_id'=>$product->id]);
         $clientsModel = new Client;
         $client = $clientsModel->createClient($request->all());
-        return ['status'=>'success','data'=>(new ClientsResource($client))];
+        return response([
+            'status'=>'success',
+            'status_code'=>200,
+            'data'=>(new ClientsResource($client))
+        ],200);
     }
     public function DeleteClientApi(Request $request,$hash)
     {
         $id = Hashids::decode($hash);
         $product = Product::find($id)->first();
         if (!$product) {
-            return response()->json([
+        return response([
                 'status' => 'error',
-                'error' => 'application is not registered'
-            ]);
+                'error' => [
+                    'status'=>404,
+                    'message'=>'application is not registered'
+                ]
+            ],404);
         }
         $rules=[
             'unic_code'=>'required',
@@ -270,7 +290,10 @@ class ApiController extends Controller
         if ($reseller->count() ==0) {
             return response([
                 'status' => 'error',
-                'error' => 'reselleer is not registered'
+                'error' => [
+                    'status'=>404,
+                    'message'=>'reseller is not registered'
+                ]
             ],404);
         }else{
             $reseller = $reseller->first();
@@ -285,6 +308,7 @@ class ApiController extends Controller
         $client->first()->delete();
         return response([
             'status'=>'success',
+            'status_code'=>200,
             'message'=> 'success deleted the client'
             ]);
     }
@@ -294,31 +318,41 @@ class ApiController extends Controller
         $id = Hashids::decode($hash);
         $product = Product::find($id)->first();
         if (!$product) {
-            return response()->json([
+            return response([
                 'status' => 'error',
-                'error' => 'application is not registered'
-            ]);
+                'error' => [
+                    'status'=>404,
+                    'message'=>'application is not registered'
+                ]
+            ],404);
         }
         $reseller = User::where('ref_code',$request->ref_code);
         if ($reseller->count() ==0) {
             return response([
                 'status' => 'error',
-                'error' => 'reseller is not registered'
+                'error' => [
+                    'status'=>404,
+                    'message'=>'reseller is not registered'
+                ]
             ],404);        
         }
         $client =$reseller->first()->product->clients->where('unic_code',$request->unic_code);
         if ($client->count() ==0) {
             return response([
                 'status' => 'error',
-                'error' => 'client is not registered'
-            ],404);        
+                'error' => [
+                    'status'=>404,
+                    'message'=>'client is not registered'
+                ]
+            ],404);    
         }
         $request->request->remove('unic_code');
         $request->request->add(['unic_code'=>$request->new_unic_code]);
-         $client->first()->update($request->all());
-         $client = $client->first();
+        $client->first()->update($request->all());
+        $client = $client->first();
         return response([
             'status'=>'success',
+            'status_code'=>200,
             'data'=>[
                 'name'=>$client->name,
                 'unic_code'=>$client->unic_code,

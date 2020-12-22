@@ -40,7 +40,6 @@
                             <th>Name</th>
                             <th>Company</th>
                             <th>Unique Id</th>
-                            <th>desc</th>
                             @if (Cookie::get('reseller'))                                
                             <th>Action</th>
                             @endif
@@ -54,7 +53,6 @@
                             <td>{{$client->name}}</td>
                             <td>{{$client->company}}</td>
                             <td>{{$client->unic_code}}</td>
-                            <td>{{ $client->description }} </td>
                             @if (Cookie::get('reseller'))
                             <td>
                                     <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round" href=""
