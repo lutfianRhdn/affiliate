@@ -13,7 +13,6 @@
           
       <form action="{{ route('account.switch.reseller') }}" method="post" class="position-absolute ml-4 mt-2" style="z-index: 9999999999999999999;">
         @csrf
-        <input type="hidden" name="user_id" value="2">
         <button type="submit" class=" btn btn-warning">Back to Admin</button>
       </form>
       @endif

@@ -1,17 +1,14 @@
-<?php
-
-namespace App\Http\Controllers\Reseller;
+<?php namespace App\Http\Controllers\Reseller;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 
-class ResellerController extends Controller
-{
-    public function __construct()
-    {
+class ResellerController extends Controller {
+    public function __construct() {
         $this->middleware('auth');
     }
 
@@ -20,25 +17,25 @@ class ResellerController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function index()
-    {
-        return view('users.dashboard', ['auth' => $this->middleware('auth')]);
+    public function index() {
+        return view('users.dashboard', ['auth'=> $this->middleware('auth')]);
     }
-    public function switchAccount(Request $request)
-    {
-        $user = User::find($request->user_id);
-        Cookie::queue(Cookie::make('reseller',auth()->user()->id));
 
-        if (!auth()->user()->hasRole('super-admin-company') || auth()->user()->hasRole('admin')) {
-            Cookie::queue(Cookie::forget('reseller'));
+    public function switchAccount(Request $request) {
+        Cookie::queue('reseller', auth()->user()->id);
+
+        if (auth()->user()->hasRole('super-admin-company') || auth()->user()->hasRole('admin')) {
+            $user=User::find($request->user_id);
+            Auth::login($user);
+            return redirect()->route('reseller');
         }
 
-        // dd(auth()->user()->hasRole('super-admin-company')); 
-        Auth::logout($user);
-        Auth::login($user);
-        if (!auth()->user()->hasRole('super-admin-company') || auth()->user()->hasRole('admin')) {
+        else {
+            Cookie::queue(Cookie::forget('reseller'));
+            $user=User::find(Cookie::get('reseller'));
+            Auth::login($user);
             return redirect()->route('admin');
         }
-        return redirect()->route('reseller');
+
     }
 }
