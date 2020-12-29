@@ -204,9 +204,8 @@
                 @php
                 $hashId = Hashids::encode($product->id);
                 @endphp
-                <div class="modal fade" id="docsApiModal{{$product->id}}" tabindex="-1" role="dialog"
-                    aria-labelledby="docsApiModal{{$product->id}}Label" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
+                <div class="modal fade bd-example-modal-lg" tabindex="-1" id="docsApiModal{{$product->id}}" role="dialog" aria-labelledby="docsApiModal{{$product->id}}Label" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="docsApiModal{{$product->id}}Label">Docs Api</h5>
@@ -215,173 +214,179 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                              
-                        <div class="my-2">
-                            <h5>Create Clients </h5>
-                            <div class=" p-1 px-3 d-flex justify-content-between align-items-center border-0 rounded"
-                                style="background:#e9ecef">
-                                <p class=" apiCreateClients my-auto" id="apiCreateClients-{{$hashId}}">
-                                    {{url('/')}}/api/client/register/{{$hashId}} </p>
-                                <button class="copyTextButtonClients btn btn-sm btn-default"
-                                    id="buttonClients-{{$hashId}}" rel="tooltip" data-original-title=""
-                                    data-placement="bottom" title="copy">Copy</button>
-                            </div>
-                            {{-- required field --}}
-                            <div class="mt-3">
-                                <p>The Field must be sent with <b>POST</b> Method</p>
-                                {{-- table --}}
-                                <div class="mx-3">
-                                    <b>
-                                        <div class="row text-center border-bottom border-dark ">
-                                            <div class="col-4 py-1">Name</div>
-                                            <div class="col-4 py-1">Type</div>
-                                            <div class="col-4 py-1">Desc</div>
+
+                                <div class="my-2">
+                                    <h5>Create Clients </h5>
+                                    <div class=" p-1 px-3 d-flex justify-content-between align-items-center border-0 rounded"
+                                        style="background:#e9ecef">
+                                        <p class=" apiCreateClients my-auto" id="apiCreateClients-{{$hashId}}">
+                                            {{url('/')}}/api/client/register/{{$hashId}} </p>
+                                        <button class="copyTextButtonClients btn btn-sm btn-default"
+                                            id="buttonClients-{{$hashId}}" rel="tooltip" data-original-title=""
+                                            data-placement="bottom" title="copy">Copy</button>
+                                    </div>
+                                    {{-- required field --}}
+                                    <div class="row">
+                                        <div class="mt-3 col-6">
+                                            <p>The Field must be sent with <b>POST</b> Method</p>
+                                            {{-- table --}}
+                                            <div class="mx-3">
+                                                <b>
+                                                    <div class="row text-center border-bottom border-dark ">
+                                                        <div class="col-4 py-1">Name</div>
+                                                        <div class="col-4 py-1">Type</div>
+                                                        <div class="col-4 py-1">Desc</div>
+                                                    </div>
+                                                </b>
+                                                <div class="row text-center " style="background:#e9ecef">
+                                                    <div class="col-4 py-1">name</div>
+                                                    <div class="col-4 py-1">String</div>
+                                                    <div class="col-4 py-1">Required</div>
+                                                </div>
+                                                <div class="row text-center ">
+                                                    <div class="col-4 py-1">ref_code</div>
+                                                    <div class="col-4 py-1">String</div>
+                                                    <div class="col-4 py-1">Ref Code Reseller</div>
+                                                </div>
+                                                <div class="row text-center " style="background:#e9ecef">
+                                                    <div class="col-4 py-1">unic_code</div>
+                                                    <div class="col-4 py-1">String</div>
+                                                    <div class="col-4 py-1">unic Id from client</div>
+                                                </div>
+                                                <div class="row text-center ">
+                                                    <div class="col-4 py-1">company</div>
+                                                    <div class="col-4 py-1">string</div>
+                                                    <div class="col-4 py-1">Optional</div>
+                                                </div>
+                                                <div class="row text-center ">
+                                                    <div class="col-4 py-1">description</div>
+                                                    <div class="col-4 py-1">string</div>
+                                                    <div class="col-4 py-1">Optional</div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </b>
-                                    <div class="row text-center " style="background:#e9ecef">
-                                        <div class="col-4 py-1">name</div>
-                                        <div class="col-4 py-1">String</div>
-                                        <div class="col-4 py-1">Required</div>
+                                        <div class="col-6">
+                                            dsadsad
+                                        </div>
                                     </div>
-                                    <div class="row text-center ">
-                                        <div class="col-4 py-1">ref_code</div>
-                                        <div class="col-4 py-1">String</div>
-                                        <div class="col-4 py-1">Ref Code Reseller</div>
+
+                                </div>
+                                <div class="my-2">
+                                    <h5>Transaction Clients </h5>
+                                    <div class=" p-1 px-3 d-flex justify-content-between align-items-center border-0 rounded"
+                                        style="background:#e9ecef">
+                                        <p class=" apiTransactionClients my-auto"
+                                            id="apiTransactionClients-{{$hashId}}">
+                                            {{url('/')}}/api/client/transaction/{{$hashId}} </p>
+                                        <button class="copyTextButtonTransaction btn btn-sm btn-default"
+                                            id="buttonApiTransaction-{{$hashId}}" rel="tooltip" data-original-title=""
+                                            data-placement="bottom" title="copy">Copy</button>
                                     </div>
-                                    <div class="row text-center " style="background:#e9ecef">
-                                        <div class="col-4 py-1">unic_code</div>
-                                        <div class="col-4 py-1">String</div>
-                                        <div class="col-4 py-1">unic Id from client</div>
-                                    </div>
-                                    <div class="row text-center ">
-                                        <div class="col-4 py-1">company</div>
-                                        <div class="col-4 py-1">string</div>
-                                        <div class="col-4 py-1">Optional</div>
-                                    </div>
-                                    <div class="row text-center ">
-                                        <div class="col-4 py-1">description</div>
-                                        <div class="col-4 py-1">string</div>
-                                        <div class="col-4 py-1">Optional</div>
+                                    {{-- required field --}}
+                                    <div class="mt-3">
+                                        <p>The Field must be sent with <b>POST</b> Method</p>
+                                        {{-- table --}}
+                                        <div class="mx-3">
+                                            <b>
+                                                <div class="row text-center border-bottom border-dark ">
+                                                    <div class="col-4 py-1">name</div>
+                                                    <div class="col-4 py-1">Type</div>
+                                                    <div class="col-4 py-1">Desc</div>
+                                                </div>
+                                            </b>
+
+                                            <div class="row text-center ">
+                                                <div class="col-4 py-1">payment_date</div>
+                                                <div class="col-4 py-1">date</div>
+                                                <div class="col-4 py-1">format : Y-m-d</div>
+                                            </div>
+                                            <div class="row text-center " style="background:#e9ecef">
+                                                <div class="col-4 py-1">unic_code</div>
+                                                <div class="col-4 py-1">String</div>
+                                                <div class="col-4 py-1">unic Id from client</div>
+                                            </div>
+                                            <div class="row text-center ">
+                                                <div class="col-4 py-1">total_payment</div>
+                                                <div class="col-4 py-1">number</div>
+                                                <div class="col-4 py-1">required</div>
+                                            </div>
+                                            <div class="row text-center ">
+                                                <div class="col-4 py-1">ref_code</div>
+                                                <div class="col-4 py-1">string</div>
+                                                <div class="col-4 py-1">Ref Code Reseller</div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-
-                        </div>
-                        <div class="my-2">
-                            <h5>Transaction Clients </h5>
-                            <div class=" p-1 px-3 d-flex justify-content-between align-items-center border-0 rounded"
-                                style="background:#e9ecef">
-                                <p class=" apiTransactionClients my-auto" id="apiTransactionClients-{{$hashId}}">
-                                    {{url('/')}}/api/client/transaction/{{$hashId}} </p>
-                                <button class="copyTextButtonTransaction btn btn-sm btn-default"
-                                    id="buttonApiTransaction-{{$hashId}}" rel="tooltip" data-original-title=""
-                                    data-placement="bottom" title="copy">Copy</button>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             </div>
-                             {{-- required field --}}
-                             <div class="mt-3">
-                                <p>The Field must be sent with <b>POST</b> Method</p>
-                                {{-- table --}}
-                                <div class="mx-3">
-                                    <b>
-                                        <div class="row text-center border-bottom border-dark ">
-                                            <div class="col-4 py-1">name</div>
-                                            <div class="col-4 py-1">Type</div>
-                                            <div class="col-4 py-1">Desc</div>
-                                        </div>
-                                    </b>
-                                   
-                                    <div class="row text-center ">
-                                        <div class="col-4 py-1">payment_date</div>
-                                        <div class="col-4 py-1">date</div>
-                                        <div class="col-4 py-1">format : Y-m-d</div>
-                                    </div>
-                                    <div class="row text-center " style="background:#e9ecef">
-                                        <div class="col-4 py-1">unic_code</div>
-                                        <div class="col-4 py-1">String</div>
-                                        <div class="col-4 py-1">unic Id from client</div>
-                                    </div>
-                                    <div class="row text-center ">
-                                        <div class="col-4 py-1">total_payment</div>
-                                        <div class="col-4 py-1">number</div>
-                                        <div class="col-4 py-1">required</div>
-                                    </div>
-                                    <div class="row text-center ">
-                                        <div class="col-4 py-1">ref_code</div>
-                                        <div class="col-4 py-1">string</div>
-                                        <div class="col-4 py-1">Ref Code Reseller</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal Code -->
+                <div class="modal fade" id="codeModal{{$product->id}}" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Code</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mt-2 bmd-form-group">
+                                    <div class="form-group pl-2">
+                                        <textarea class="form-control" id="codeInput" rows="20"
+                                            placeholder="{{ !empty($product->code) ? '' : 'Product Code' }}" name="code"
+                                            readonly>{{ !empty($product->code) ? $product->code : ''}}</textarea>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Modal Code -->
-        <div class="modal fade" id="codeModal{{$product->id}}" tabindex="-1" role="dialog"
-            aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Code</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mt-2 bmd-form-group">
-                            <div class="form-group pl-2">
-                                <textarea class="form-control" id="codeInput" rows="20"
-                                    placeholder="{{ !empty($product->code) ? '' : 'Product Code' }}" name="code"
-                                    readonly>{{ !empty($product->code) ? $product->code : ''}}</textarea>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button class="btn btn-primary" id="btnCopy" data-dismiss="modal">Copy
+                                    code</button>
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button class="btn btn-primary" id="btnCopy" data-dismiss="modal">Copy
-                            code</button>
+                </div>
+
+                {{-- modal delete --}}
+                <div class="modal fade" id="deleteModal{{$product->id}}" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <form action="{{ route('admin.product.destroy', $product->id)}}" method="POST">
+                                @method('delete')
+                                @csrf
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Delete items</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p class="h5">Are you sure want to permanently remove this item?
+                                    </p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                    <button type="submit" class="btn btn-danger">Yes</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
+
+                @endforeach
+                </tbody>
+                </table>
             </div>
         </div>
-
-        {{-- modal delete --}}
-        <div class="modal fade" id="deleteModal{{$product->id}}" tabindex="-1" role="dialog"
-            aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <form action="{{ route('admin.product.destroy', $product->id)}}" method="POST">
-                        @method('delete')
-                        @csrf
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Delete items</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <p class="h5">Are you sure want to permanently remove this item?
-                            </p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                            <button type="submit" class="btn btn-danger">Yes</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        @endforeach
-        </tbody>
-        </table>
     </div>
-</div>
-</div>
 </div>
 </div>
 </div>

@@ -111,7 +111,20 @@
             <p>{{ __('Transaction') }}</p>
         </a>
       </li>
+    
       @endrole
+      <li class="nav-item{{ $activePage == 'commission' ? ' active' : '' }}">
+        <a class="nav-link" 
+        @role('reseller')
+          href="{{ route('reseller.commission.index')}}"
+          @else
+          href="{{ route('admin.commissions.index')}}"
+        @endrole
+        >
+          <i class="material-icons">receipt_long</i>
+            <p>{{ __('commission') }}</p>
+        </a>
+      </li>
     </ul>
   </div>
 </div>

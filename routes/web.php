@@ -10,9 +10,12 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LogActivityController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Reseller\ResellerController;
+use App\Http\Controllers\Reseller\CommissionController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\CommissionController as adminCommision;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
+use App\Models\Commission;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -60,6 +63,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::resource('/role', RoleController::class, ["as" => "admin"]);
 	Route::resource('/product', ProductController::class, ["as" => "admin"]);
 	Route::resource('/setting', SettingController::class, ["as" => "admin"]);
+	Route::resource('/commissions', adminCommision::class, ["as" => "admin"]);
 	Route::resource('/log', LogActivityController::class, ["as" => "admin"]);
 	Route::resource('/reseller', AdminResellerController::class, ["as" => "admin"]);
 	
@@ -74,7 +78,10 @@ Route::group(['middleware' => ['auth']], function () {
 Route::group(['prefix' => 'reseller'], function () {
 	Route::get('', [HomeController::class, 'index'])->name('reseller');
 	Route::resource('/client', ClientController::class,["as"=>"reseller"]);
+	Route::resource('/commission', CommissionController::class,["as"=>"reseller"]);
+	Route::get('/transaction/{client}', [ClientController::class,'searchByClient'],["as"=>"reseller"])->name('reseller.client.search');
 	Route::get('/transaction', [ClientController::class,'transaction'],["as"=>"reseller"])->name('reseller.client.transaction');
+	Route::get('/commision-month', [CommissionController::class,'getTransactionMonth'],["as"=>"reseller"])->name('reseller.client.transaction-month');
 	Route::post('/swithaccount/reseller', [ResellerController::class,'switchAccount'])->name('account.switch.reseller');
 });
 

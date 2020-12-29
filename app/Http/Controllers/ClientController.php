@@ -106,4 +106,15 @@ class ClientController extends Controller
         
         return view('reseller.transaction',compact('transactions'));
     }
+    public function searchByClient($client)
+    {
+        $transactions=Transaction::whereHas('client',function($q) use($client){
+            $q
+            ->where('user_id',auth()->user()->id)
+            ->where('name',$client)
+            ->where('product_id',auth()->user()->product->id);
+        })->get();
+        // dd($transactions);
+        return view('reseller.transaction',compact('transactions'));
+    }
 }

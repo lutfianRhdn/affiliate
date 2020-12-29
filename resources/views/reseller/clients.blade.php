@@ -40,9 +40,7 @@
                             <th>Name</th>
                             <th>Company</th>
                             <th>Unique Id</th>
-                            @if (Cookie::get('reseller'))                                
                             <th>Action</th>
-                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -53,8 +51,12 @@
                             <td>{{$client->name}}</td>
                             <td>{{$client->company}}</td>
                             <td>{{$client->unic_code}}</td>
-                            @if (Cookie::get('reseller'))
                             <td>
+                                <a class="btn btn-info btn-fab btn-fab-mini btn-round" href="{{route('reseller.client.search',$client->name)}}">                                
+                                <i class="material-icons">list</i>
+                                <div class="ripple-container"></div>
+                            </a>
+                                @if (Cookie::get('reseller'))
                                     <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round" href=""
                                         
                                     @if ($client->transactions->count() != 0)
@@ -72,8 +74,8 @@
                                     <i class="material-icons">edit</i>
                                     <div class="ripple-container"></div>
                                 </a>
+                                @endif
                             </td>
-                            @endif
                            
                         </tr>
                         <!-- Modal delete -->

@@ -80,7 +80,14 @@ class User extends Authenticatable
         $data = User::select('id')->where('ref_code', $data)->first();
         return $data;
     }
-
+    public function clients()
+    {
+        return $this->hasMany(Client::class);
+    }
+    public function commissions()
+    {
+        return $this->hasMany(Commission::class);
+    }
     public function createUser($data, $ref_code)
     {
         $phone = str_replace("-", "", $data['phone']);
