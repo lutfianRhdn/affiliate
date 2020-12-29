@@ -258,7 +258,7 @@
                                                     <div class="col-4 py-1">string</div>
                                                     <div class="col-4 py-1">Optional</div>
                                                 </div>
-                                                <div class="row text-center ">
+                                                <div class="row text-center " style="background:#e9ecef">
                                                     <div class="col-4 py-1">description</div>
                                                     <div class="col-4 py-1">string</div>
                                                     <div class="col-4 py-1">Optional</div>
@@ -266,7 +266,33 @@
                                             </div>
                                         </div>
                                         <div class="col-6">
-                                            dsadsad
+                                            <h5>Success : </h5>
+                                            <div style="background:#e9ecef" class="rounded px-3 py-2 " >
+                                                {
+                                                    "status": "success",
+                                                    "status_code": 200,
+                                                    "data": {
+                                                        "name": "Client Name",
+                                                        "unic_code": "Unic Code",
+                                                        "company": "Client Company"
+                                                    }
+                                                }
+                                            </div>
+                                            <h5>error : </h5>
+                                            <div style="background:#e9ecef" class="rounded px-3 py-2 ">
+                                                {
+                                                    "message": "The given data was invalid.",
+                                                    "errors": {
+                                                        "field": [
+                                                            {
+                                                                "type": "error type",
+                                                                "message": "message error"
+                                                            }
+                                                            ...
+                                                        ]
+                                                    }
+                                                }
+                                            </div>
                                         </div>
                                     </div>
 
@@ -283,7 +309,9 @@
                                             data-placement="bottom" title="copy">Copy</button>
                                     </div>
                                     {{-- required field --}}
-                                    <div class="mt-3">
+                                    <div class="row">
+
+                                    <div class="col-6 mt-3">
                                         <p>The Field must be sent with <b>POST</b> Method</p>
                                         {{-- table --}}
                                         <div class="mx-3">
@@ -310,13 +338,48 @@
                                                 <div class="col-4 py-1">number</div>
                                                 <div class="col-4 py-1">required</div>
                                             </div>
-                                            <div class="row text-center ">
+                                            <div class="row text-center " style="background:#e9ecef">
                                                 <div class="col-4 py-1">ref_code</div>
                                                 <div class="col-4 py-1">string</div>
                                                 <div class="col-4 py-1">Ref Code Reseller</div>
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-6">
+                                        <h5>Success : </h5>
+                                        <div style="background:#e9ecef" class="rounded px-3 py-2 " >
+                                            {
+                                                "status": "success",
+                                                "status_code": 200,
+                                                "data": {
+                                                    "name": "Client Name",
+                                                    "unic_code": "Unic Code Client",
+                                                    "transaction": {
+                                                        "total_payment": "Total Payment",
+                                                        "payment_date": "Payment Data",
+                                                        "total_transaction": total transaction
+                                                    }
+                                                }
+                                            }
+                                        </div>
+                                        <h5>error : </h5>
+                                        <div style="background:#e9ecef" class="rounded px-3 py-2 ">
+                                            {
+                                                "message": "The given data was invalid.",
+                                                "errors": {
+                                                    "field": [
+                                                        {
+                                                            "type": "error type",
+                                                            "message": "message error"
+                                                        }
+                                                        ...
+                                                    ]
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+
                                 </div>
                                  {{-- delete client --}}
                         <div class="my-2">
@@ -329,33 +392,62 @@
                                     id="buttonApiTransaction-{{$hashId}}" rel="tooltip" data-original-title=""
                                     data-placement="bottom" title="copy">Copy</button>
                             </div>
-                             {{-- required field --}}
-                             <div class="mt-3">
-                                <p>The Field must be sent with <b>DELETE</b> Method</p>
-                                {{-- table --}}
-                                <div class="mx-3">
-                                    <b>
-                                        <div class="row text-center border-bottom border-dark ">
-                                            <div class="col-4 py-1">name</div>
-                                            <div class="col-4 py-1">Type</div>
-                                            <div class="col-4 py-1">Desc</div>
+                             <div class="row">
+
+                            {{-- required field --}}
+                                <div class="mt-3 col-6">
+                                    <p>The Field must be sent with <b>DELETE</b> Method</p>
+                                    {{-- table --}}
+                                    <div class="mx-3">
+                                        <b>
+                                            <div class="row text-center border-bottom border-dark ">
+                                                <div class="col-4 py-1">name</div>
+                                                <div class="col-4 py-1">Type</div>
+                                                <div class="col-4 py-1">Desc</div>
+                                            </div>
+                                        </b>
+                                    
+                                    
+                                        <div class="row text-center " style="background:#e9ecef">
+                                            <div class="col-4 py-1">unic_code</div>
+                                            <div class="col-4 py-1">String</div>
+                                            <div class="col-4 py-1">unic Id from client</div>
                                         </div>
-                                    </b>
-                                   
-                                 
-                                    <div class="row text-center " style="background:#e9ecef">
-                                        <div class="col-4 py-1">unic_code</div>
-                                        <div class="col-4 py-1">String</div>
-                                        <div class="col-4 py-1">unic Id from client</div>
+                            
+                                        <div class="row text-center ">
+                                            <div class="col-4 py-1">ref_code</div>
+                                            <div class="col-4 py-1">string</div>
+                                            <div class="col-4 py-1">Ref Code Reseller</div>
+                                        </div>
                                     </div>
-                          
-                                    <div class="row text-center ">
-                                        <div class="col-4 py-1">ref_code</div>
-                                        <div class="col-4 py-1">string</div>
-                                        <div class="col-4 py-1">Ref Code Reseller</div>
+                                </div>
+                                <div class="col-6">
+                                    <h5>Success : </h5>
+                                    <div style="background:#e9ecef" class="rounded px-3 py-2 " >
+                                        {
+                                            "status": "success",
+                                            "status_code": 200,
+                                            "message": "success deleted the client"
+                                        }
+                                    </div>
+                                    <h5>error : </h5>
+                                    <div style="background:#e9ecef" class="rounded px-3 py-2 ">
+                                        {
+                                            "message": "The given data was invalid.",
+                                            "errors": {
+                                                "field": [
+                                                    {
+                                                        "type": "error type",
+                                                        "message": "message error"
+                                                    }
+                                                    ...
+                                                ]
+                                            }
+                                        }
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                         {{-- edit client --}}
                         <div class="my-2">
@@ -368,45 +460,78 @@
                                     id="buttonApiTransaction-{{$hashId}}" rel="tooltip" data-original-title=""
                                     data-placement="bottom" title="copy">Copy</button>
                             </div>
+                            <div class="row">
+
                              {{-- required field --}}
-                             <div class="mt-3">
-                                <p>The Field must be sent with <b>PUT</b> Method</p>
-                                {{-- table --}}
-                                <div class="mx-3">
-                                    <b>
-                                        <div class="row text-center border-bottom border-dark ">
-                                            <div class="col-4 py-1">name</div>
-                                            <div class="col-4 py-1">Type</div>
-                                            <div class="col-4 py-1">Desc</div>
+                                <div class="mt-3 col-6">
+                                    <p>The Field must be sent with <b>PUT</b> Method</p>
+                                    {{-- table --}}
+                                    <div class="mx-3">
+                                        <b>
+                                            <div class="row text-center border-bottom border-dark ">
+                                                <div class="col-4 py-1">name</div>
+                                                <div class="col-4 py-1">Type</div>
+                                                <div class="col-4 py-1">Desc</div>
+                                            </div>
+                                        </b>
+                                        <div class="row text-center " style="background:#e9ecef">
+                                            <div class="col-4 py-1">unic_code</div>
+                                            <div class="col-4 py-1">String</div>
+                                            <div class="col-4 py-1">unic Id from client</div>
                                         </div>
-                                    </b>
-                                    <div class="row text-center " style="background:#e9ecef">
-                                        <div class="col-4 py-1">unic_code</div>
-                                        <div class="col-4 py-1">String</div>
-                                        <div class="col-4 py-1">unic Id from client</div>
+                                        <div class="row text-center ">
+                                            <div class="col-4 py-1">ref_code</div>
+                                            <div class="col-4 py-1">string</div>
+                                            <div class="col-4 py-1">Ref Code Reseller</div>
+                                        </div>
+                                        <div class="row text-center " style="background:#e9ecef">
+                                            <div class="col-4 py-1">new_unic_code</div>
+                                            <div class="col-4 py-1">string</div>
+                                            <div class="col-4 py-1">new unic_code</div>
+                                        </div>
+                                        <div class="row text-center " >
+                                            <div class="col-4 py-1">name</div>
+                                            <div class="col-4 py-1">string</div>
+                                            <div class="col-4 py-1"></div>
+                                        </div>
+                                        <div class="row text-center " style="background:#e9ecef">
+                                            <div class="col-4 py-1">company</div>
+                                            <div class="col-4 py-1">string</div>
+                                            <div class="col-4 py-1"></div>
+                                        </div>
                                     </div>
-                                    <div class="row text-center ">
-                                        <div class="col-4 py-1">ref_code</div>
-                                        <div class="col-4 py-1">string</div>
-                                        <div class="col-4 py-1">Ref Code Reseller</div>
+                                </div>
+                                <div class="col-6">
+                                    <h5>Success : </h5>
+                                    <div style="background:#e9ecef" class="rounded px-3 py-2 " >
+                                        {
+                                            "status": "success",
+                                            "status_code": 200,
+                                            "data": {
+                                                "name": "Client Name",
+                                                "unic_code": "Unic Code Client",
+                                                "company": "Client Company"
+                                            }
+                                        }
                                     </div>
-                                    <div class="row text-center ">
-                                        <div class="col-4 py-1">new_unic_code</div>
-                                        <div class="col-4 py-1">string</div>
-                                        <div class="col-4 py-1">new unic_code</div>
-                                    </div>
-                                    <div class="row text-center ">
-                                        <div class="col-4 py-1">name</div>
-                                        <div class="col-4 py-1">string</div>
-                                        <div class="col-4 py-1"></div>
-                                    </div>
-                                    <div class="row text-center ">
-                                        <div class="col-4 py-1">company</div>
-                                        <div class="col-4 py-1">string</div>
-                                        <div class="col-4 py-1"></div>
+                                    <h5>error : </h5>
+                                    <div style="background:#e9ecef" class="rounded px-3 py-2 ">
+                                        {
+                                            "message": "The given data was invalid.",
+                                            "errors": {
+                                                "field": [
+                                                    {
+                                                        "type": "error type",
+                                                        "message": "message error"
+                                                    }
+                                                    ...
+                                                ]
+                                            }
+                                        }
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                             </div>
                             <div class="modal-footer">

@@ -346,8 +346,11 @@ class ApiController extends Controller
                 ]
             ],404);    
         }
+        if ($request->new_unic_code !==null) {
         $request->request->remove('unic_code');
-        $request->request->add(['unic_code'=>$request->new_unic_code]);
+            # code...
+            $request->request->add(['unic_code'=>$request->new_unic_code]);
+        }
         $client->first()->update($request->all());
         $client = $client->first();
         return response([
