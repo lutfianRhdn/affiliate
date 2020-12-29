@@ -318,11 +318,102 @@
                                         </div>
                                     </div>
                                 </div>
+                                 {{-- delete client --}}
+                        <div class="my-2">
+                            <h5>Delete Clients </h5>
+                            <div class=" p-1 px-3 d-flex justify-content-between align-items-center border-0 rounded"
+                                style="background:#e9ecef">
+                                <p class=" apiTransactionClients my-auto" id="apiTransactionClients-{{$hashId}}">
+                                    {{url('/')}}/api/client/delete/{{$hashId}} </p>
+                                <button class="copyTextButtonTransaction btn btn-sm btn-default"
+                                    id="buttonApiTransaction-{{$hashId}}" rel="tooltip" data-original-title=""
+                                    data-placement="bottom" title="copy">Copy</button>
+                            </div>
+                             {{-- required field --}}
+                             <div class="mt-3">
+                                <p>The Field must be sent with <b>DELETE</b> Method</p>
+                                {{-- table --}}
+                                <div class="mx-3">
+                                    <b>
+                                        <div class="row text-center border-bottom border-dark ">
+                                            <div class="col-4 py-1">name</div>
+                                            <div class="col-4 py-1">Type</div>
+                                            <div class="col-4 py-1">Desc</div>
+                                        </div>
+                                    </b>
+                                   
+                                 
+                                    <div class="row text-center " style="background:#e9ecef">
+                                        <div class="col-4 py-1">unic_code</div>
+                                        <div class="col-4 py-1">String</div>
+                                        <div class="col-4 py-1">unic Id from client</div>
+                                    </div>
+                          
+                                    <div class="row text-center ">
+                                        <div class="col-4 py-1">ref_code</div>
+                                        <div class="col-4 py-1">string</div>
+                                        <div class="col-4 py-1">Ref Code Reseller</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- edit client --}}
+                        <div class="my-2">
+                            <h5>Edit Clients </h5>
+                            <div class=" p-1 px-3 d-flex justify-content-between align-items-center border-0 rounded"
+                                style="background:#e9ecef">
+                                <p class=" apiTransactionClients my-auto" id="apiTransactionClients-{{$hashId}}">
+                                    {{url('/')}}/api/client/update/{{$hashId}} </p>
+                                <button class="copyTextButtonTransaction btn btn-sm btn-default"
+                                    id="buttonApiTransaction-{{$hashId}}" rel="tooltip" data-original-title=""
+                                    data-placement="bottom" title="copy">Copy</button>
+                            </div>
+                             {{-- required field --}}
+                             <div class="mt-3">
+                                <p>The Field must be sent with <b>PUT</b> Method</p>
+                                {{-- table --}}
+                                <div class="mx-3">
+                                    <b>
+                                        <div class="row text-center border-bottom border-dark ">
+                                            <div class="col-4 py-1">name</div>
+                                            <div class="col-4 py-1">Type</div>
+                                            <div class="col-4 py-1">Desc</div>
+                                        </div>
+                                    </b>
+                                    <div class="row text-center " style="background:#e9ecef">
+                                        <div class="col-4 py-1">unic_code</div>
+                                        <div class="col-4 py-1">String</div>
+                                        <div class="col-4 py-1">unic Id from client</div>
+                                    </div>
+                                    <div class="row text-center ">
+                                        <div class="col-4 py-1">ref_code</div>
+                                        <div class="col-4 py-1">string</div>
+                                        <div class="col-4 py-1">Ref Code Reseller</div>
+                                    </div>
+                                    <div class="row text-center ">
+                                        <div class="col-4 py-1">new_unic_code</div>
+                                        <div class="col-4 py-1">string</div>
+                                        <div class="col-4 py-1">new unic_code</div>
+                                    </div>
+                                    <div class="row text-center ">
+                                        <div class="col-4 py-1">name</div>
+                                        <div class="col-4 py-1">string</div>
+                                        <div class="col-4 py-1"></div>
+                                    </div>
+                                    <div class="row text-center ">
+                                        <div class="col-4 py-1">company</div>
+                                        <div class="col-4 py-1">string</div>
+                                        <div class="col-4 py-1"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             </div>
                         </div>
+                       
                     </div>
                 </div>
                 <!-- Modal Code -->
