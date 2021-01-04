@@ -95,10 +95,11 @@ class CommissionController extends Controller
         foreach ($clients as $client) {
             foreach ($client->transactions as $transaction) {
                 if (Carbon::parse($transaction->payment_date)->format('m-Y') == $request->month.'-'.$request->year) {
-                    array_push($transactionClient,['name'=>$client->name,'data'=>[$transaction]]);
+                    array_push($transactionClient,['name'=>$client->name,'company'=>$client->company,'transaction'=>$transaction->total_payment]);
                 }
             }
         }
+        // dd($transactionClient);
         return($transactionClient);
     }
 

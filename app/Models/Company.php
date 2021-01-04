@@ -30,6 +30,10 @@ class Company extends Model
     {
         return $this->hasMany(Role::class);
     }
+    public function commissions()
+    {
+        return $this->hasMany(Commission::class);
+    }
 
     // custom method
     public function addCompany( $data)

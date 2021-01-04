@@ -61,8 +61,8 @@ public function clients()
             'company_id'=>$comId
         ]);
             Setting::create([
-                'key'=>'persentage',
-                'label'=>'Persentage',
+                'key'=>'percentage',
+                'label'=>'percentage',
                 'value'=>10,
                 'product_id'=>$product->id,
                 'company_id'=> $comId,

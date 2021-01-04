@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\CalculateCommission as JobsCalculateCommission;
 use App\Models\Commission;
 use App\Models\Product;
 use App\Models\User;
@@ -50,23 +51,31 @@ class CalculateCommission extends Command
             if ($now->format('d') == $setting->value) {
                 $resellers = $product->users;
                 foreach ($resellers as $reseller ) {
+                    $commissions = Commission::where('user_id',$reseller->id)->whereYear('created_at',$now->format('Y'));
                     $total =0;
                     foreach ($reseller->clients as $client) {
-                        foreach ($client->transactions as $transaction ) {
-                            if (Carbon::parse($transaction->payment_date)->format('m-Y') == $now->format('m-Y')) {
-                                $total += $transaction->total_payment;
+                        $transactions = $client->transactions;
+                        // $this->info($transactions->count());
+                        if ($commissions->count() >0) {
+                            $transactions = $client->transactions->where('payment_date','>',$commissions->latest('id')->first()->created_at);
+                        }
+                            foreach ($transactions as $transaction ) {
+                                if (Carbon::parse($transaction->payment_date)->format('m-Y') == $now->format('m-Y')) {
+                                    $total += $transaction->total_payment;
+                                }
                             }
                         }
-                    }
-                    Commission::create([
-                        'user_id'=>$reseller->id,
-                        'product_id'=>$product->id,
-                        'payment'=>$total*($product->setting->where('key','percentage')->first()->value /100),
-                        'company_id'=>$product->company->id
-                    ]);
-               }
-               $this->info('the commision calculated');
-           }
+                        $this->calculate($product,$reseller,$total);
+                }
+            }
         }
+    }
+    public function calculate($product,$reseller,$total)
+    {
+        $now = Carbon::now();
+        $commissions = Commission::where('user_id',$reseller->id)->whereYear('created_at',$now->format('Y'))->whereMonth('created_at',$now->format('m'))->get()->count() ;
+        if ($commissions== 0) {
+            JobsCalculateCommission::dispatch($product,$reseller,$total,$commissions);
+        } 
     }
 }

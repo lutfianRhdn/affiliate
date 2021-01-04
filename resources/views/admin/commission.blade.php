@@ -14,25 +14,40 @@
 
                     <table class="table">
                         <thead>
-                            <tr>
+                            <tr class="text-center text-primary text-bold">
                                 <th>#</th>
-                                <th>reseller</th>
-                                <th>month</th>
-                                <th>total Client</th>
-                                <th>total Commision</th>
-                                <th>status</th>
-                                <th>action</th>
+                                <th>Reseller</th>
+                                <th>Month</th>
+                                <th>Total Client</th>
+                                <th>Total Payment</th>
+                                <th>Total Commision</th>
+                                <th>Percentage</th>
+                                <th>Status</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($commissions as $commission)
-                            <tr>
-                                {{-- {{dd($commission->user)}} --}}
+                            <tr class="text-center">
                                 <td>{{$loop->index +1}}</td>
                                 <td>{{$commission->user->name}}</td>
                                 <td>{{$commission->created_at->format('M-Y')}}</td>
-                                <td>10</td>
-                                <td>{{$commission->payment}}</td>
+                                @php
+                                    $clients = $commission->user->clients;
+                                    $totalClient=[];
+                                    foreach ($clients as $client) {
+                                        foreach ($client->transactions as $transaction ) {
+                                            if (Carbon\Carbon::parse($transaction->payment_date)->format('m-Y') == $commission->created_at->format('m-Y')) {
+                                                array_push($totalClient,$transaction);
+                                            }
+                                        }
+                                    }
+                                    $totalClient = count($totalClient);
+                                @endphp
+                                <td>{{ $totalClient }}</td>
+                                <td>{{$commission->total_payment}}</td>
+                                <td>{{$commission->total_commission}}</td>
+                                <td>{{$commission->percentage}}%</td>
                                 <td>
                                   @if ($commission->status == true)
                                   <a rel="tooltip" class="btn btn-success btn-fab btn-fab-mini btn-round " href="">
@@ -66,13 +81,21 @@
                                     <i class="material-icons">upload</i>
                                     <div class="ripple-container"></div>
                                   </a>
+                                  @else
+                                    <a rel="tooltip" class="btn btn-primary btn-fab btn-fab-mini btn-round detail"
+                                    href="" data-original-title="" data-placement="bottom"
+                                    title="show transaction evidence " data-toggle="modal"
+                                    data-target="#show-image-Modal-{{$loop->index+1}}">
+                                    <i class="material-icons">image</i>
+                                    <div class="ripple-container"></div>
+                                  </a>
                                   @endif
                                 </td>
                             </tr>
                             {{-- detail modal --}}
                             <div class="modal fade" id="detailModal-{{$loop->index +1}}" tabindex="-1" role="dialog"
                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
+                                <div class="modal-dialog modal-lg" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="exampleModalLabel">Detail Modal</h5>
@@ -81,25 +104,61 @@
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                          <div class="mb-4">
-                                            <h5>Transfer Evidence </h5>
-                                           
-                                            <div class="d-flex justify-content-center border border-dark">
-                                              @if ($commission->status == true)
-                                              <img src="{{asset('storage/evidence/'.$commission->photo_path)}}" style="max-height: 300px;max-width:400px" alt="">
-                                                  
-                                              @else
-                                              <div class="text-center">
+                                            <div class="row  mx-3">
+                                                <div class="col-6">
+                                                    <p>Commission Id : {{$commission->id}}</p>
+                                                    <p>Issue date : {{$commission->created_at}}</p>
+                                                    <p>Summary </p>
+                                                </div>
+                                                <div class="col-6">
+                                                    <p>From : {{$commission->company->name}}</p>
+                                                    <p>Status : {{$commission->status ?'paid':"doesn't paid"}}</p>
+                                                </div>
+                                            </div>
+                                            {{-- head --}}
+                                            <div class="mx-auto w-75">
+                                                
+                                                <div class="row text-center align-items-center">
+                                                    <div class=" col-1 border py-2 border-dark text-primary ">
+                                                        <b>
+                                                            <h5 class="my-auto">#</h5>
+                                                        </b>
+                                                    </div>
+                                                    <div class=" col-3 border py-2 border-dark text-primary ">
+                                                        <b>
+                                                            <h5 class="my-auto">Name</h5>
+                                                        </b>
+                                                    </div>
+                                                    <div class=" col-4 border py-2 border-dark text-primary ">
+                                                        <b>
+                                                            <h5 class="my-auto">Company</h5>
+                                                        </b>
+                                                    </div>
+                                                    <div class=" col-4 border py-2 border-dark text-primary ">
+                                                        <b>
+                                                            <h5 class="my-auto">Payment</h5>
+                                                        </b>
+                                                    </div>
 
-                                                <h3 class="text-primary text-capitalize"> hasn't been transferred yet</h3>
-                                                <p>please, contact admin for transfer your commission</p>
-                                              </div>
-                                              @endif
+                                                    {{-- content --}}
+                                                    <div id="show-detail-{{$loop->index+1}}"></div>
+                                                    
+                                                    {{-- end content --}}
+                                                </div>
                                             </div>
-                                          </div>
-                                          <h5>client Payed</h5>
-                                            <div id="show-detail-{{$loop->index+1}}">
+                                            <div class="d-flex align-items-end flex-column mx-5 my-3">
+                                                <p>
+                                                    Total Payment : {{$commission->total_payment}}
+                                                </p>
+                                                <p>
+                                                    Commission : {{$commission->percentage}}%
+                                                </p>
+                                                <p>
+                                                    Total Commission : {{$commission->total_commission}}
+                                                </p>
                                             </div>
+                                            {{-- <div id="show-detail-{{$loop->index+1}}">
+                                            </div> --}}
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
@@ -111,7 +170,7 @@
                             {{-- upload evidance modal --}}
                             <div class="modal fade" id="file-upload-Modal-{{$loop->index +1}}" tabindex="-1"
                                 role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-dialog " role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="exampleModalLabel">Detail Modal</h5>
@@ -153,6 +212,30 @@
                                     </div>
                                 </div>
                             </div>
+                            {{-- upload evidance modal --}}
+                            <div class="modal fade" id="show-image-Modal-{{$loop->index +1}}" tabindex="-1"
+                                role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog " role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Detail Modal</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                            <div class="modal-body ">
+                                                <div class="d-flex justify-content-center p-2 border  bg-dark   ">
+                                                    <img src="{{ asset('/storage/evidence/'.$commission->photo_path) }}" style="max-width: 516px; max-height:400px" class="h-100 "alt="">
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">Close</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                             @endforeach
 
                         </tbody>
@@ -187,24 +270,27 @@
         // console.log()
         $.get(`{{url('/')}}/reseller/commision-month?user_id=${user_id}&month=${month}&year=${year}`, (res) => {
             let card = $(`#show-detail-${$(this).data('loop')}`)
-            card.html("");
-
-            res.map((el) => {
+            // card.html("");
+            console.log('res',res)
+            $('.t-column').remove()
+            res.map((el,index) => {
                 console.log(el.name, el.data)
                 let show =
                     `
-                <div class="row text-center">
-                    <div class="col-6">
-                        <p>${el.name}</p>
+                    <div class="col-1 py-1 border border-dark t-column border-top-0  ${index+1 !==res.length ?'border-bottom-0':''}" ${index%2 ==0?'style="background:#e9ecef"':''}>
+                        <p class="my-auto">${index+1}</p>
                     </div>
-                    <div class="col-6">                    
-                        ${el.data.map(e=>{
-                            return e.total_payment
-                        })}
+                    <div class="col-3 py-1 border border-dark t-column border-top-0  ${index+1 !==res.length ?'border-bottom-0':''}" ${index%2 ==0?'style="background:#e9ecef"':''}>
+                        <p class="my-auto">${el.name}</p>
                     </div>
-                </div>
+                    <div class="col-4 py-1 border border-dark t-column border-top-0  ${index+1 !==res.length ?'border-bottom-0':''}" ${index%2 ==0?'style="background:#e9ecef"':''}>
+                        <p class="my-auto">${el.company}</p>
+                    </div>
+                    <div class="col-4 py-1 border border-dark t-column border-top-0  ${index+1 !==res.length ?'border-bottom-0':''}" ${index%2 ==0?'style="background:#e9ecef"':''}>
+                        <p class="my-auto">Rp.${el.transaction}</p>
+                    </div>
                 `
-                card.append(show)
+                card.before(show)
             })
         })
     })

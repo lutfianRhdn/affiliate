@@ -39,7 +39,9 @@
                             <th>#</th>
                             <th>Name</th>
                             <th>Company</th>
+                            @if (Cookie::get('reseller'))
                             <th>Unique Id</th>
+                            @endif
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -50,7 +52,9 @@
                             <td>{{$loop->index+1}}</td>
                             <td>{{$client->name}}</td>
                             <td>{{$client->company}}</td>
+                            @if (Cookie::get('reseller'))
                             <td>{{$client->unic_code}}</td>
+                            @endif
                             <td>
                                 <a class="btn btn-info btn-fab btn-fab-mini btn-round" href="{{route('reseller.client.search',$client->name)}}">                                
                                 <i class="material-icons">list</i>
