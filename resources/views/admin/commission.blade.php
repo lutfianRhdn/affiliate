@@ -237,7 +237,7 @@
       $('.form-file-multiple .btn').on('focus', function() {
         $(this).parent().siblings().trigger('focus');
       });
-
+    
       $('.form-file-multiple .btn').on('focusout', function() {
         $(this).parent().siblings().trigger('focusout');
       });
