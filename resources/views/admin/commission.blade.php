@@ -33,33 +33,34 @@
                                 <td>{{$commission->user->name}}</td>
                                 <td>{{$commission->created_at->format('M-Y')}}</td>
                                 @php
-                                    $clients = $commission->user->clients;
-                                    $totalClient=[];
-                                    foreach ($clients as $client) {
-                                        foreach ($client->transactions as $transaction ) {
-                                            if (Carbon\Carbon::parse($transaction->payment_date)->format('m-Y') == $commission->created_at->format('m-Y')) {
-                                                array_push($totalClient,$transaction);
-                                            }
-                                        }
-                                    }
-                                    $totalClient = count($totalClient);
+                                $clients = $commission->user->clients;
+                                $totalClient=[];
+                                foreach ($clients as $client) {
+                                foreach ($client->transactions as $transaction ) {
+                                if (Carbon\Carbon::parse($transaction->payment_date)->format('m-Y') ==
+                                $commission->created_at->format('m-Y')) {
+                                array_push($totalClient,$transaction);
+                                }
+                                }
+                                }
+                                $totalClient = count($totalClient);
                                 @endphp
                                 <td>{{ $totalClient }}</td>
                                 <td>{{$commission->total_payment}}</td>
                                 <td>{{$commission->total_commission}}</td>
                                 <td>{{$commission->percentage}}%</td>
                                 <td>
-                                  @if ($commission->status == true)
-                                  <a rel="tooltip" class="btn btn-success btn-fab btn-fab-mini btn-round " href="">
-                                  <i class="material-icons">done</i>
-                                  <div class="ripple-container"></div>
-                              </a>
-                              @else
-                              <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round " href="">
-                              <i class="material-icons">clear</i>
-                              <div class="ripple-container"></div>
-                          </a>
-                                  @endif
+                                    @if ($commission->status == true)
+                                    <a rel="tooltip" class="btn btn-success btn-fab btn-fab-mini btn-round " href="">
+                                        <i class="material-icons">done</i>
+                                        <div class="ripple-container"></div>
+                                    </a>
+                                    @else
+                                    <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round " href="">
+                                        <i class="material-icons">clear</i>
+                                        <div class="ripple-container"></div>
+                                    </a>
+                                    @endif
                                 </td>
                                 <td>
                                     <a rel="tooltip" class="btn btn-info btn-fab btn-fab-mini btn-round detail" href=""
@@ -73,23 +74,23 @@
                                         <div class="ripple-container"></div>
                                     </a>
                                     @if ($commission->status == false)
-                                        
+
                                     <a rel="tooltip" class="btn btn-success btn-fab btn-fab-mini btn-round detail"
-                                    href="" data-original-title="" data-placement="bottom"
-                                    title="upload transaction evidence" data-toggle="modal"
-                                    data-target="#file-upload-Modal-{{$loop->index+1}}">
-                                    <i class="material-icons">upload</i>
-                                    <div class="ripple-container"></div>
-                                  </a>
-                                  @else
+                                        href="" data-original-title="" data-placement="bottom"
+                                        title="upload transaction evidence" data-toggle="modal"
+                                        data-target="#file-upload-Modal-{{$loop->index+1}}">
+                                        <i class="material-icons">upload</i>
+                                        <div class="ripple-container"></div>
+                                    </a>
+                                    @else
                                     <a rel="tooltip" class="btn btn-primary btn-fab btn-fab-mini btn-round detail"
-                                    href="" data-original-title="" data-placement="bottom"
-                                    title="show transaction evidence " data-toggle="modal"
-                                    data-target="#show-image-Modal-{{$loop->index+1}}">
-                                    <i class="material-icons">image</i>
-                                    <div class="ripple-container"></div>
-                                  </a>
-                                  @endif
+                                        href="" data-original-title="" data-placement="bottom"
+                                        title="show transaction evidence " data-toggle="modal"
+                                        data-target="#show-image-Modal-{{$loop->index+1}}">
+                                        <i class="material-icons">image</i>
+                                        <div class="ripple-container"></div>
+                                    </a>
+                                    @endif
                                 </td>
                             </tr>
                             {{-- detail modal --}}
@@ -103,63 +104,65 @@
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
-                                        <div class="modal-body">
-                                            <div class="row  mx-3">
-                                                <div class="col-6">
-                                                    <p>Commission Id : {{$commission->id}}</p>
-                                                    <p>Issue date : {{$commission->created_at}}</p>
-                                                    <p>Summary </p>
-                                                </div>
-                                                <div class="col-6">
-                                                    <p>From : {{$commission->company->name}}</p>
-                                                    <p>Status : {{$commission->status ?'paid':"doesn't paid"}}</p>
-                                                </div>
-                                            </div>
-                                            {{-- head --}}
-                                            <div class="mx-auto w-75">
-                                                
-                                                <div class="row text-center align-items-center">
-                                                    <div class=" col-1 border py-2 border-dark text-primary ">
-                                                        <b>
-                                                            <h5 class="my-auto">#</h5>
-                                                        </b>
-                                                    </div>
-                                                    <div class=" col-3 border py-2 border-dark text-primary ">
-                                                        <b>
-                                                            <h5 class="my-auto">Name</h5>
-                                                        </b>
-                                                    </div>
-                                                    <div class=" col-4 border py-2 border-dark text-primary ">
-                                                        <b>
-                                                            <h5 class="my-auto">Company</h5>
-                                                        </b>
-                                                    </div>
-                                                    <div class=" col-4 border py-2 border-dark text-primary ">
-                                                        <b>
-                                                            <h5 class="my-auto">Payment</h5>
-                                                        </b>
-                                                    </div>
+                                        <div class="modal-body ">
+                                            <div class="mx-5">
 
-                                                    {{-- content --}}
-                                                    <div id="show-detail-{{$loop->index+1}}"></div>
-                                                    
-                                                    {{-- end content --}}
+                                                <div class="row  ">
+                                                    <div class="col-6">
+                                                        <p>Commission Id : {{$commission->id}}</p>
+                                                        <p>Issue date : {{$commission->created_at}}</p>
+                                                        <p>Summary </p>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <p>From : {{$commission->company->name}}</p>
+                                                        <p>Status : {{$commission->status ?'paid':"waiting"}}</p>
+                                                    </div>
+                                                </div>
+                                                {{-- head --}}
+                                                <div class="mx-auto ">
+
+                                                    <div class="row text-center align-items-center">
+                                                        <div class=" col-1 border py-2 border-dark text-primary ">
+                                                            <b>
+                                                                <h5 class="my-auto">#</h5>
+                                                            </b>
+                                                        </div>
+                                                        <div class=" col-3 border py-2 border-dark text-primary ">
+                                                            <b>
+                                                                <h5 class="my-auto">Name</h5>
+                                                            </b>
+                                                        </div>
+                                                        <div class=" col-4 border py-2 border-dark text-primary ">
+                                                            <b>
+                                                                <h5 class="my-auto">Company</h5>
+                                                            </b>
+                                                        </div>
+                                                        <div class=" col-4 border py-2 border-dark text-primary ">
+                                                            <b>
+                                                                <h5 class="my-auto">Payment</h5>
+                                                            </b>
+                                                        </div>
+
+                                                        {{-- content --}}
+                                                        <div id="show-detail-{{$loop->index+1}}"></div>
+
+                                                        {{-- end content --}}
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex align-items-end flex-column  my-3">
+                                                    <p>
+                                                        Total Payment : {{$commission->total_payment}}
+                                                    </p>
+                                                    <p>
+                                                        Commission : {{$commission->percentage}}%
+                                                    </p>
+                                                    <p>
+                                                        Total Commission : {{$commission->total_commission}}
+                                                    </p>
                                                 </div>
                                             </div>
-                                            <div class="d-flex align-items-end flex-column mx-5 my-3">
-                                                <p>
-                                                    Total Payment : {{$commission->total_payment}}
-                                                </p>
-                                                <p>
-                                                    Commission : {{$commission->percentage}}%
-                                                </p>
-                                                <p>
-                                                    Total Commission : {{$commission->total_commission}}
-                                                </p>
-                                            </div>
-                                            {{-- <div id="show-detail-{{$loop->index+1}}">
-                                            </div> --}}
                                         </div>
+
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
                                                 data-dismiss="modal">Close</button>
@@ -184,11 +187,15 @@
                                                 @method('PUT')
                                                 @csrf
                                                 <div class="d-flex justify-content-center">
-                                                  <img id="uploadPreview" src="http://style.anu.edu.au/_anu/4/images/placeholders/person_8x10.png" class=" border border-dark p-1" style="max-width: 500px; max-height: 300px;" />
+                                                    <img id="uploadPreview"
+                                                        src="http://style.anu.edu.au/_anu/4/images/placeholders/person_8x10.png"
+                                                        class=" border border-dark p-1"
+                                                        style="max-width: 500px; max-height: 300px;" />
                                                 </div>
                                                 <div class="form-group form-file-upload form-file-multiple">
-                                                    <input type="file" name="image" id="uploadImage" class="inputFileHidden"
-                                                        onchange="PreviewImage();" accept="image/x-png,image/jpeg,image/x-png,image/jjif">
+                                                    <input type="file" name="image" id="uploadImage"
+                                                        class="inputFileHidden" onchange="PreviewImage();"
+                                                        accept="image/x-png,image/jpeg,image/x-png,image/jjif">
                                                     <div class="input-group">
                                                         <input type="text" class="form-control inputFileVisible"
                                                             placeholder="Single File">
@@ -200,7 +207,8 @@
                                                         </span>
                                                     </div>
                                                 </div>
-                                                {!!$errors->first('image', '<span class="text-danger">:message</span>')!!}
+                                                {!!$errors->first('image', '<span
+                                                    class="text-danger">:message</span>')!!}
 
                                             </div>
                                             <div class="modal-footer">
@@ -223,15 +231,16 @@
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
-                                            <div class="modal-body ">
-                                                <div class="d-flex justify-content-center p-2 border  bg-dark   ">
-                                                    <img src="{{ asset('/storage/evidence/'.$commission->photo_path) }}" style="max-width: 516px; max-height:400px" class="h-100 "alt="">
-                                                </div>
+                                        <div class="modal-body ">
+                                            <div class="d-flex justify-content-center p-2 border  bg-dark   ">
+                                                <img src="{{ asset('/storage/evidence/'.$commission->photo_path) }}"
+                                                    style="max-width: 516px; max-height:400px" class="h-100 " alt="">
                                             </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-dismiss="modal">Close</button>
-                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Close</button>
+                                        </div>
                                         </form>
                                     </div>
                                 </div>
@@ -251,7 +260,7 @@
 @push('js')
 <script>
     // form file upload
-    
+
     function PreviewImage() {
         var oFReader = new FileReader();
         oFReader.readAsDataURL(document.getElementById("uploadImage").files[0]);
@@ -271,9 +280,9 @@
         $.get(`{{url('/')}}/reseller/commision-month?user_id=${user_id}&month=${month}&year=${year}`, (res) => {
             let card = $(`#show-detail-${$(this).data('loop')}`)
             // card.html("");
-            console.log('res',res)
+            console.log('res', res)
             $('.t-column').remove()
-            res.map((el,index) => {
+            res.map((el, index) => {
                 console.log(el.name, el.data)
                 let show =
                     `
@@ -294,39 +303,40 @@
             })
         })
     })
-    $('.form-file-simple .inputFileVisible').click(function() {
-    $(this).siblings('.inputFileHidden').trigger('click');
-  });
+    $('.form-file-simple .inputFileVisible').click(function () {
+        $(this).siblings('.inputFileHidden').trigger('click');
+    });
     // file input
-      $('.form-file-simple .inputFileHidden').change(function() {
+    $('.form-file-simple .inputFileHidden').change(function () {
         var filename = $(this).val().replace(/C:\\fakepath\\/i, '');
         $(this).siblings('.inputFileVisible').val(filename);
-      });
+    });
 
-      $('.form-file-multiple .inputFileVisible, .form-file-multiple .input-group-btn').click(function() {
+    $('.form-file-multiple .inputFileVisible, .form-file-multiple .input-group-btn').click(function () {
         $(this).parent().parent().find('.inputFileHidden').trigger('click');
         $(this).parent().parent().addClass('is-focused');
-      });
+    });
 
-      $('.form-file-multiple .inputFileHidden').change(function() {
+    $('.form-file-multiple .inputFileHidden').change(function () {
         var names = '';
         for (var i = 0; i < $(this).get(0).files.length; ++i) {
-          if (i < $(this).get(0).files.length - 1) {
-            names += $(this).get(0).files.item(i).name + ',';
-          } else {
-            names += $(this).get(0).files.item(i).name;
-          }
+            if (i < $(this).get(0).files.length - 1) {
+                names += $(this).get(0).files.item(i).name + ',';
+            } else {
+                names += $(this).get(0).files.item(i).name;
+            }
         }
         $(this).siblings('.input-group').find('.inputFileVisible').val(names);
-      });
+    });
 
-      $('.form-file-multiple .btn').on('focus', function() {
+    $('.form-file-multiple .btn').on('focus', function () {
         $(this).parent().siblings().trigger('focus');
-      });
-    
-      $('.form-file-multiple .btn').on('focusout', function() {
+    });
+
+    $('.form-file-multiple .btn').on('focusout', function () {
         $(this).parent().siblings().trigger('focusout');
-      });
+    });
     // file input end
+
 </script>
 @endpush
