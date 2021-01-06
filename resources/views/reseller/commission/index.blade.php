@@ -30,18 +30,31 @@
                                 {{-- {{dd($commission->user)}} --}}
                                 <td>{{$loop->index +1}}</td>
                                 <td>{{$commission->created_at->format('M-Y')}}</td>
-                                <td>{{$commission->user->clients->count()}}</td>
+                                @php
+                                $clients = $commission->user->clients;
+                                $totalClient=[];
+                                foreach ($clients as $client) {
+                                foreach ($client->transactions as $transaction ) {
+                                if (Carbon\Carbon::parse($transaction->payment_date)->format('m-Y') ==
+                                $commission->created_at->format('m-Y')) {
+                                array_push($totalClient,$transaction);
+                                }
+                                }
+                                }
+                                $totalClient = count($totalClient);
+                                @endphp
+                                <td>{{$totalClient}}</td>
                                 <td>{{$commission->total_payment}}</td>
                                 <td>{{$commission->total_commission}}</td>
                                 <td>{{$commission->percentage}}%</td>
                                
                                 <td>
-                                    <a rel="tooltip" class="btn btn-info btn-fab btn-fab-mini btn-round detail" href=""
+                                    <a rel="tooltip" id="detail-button-{{$commission->id}}" class="btn btn-info btn-fab btn-fab-mini btn-round detail" href=""
                                         data-original-title="" data-placement="bottom" title="detail"
                                         data-month="{{$commission->created_at->format('m')}}"
                                         data-loop="{{$loop->index +1}}"
                                         data-year="{{ $commission->created_at->format('Y') }}" data-toggle="modal"
-                                        data-target="#detailModal-{{$loop->index+1}}">
+                                        data-target="#detailModal-{{$commission->id}}">
                                         <i class="material-icons">list</i>
                                         <div class="ripple-container"></div>
                                     </a>
@@ -55,7 +68,7 @@
                                 </td>
                             </tr>
                             {{-- detail modal --}}
-                            <div class="modal fade" id="detailModal-{{$loop->index +1}}" tabindex="-1" role="dialog"
+                            <div class="modal fade" id="detailModal-{{$commission->id}}" tabindex="-1" role="dialog"
                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-lg" role="document">
                                     <div class="modal-content">
@@ -66,7 +79,9 @@
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <div class="row  mx-3">
+                                            <div class=" mx-3">
+
+                                            <div class="row ">
                                                 <div class="col-6">
                                                     <p>Commission Id : {{$commission->id}}</p>
                                                     <p>Issue date : {{$commission->created_at}}</p>
@@ -74,11 +89,11 @@
                                                 </div>
                                                 <div class="col-6">
                                                     <p>From : {{$commission->company->name}}</p>
-                                                    <p>Status : {{$commission->status ?'paid':"doesn't paid"}}</p>
+                                                    <p>Status : {{$commission->status ?'paid':"waiting"}}</p>
                                                 </div>
                                             </div>
                                             {{-- head --}}
-                                            <div class="mx-auto w-75">
+                                            <div class="mx-auto">
 
                                                 <div class="row text-center align-items-center">
                                                     <div class=" col-1 border py-2 border-dark text-primary ">
@@ -108,7 +123,7 @@
                                                     {{-- end content --}}
                                                 </div>
                                             </div>
-                                            <div class="d-flex align-items-end flex-column mx-5 my-3">
+                                            <div class="d-flex align-items-end flex-column  my-3">
                                                 <p>
                                                     Total Payment : {{$commission->total_payment}}
                                                 </p>
@@ -119,6 +134,8 @@
                                                     Total Commission : {{$commission->total_commission}}
                                                 </p>
                                             </div>
+                                        </div>
+
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
@@ -173,9 +190,28 @@
 @endsection
 @push('js')
 <script>
+    var getUrlParameter = function getUrlParameter(sParam) {
+        var sPageURL = window.location.search.substring(1),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+            }
+        }
+    }   
+   
     $('.table').DataTable()
     $("#preloaders").fadeOut(1000);
-    md.initDashboardPageCharts();
+ 
+ md.initDashboardPageCharts();    
+    
+   
+    
     $('.detail').click(function () {
         const month = $(this).data('month')
         const year = $(this).data('year')
@@ -190,23 +226,25 @@
                 console.log(el.name, el.data)
                 let show =
                     `
-                    <div class="col-1 py-1 border border-dark t-column border-top-0  ${index+1 !==res.length ?'border-bottom-0':''}" ${index%2 ==0?'style="background:#e9ecef"':''}>
-                        <p class="my-auto">${index+1}</p>
+                    <div class="col-1 py-1  border border-dark t-column border-top-0  ${index+1 !==res.length ?'border-bottom-0':''}" ${index%2 ==0?'style="background:#e9ecef"':''}>
+                        <p class="my-auto h-100">${index+1}</p>
                     </div>
-                    <div class="col-3 py-1 border border-dark t-column border-top-0  ${index+1 !==res.length ?'border-bottom-0':''}" ${index%2 ==0?'style="background:#e9ecef"':''}>
-                        <p class="my-auto">${el.name}</p>
+                    <div class="col-3 py-1  border border-dark t-column border-top-0  ${index+1 !==res.length ?'border-bottom-0':''}" ${index%2 ==0?'style="background:#e9ecef"':''}>
+                        <p class="my-auto h-100">${ el.name.length > 15 ?  el.name.substring(0,15)+'...' :el.name }</p>
                     </div>
-                    <div class="col-4 py-1 border border-dark t-column border-top-0  ${index+1 !==res.length ?'border-bottom-0':''}" ${index%2 ==0?'style="background:#e9ecef"':''}>
-                        <p class="my-auto">${el.company}</p>
+                    <div class="col-4 py-1  border border-dark t-column border-top-0  ${index+1 !==res.length ?'border-bottom-0':''}" ${index%2 ==0?'style="background:#e9ecef"':''}>
+                        <p class="my-auto h-100">${ el.company.length > 15 ?  el.company.substring(0,15)+'...' :el.company  }</p>
                     </div>
-                    <div class="col-4 py-1 border border-dark t-column border-top-0  ${index+1 !==res.length ?'border-bottom-0':''}" ${index%2 ==0?'style="background:#e9ecef"':''}>
-                        <p class="my-auto">Rp.${el.transaction}</p>
+                    <div class="col-4 py-1  border border-dark t-column border-top-0  ${index+1 !==res.length ?'border-bottom-0':''}" ${index%2 ==0?'style="background:#e9ecef"':''}>
+                        <p class="my-auto h-100">Rp.${el.transaction}</p>
                     </div>
                 `
                 card.before(show)
             })
         })
     })
-
+    if (getUrlParameter('id')) {
+        $(`#detail-button-${getUrlParameter('id')}`).click(); 
+    } 
 </script>
 @endpush

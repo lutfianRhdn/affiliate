@@ -52,18 +52,18 @@
                                 <td>
                                     @if ($commission->status == true)
                                     <a rel="tooltip" class="btn btn-success btn-fab btn-fab-mini btn-round " href="">
-                                        <i class="material-icons">done</i>
+                                        <i class="material-icons">attach_money</i>
                                         <div class="ripple-container"></div>
                                     </a>
                                     @else
                                     <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round " href="">
-                                        <i class="material-icons">clear</i>
+                                        <i class="material-icons">money_off</i>
                                         <div class="ripple-container"></div>
                                     </a>
                                     @endif
                                 </td>
                                 <td>
-                                    <a rel="tooltip" class="btn btn-info btn-fab btn-fab-mini btn-round detail" href=""
+                                    <a rel="tooltip" class="btn btn-info btn-fab btn-fab-mini btn-round detail" id="detail-button-{{$commission->id}}" href=""
                                         data-original-title="" data-placement="bottom" title="detail"
                                         data-month="{{$commission->created_at->format('m')}}"
                                         data-loop="{{$loop->index +1}}"
@@ -75,7 +75,7 @@
                                     </a>
                                     @if ($commission->status == false)
 
-                                    <a rel="tooltip" class="btn btn-success btn-fab btn-fab-mini btn-round detail"
+                                    <a rel="tooltip" class="btn btn-success btn-fab btn-fab-mini btn-round detail" id="upload-button-{{$loop->index+1}}"
                                         href="" data-original-title="" data-placement="bottom"
                                         title="upload transaction evidence" data-toggle="modal"
                                         data-target="#file-upload-Modal-{{$loop->index+1}}">
@@ -166,6 +166,10 @@
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
                                                 data-dismiss="modal">Close</button>
+                                                @if ($commission->status == false)
+                                                <button class="btn btn-secondary complate-payment" data-loop="{{$loop->index+1}}"
+                                                    data-dismiss="modal" onclick="complatePayment({{$loop->index+1}})">Complate Payment</button>
+                                                @endif
                                         </div>
                                     </div>
                                 </div>
@@ -260,7 +264,20 @@
 @push('js')
 <script>
     // form file upload
+    var getUrlParameter = function getUrlParameter(sParam) {
+        var sPageURL = window.location.search.substring(1),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
 
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+            }
+        }
+    } 
     function PreviewImage() {
         var oFReader = new FileReader();
         oFReader.readAsDataURL(document.getElementById("uploadImage").files[0]);
@@ -270,8 +287,10 @@
         };
     };
     $('table').DataTable()
+   
     $("#preloaders").fadeOut(1000);
     md.initDashboardPageCharts();
+   
     $('.detail').click(function () {
         const month = $(this).data('month')
         const year = $(this).data('year')
@@ -290,10 +309,10 @@
                         <p class="my-auto">${index+1}</p>
                     </div>
                     <div class="col-3 py-1 border border-dark t-column border-top-0  ${index+1 !==res.length ?'border-bottom-0':''}" ${index%2 ==0?'style="background:#e9ecef"':''}>
-                        <p class="my-auto">${el.name}</p>
+                        <p class="my-auto h-100">${ el.name.length > 15 ?  el.name.substring(0,15)+'...' :el.name }</p>
                     </div>
                     <div class="col-4 py-1 border border-dark t-column border-top-0  ${index+1 !==res.length ?'border-bottom-0':''}" ${index%2 ==0?'style="background:#e9ecef"':''}>
-                        <p class="my-auto">${el.company}</p>
+                        <p class="my-auto h-100">${ el.company.length > 15 ?  el.company.substring(0,15)+'...' :el.company  }</p>
                     </div>
                     <div class="col-4 py-1 border border-dark t-column border-top-0  ${index+1 !==res.length ?'border-bottom-0':''}" ${index%2 ==0?'style="background:#e9ecef"':''}>
                         <p class="my-auto">Rp.${el.transaction}</p>
@@ -303,6 +322,11 @@
             })
         })
     })
+    function complatePayment(dataLoop) {
+        $(`#detailModal-${dataLoop}`).modal('hide')
+        $(`#upload-button-${dataLoop}`).click()
+    }
+   
     $('.form-file-simple .inputFileVisible').click(function () {
         $(this).siblings('.inputFileHidden').trigger('click');
     });
@@ -337,6 +361,8 @@
         $(this).parent().siblings().trigger('focusout');
     });
     // file input end
-
+    if (getUrlParameter('id')) {
+        $(`#detail-button-${getUrlParameter('id')}`).click(); 
+    } 
 </script>
 @endpush

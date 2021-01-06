@@ -8,7 +8,7 @@ use App\Models\LogActivity as ModelsLogActivity;
 
 
 
-    function addToLog($subject, $companyId =null)
+    function addToLog($subject, $companyId = null)
     {
         $log = [];
         $log['subject'] = $subject;

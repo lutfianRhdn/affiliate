@@ -96,5 +96,5 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'App\Http\Controllers\ProfileController@password']);
 
 });
-
+Route::post('/notification/read', [HomeController::class,'markReadNotify'])->name('notification.read');
 Route::post('register/{id}', [ApiController::class, 'RegisterApi']);

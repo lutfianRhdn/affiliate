@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Storage;
 
 class CalculateCommission extends Command
 {
@@ -75,7 +76,9 @@ class CalculateCommission extends Command
         $now = Carbon::now();
         $commissions = Commission::where('user_id',$reseller->id)->whereYear('created_at',$now->format('Y'))->whereMonth('created_at',$now->format('m'))->get()->count() ;
         if ($commissions== 0) {
-            JobsCalculateCommission::dispatch($product,$reseller,$total,$commissions);
+            $job = new JobsCalculateCommission($product,$reseller,$total,$commissions);
+            $data = dispatch($job);
+            Storage::append('log.txt','data ===== '.json_encode($data));
         } 
     }
 }
