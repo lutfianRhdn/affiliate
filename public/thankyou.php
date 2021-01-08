@@ -27,13 +27,13 @@
                         if ($_GET['st'] == 0) {
                     ?>
                             <h1><span class="text-primary">Thank</span> You</h1>
-                            <h3>Activation Sucess Please wait for Approval</h3>
+                            <h3><?= isset($_GET['res']) ?$_GET['res'] :'' ?></h3>
                         <?php
                         } elseif ($_GET['st'] == 1) {
                         ?>
                             <h1><span class="text-primary">Activation</span> Failed</h1>
-                            <h3>Activation Failed please Contact the Call Center</h3>
-                    <?php
+                            <h3><?= isset($_GET['res']) ?$_GET['res'] :'' ?></h3>
+                            <?php
                         }else{
                             echo 'status invalid';
                         }

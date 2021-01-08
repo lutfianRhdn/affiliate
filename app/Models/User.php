@@ -88,6 +88,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Commission::class);
     }
+    public function profile()
+    {
+        return $this->hasOne(Profile::class);
+    }
     public function createUser($data, $ref_code)
     {
         $phone = str_replace("-", "", $data['phone']);

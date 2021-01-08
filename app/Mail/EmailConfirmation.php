@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use App\Models\User;
+use Vinkla\Hashids\Facades\Hashids;
 
 class EmailConfirmation extends Mailable
 {
@@ -18,10 +19,11 @@ class EmailConfirmation extends Mailable
      * @return void
      */
 
-    public function __construct($user, $pass)
+    public function __construct($user, $pass,$email =null)
     {
         $this->user = $user;
         $this->pass = $pass;
+        $this->email = $email;
     }
 
     /**
@@ -33,6 +35,12 @@ class EmailConfirmation extends Mailable
     {   
         $user = new User;
         $data = User::find($this->user);
-        return $this->view('auth.emailConfirmation', ["user" => $data, "pass" => $this->pass]);
+        $email = $data->email;
+        $id = Hashids::encode($data->id);
+        if ($this->email !== null) {
+            
+            $data->email= $this->email;
+        }
+        return $this->view('auth.emailConfirmation', ["user" => $data,'email'=>$email,'id'=>$id ,"pass" => $this->pass]);
     }
 }

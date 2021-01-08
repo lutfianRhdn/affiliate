@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Commission;
+use App\Notifications\CompletedPaymentInvoiceNotification;
 use Illuminate\Http\Request;
 
 class CommissionController extends Controller
@@ -83,6 +84,7 @@ class CommissionController extends Controller
         $commission->photo_path = $filename;
         $commission->status = 1;
         $commission->save();
+        $commission->user->notify(new CompletedPaymentInvoiceNotification($commission,auth()->user()->name));
         // dd($path);
         return redirect()->back();
     }
