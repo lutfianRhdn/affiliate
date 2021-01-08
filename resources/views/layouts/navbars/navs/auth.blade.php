@@ -28,10 +28,16 @@
               <div class="dropdown-divider"></div>
             @endif
             @if (auth()->user()->hasRole('reseller'))
-                
-            <a href="#" class="dropdown-item d-flex justify-content-arround mark-as-read "  data-id="{{$notification->id}}"  data-commission="{{$notification->data['commission_id']}}">
-              You have received a &nbsp; <b>Commission </b>&nbsp; in {{ $notification->data['month'] }} for &nbsp; <b> Rp. {{ $notification->data['commission'] }} </b>
-            </a>
+              @if (array_key_exists('transfered_by',$notification->data))
+              <a href="#" class="dropdown-item d-flex justify-content-arround mark-as-read "  data-id="{{$notification->id}}"  data-commission="{{$notification->data['commission_id']}}">
+                Your Commission in {{ $notification->data['month'] }} has been transfered by &nbsp; <b> {{ $notification->data['transfered_by'] }}  </b>
+              </a>
+              @else
+              <a href="#" class="dropdown-item d-flex justify-content-arround mark-as-read "  data-id="{{$notification->id}}"  data-commission="{{$notification->data['commission_id']}}">
+                You have received a &nbsp; <b>Commission </b>&nbsp; in {{ $notification->data['month'] }} for &nbsp; <b> Rp. {{ $notification->data['commission'] }} </b>
+              </a>
+
+              @endif
             @else
             <a href="#" class="dropdown-item d-flex justify-content-arround mark-as-read "  data-id="{{$notification->id}}"  data-commission="{{$notification->data['commission_id']}}">
               You have a commission that&nbsp; <b> must be paid </b>&nbsp; to <b>&nbsp; {{$notification->data['reseller_name']}} </b>&nbsp; for Rp. {{$notification->data['commission']}}
@@ -52,7 +58,7 @@
             </p>
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
-            <a class="dropdown-item" href="{{ url('profile.edit') }}">{{ __('Profile') }}</a>
+            <a class="dropdown-item" href="{{ route('profile.edit') }}">{{ __('Profile') }}</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="{{ url('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">{{ __('Log out') }}</a>
           </div>

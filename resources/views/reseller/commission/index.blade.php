@@ -12,7 +12,7 @@
             <div class="card-body">
                 <div class="table-responsive">
 
-                    <table class="table">
+                    <table class="table data-table">
                         <thead>
                             <tr class="text-center text-primary text-bold">
                                 <th>#</th>
@@ -47,19 +47,29 @@
                                 <td>{{$commission->total_payment}}</td>
                                 <td>{{$commission->total_commission}}</td>
                                 <td>{{$commission->percentage}}%</td>
-                               
-                                <td>
-                                    <a rel="tooltip" id="detail-button-{{$commission->id}}" class="btn btn-info btn-fab btn-fab-mini btn-round detail" href=""
+
+                                <td class="d-flex">
+                                    <p rel="tooltip" id="detail-button-{{$commission->id}}"
+                                        class="btn btn-info btn-fab btn-fab-mini btn-round detail" href=""
                                         data-original-title="" data-placement="bottom" title="detail"
                                         data-month="{{$commission->created_at->format('m')}}"
                                         data-loop="{{$loop->index +1}}"
-                                        data-year="{{ $commission->created_at->format('Y') }}" data-toggle="modal"
-                                        data-target="#detailModal-{{$commission->id}}">
+                                        data-year="{{ $commission->created_at->format('Y') }}"
+
+                                        data-commission-id="{{$commission->id}}"
+                                        data-total-payment="{{$commission->total_payment}}"
+                                        data-total-commission="{{$commission->total_commission}}"
+                                        data-percentage="{{$commission->percentage}}"
+                                        data-issue-date="{{$commission->created_at->format('d-F-Y')}}"
+                                        data-status="{{$commission->status == true ?'paid':'waiting'}}"
+                                        data-from-company="{{$commission->company->name}}"
+                                        data-from-admin="{{$commission->company->users()->whereHas('roles',function($q){$q->where('name','super-admin-company');})->get()->first()->name}}"
+                                        data-for="{{$commission->user->name}}">
                                         <i class="material-icons">list</i>
                                         <div class="ripple-container"></div>
-                                    </a>
-                                    <a rel="tooltip" class="btn btn-primary btn-fab btn-fab-mini btn-round detail"
-                                        href="" data-original-title="" data-placement="bottom"
+                                    </p>
+                                    <a rel="tooltip" class="btn btn-primary btn-fab btn-fab-mini btn-round" href=""
+                                        data-original-title="" data-placement="bottom"
                                         title="show transaction evidence " data-toggle="modal"
                                         data-target="#show-image-Modal-{{$loop->index+1}}">
                                         <i class="material-icons">image</i>
@@ -67,83 +77,7 @@
                                     </a>
                                 </td>
                             </tr>
-                            {{-- detail modal --}}
-                            <div class="modal fade" id="detailModal-{{$commission->id}}" tabindex="-1" role="dialog"
-                                aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-lg" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Detail Modal</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class=" mx-3">
 
-                                            <div class="row ">
-                                                <div class="col-6">
-                                                    <p>Commission Id : {{$commission->id}}</p>
-                                                    <p>Issue date : {{$commission->created_at}}</p>
-                                                    <p>Summary </p>
-                                                </div>
-                                                <div class="col-6">
-                                                    <p>From : {{$commission->company->name}}</p>
-                                                    <p>Status : {{$commission->status ?'paid':"waiting"}}</p>
-                                                </div>
-                                            </div>
-                                            {{-- head --}}
-                                            <div class="mx-auto">
-
-                                                <div class="row text-center align-items-center">
-                                                    <div class=" col-1 border py-2 border-dark text-primary ">
-                                                        <b>
-                                                            <h5 class="my-auto">#</h5>
-                                                        </b>
-                                                    </div>
-                                                    <div class=" col-3 border py-2 border-dark text-primary ">
-                                                        <b>
-                                                            <h5 class="my-auto">Name</h5>
-                                                        </b>
-                                                    </div>
-                                                    <div class=" col-4 border py-2 border-dark text-primary ">
-                                                        <b>
-                                                            <h5 class="my-auto">Company</h5>
-                                                        </b>
-                                                    </div>
-                                                    <div class=" col-4 border py-2 border-dark text-primary ">
-                                                        <b>
-                                                            <h5 class="my-auto">Payment</h5>
-                                                        </b>
-                                                    </div>
-
-                                                    {{-- content --}}
-                                                    <div id="show-detail-{{$loop->index+1}}"></div>
-
-                                                    {{-- end content --}}
-                                                </div>
-                                            </div>
-                                            <div class="d-flex align-items-end flex-column  my-3">
-                                                <p>
-                                                    Total Payment : {{$commission->total_payment}}
-                                                </p>
-                                                <p>
-                                                    Commission : {{$commission->percentage}}%
-                                                </p>
-                                                <p>
-                                                    Total Commission : {{$commission->total_commission}}
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-dismiss="modal">Close</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
                             {{-- upload evidance modal --}}
                             <div class="modal fade" id="show-image-Modal-{{$loop->index +1}}" tabindex="-1"
@@ -157,14 +91,15 @@
                                             </button>
                                         </div>
                                         <div class="modal-body ">
-                                            <div class="d-flex justify-content-center p-2 border  bg-light flex-column  text-center ">
+                                            <div
+                                                class="d-flex justify-content-center p-2 border  bg-light flex-column  text-center ">
                                                 @if ($commission->status == true)
                                                 <img src="{{ asset('/storage/evidence/'.$commission->photo_path) }}"
                                                     style="max-width: 516px; max-height:400px" class="h-100 " alt="">
 
                                                 @else
-                                                    <h3 class="text-primary">Hasn't Been <b> Transferred </b>Yet</h3>
-                                                    <p>please, contact admin for transfer your commission</p>
+                                                <h3 class="text-primary">Hasn't Been <b> Transferred </b>Yet</h3>
+                                                <p>please, contact admin for transfer your commission</p>
                                                 @endif
                                             </div>
                                         </div>
@@ -186,7 +121,104 @@
         </div>
     </div>
 </div>
+{{-- detail modal --}}
+<div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class=" mx-3">
+                    <small>
+                        <div class="row justify-content-between">
+                            <div class="col-5 row">
+                                <div class="col-12">
+                                    <h2> <b> INVOICE </b></h2>
 
+                                </div>
+                                <div class="col-6 d-flex">
+                                    Commission Id
+                                </div>
+                                <div class="col-6 d-flex border-left border-dark">
+                                    <span id="commission-id-detail"></span>
+                                </div>
+                                <div class="col-6 d-flex">
+                                    Issue date
+                                </div>
+                                <div class="col-6 d-flex border-left border-dark">
+                                    <span id="issue-date-detail"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-4">
+                                <div class="row">
+                                    <div class="col-6 d-flex justify-content-end">From</div>
+                                    <div class="col-6 border-left border-dark py-2">
+                                        <p class="h6">
+                                            <b>
+                                                <span id="from-company-detail"></span>
+                                            </b>
+                                        </p>
+                                        <span id="from-admin-detail"></span>
+                                    </div>
+
+                                    <div class="col-6 d-flex justify-content-end mt-2">For</div>
+                                    <div class="col-6 border-left border-dark mt-2"><span id="for-detail"></span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </small>
+
+                    {{-- head --}}
+                    <table class="table table-striped table-bordered mt-3">
+                        <thead class="text-bold text-primary">
+                            <tr>
+                                <th>#</th>
+                                <th class="w-75">Name</th>
+                                <th>Company</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody id="show-detail">
+
+                        </tbody>
+                    </table>
+                    <div class="col-4 d-flex ml-auto flex-column  my-3 ">
+                        <small>
+
+                            <div class="row justify-content-end text-right">
+                                <div class="col-8  ">
+                                    Total Payment
+                                </div>
+                                <div class="col-4">
+                                    Rp.<span id="total-payment-detail"></span>
+                                </div>
+                                <div class="col-8  ">
+                                    Commission
+                                </div>
+                                <div class="col-4">
+                                    <span id="percentage-detail"></span> %
+                                </div>
+                                <div class="col-8  ">
+                                    Total Commission
+                                </div>
+                                <div class="col-4">
+                                    Rp.<span id="total-commission-detail"></span>
+                                </div>
+                            </div>
+                        </small>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
 @endsection
 @push('js')
 <script>
@@ -203,48 +235,53 @@
                 return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
             }
         }
-    }   
-   
-    $('.table').DataTable()
+    }
+
+    $('.data-table').DataTable()
     $("#preloaders").fadeOut(1000);
- 
- md.initDashboardPageCharts();    
-    
-   
-    
+
+    md.initDashboardPageCharts();
+
+
+
     $('.detail').click(function () {
         const month = $(this).data('month')
         const year = $(this).data('year')
         const user_id = '{{auth()->user()->id}}'
         // console.log()
         $.get(`{{url('/')}}/reseller/commision-month?user_id=${user_id}&month=${month}&year=${year}`, (res) => {
-            let card = $(`#show-detail-${$(this).data('loop')}`)
-            // card.html("");
-            console.log('res', res)
+            let card = $(`#show-detail`)
+            card.html("");
+            // console.log('res', res)
             $('.t-column').remove()
             res.map((el, index) => {
                 console.log(el.name, el.data)
                 let show =
                     `
-                    <div class="col-1 py-1  border border-dark t-column border-top-0  ${index+1 !==res.length ?'border-bottom-0':''}" ${index%2 ==0?'style="background:#e9ecef"':''}>
-                        <p class="my-auto h-100">${index+1}</p>
-                    </div>
-                    <div class="col-3 py-1  border border-dark t-column border-top-0  ${index+1 !==res.length ?'border-bottom-0':''}" ${index%2 ==0?'style="background:#e9ecef"':''}>
-                        <p class="my-auto h-100">${ el.name.length > 15 ?  el.name.substring(0,15)+'...' :el.name }</p>
-                    </div>
-                    <div class="col-4 py-1  border border-dark t-column border-top-0  ${index+1 !==res.length ?'border-bottom-0':''}" ${index%2 ==0?'style="background:#e9ecef"':''}>
-                        <p class="my-auto h-100">${ el.company.length > 15 ?  el.company.substring(0,15)+'...' :el.company  }</p>
-                    </div>
-                    <div class="col-4 py-1  border border-dark t-column border-top-0  ${index+1 !==res.length ?'border-bottom-0':''}" ${index%2 ==0?'style="background:#e9ecef"':''}>
-                        <p class="my-auto h-100">Rp.${el.transaction}</p>
-                    </div>
+                    <tr>
+                        <td>${index+1}</td>
+                        <td>${el.name }</td>
+                        <td class="w-100"> ${ el.company.length > 15 ?  el.company.substring(0,15)+'...' :el.company  }</td>
+                        <td> <b>Rp.${el.transaction}</b></td>
+                    </tr>
                 `
-                card.before(show)
+                card.append(show)
             })
         })
+        $('#detailModal').modal('show')
+        $('#commission-id-detail').html($(this).data('commission-id'))
+        $('#issue-date-detail').html($(this).data('issue-date'))
+        $('#from-company-detail').html($(this).data('from-company'))
+        $('#from-admin-detail').html($(this).data('from-admin'))
+        $('#total-commission-detail').html($(this).data('total-commission'))
+        $('#total-payment-detail').html($(this).data('total-payment'))
+        $('#percentage-detail').html($(this).data('percentage'))
+        $('#status-detail').html($(this).data('status'))
+        $('#for-detail').html($(this).data('for'))
     })
     if (getUrlParameter('id')) {
-        $(`#detail-button-${getUrlParameter('id')}`).click(); 
-    } 
+        $(`#detail-button-${getUrlParameter('id')}`).click();
+    }
+
 </script>
 @endpush

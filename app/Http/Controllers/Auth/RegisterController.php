@@ -132,7 +132,7 @@ private $pass ='';
             $url = null;
         }
         if ($url ==null) {
-            return redirect(url('/thankyou.php?st=0'));
+            return redirect(url('/thankyou.php?st=0&res=Activation Sucess Please wait for Approval'));
         }else{
             $url = $url->url;
         }

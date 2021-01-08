@@ -49,6 +49,50 @@
                     </div>
                   </div>
                 </div>
+                <div class="row">
+                  <label class="col-sm-2 col-form-label">{{ __('phone') }}</label>
+                  <div class="col-sm-7">
+                    <div class="form-group{{ $errors->has('phone') ? ' has-danger' : '' }}">
+                      <input class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" name="phone" id="input-phone" type="number" placeholder="{{ __('phone') }}" value="{{ old('phone', auth()->user()->phone) }}" required />
+                      @if ($errors->has('phone'))
+                        <span id="phone-error" class="error text-danger" for="input-phone">{{ $errors->first('phone') }}</span>
+                      @endif
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <label class="col-sm-2 col-form-label">{{ __('address') }}</label>
+                  <div class="col-sm-7">
+                    <div class="form-group{{ $errors->has('address') ? ' has-danger' : '' }}">
+                      <input class="form-control{{ $errors->has('address') ? ' is-invalid' : '' }}" name="address" id="input-address" type="text" placeholder="{{ __('address') }}" value="{{ old('address', auth()->user()->address) }}" required />
+                      @if ($errors->has('address'))
+                        <span id="address-error" class="error text-danger" for="input-address">{{ $errors->first('address') }}</span>
+                      @endif
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <label class="col-sm-2 col-form-label">{{ __('bank') }}</label>
+                  <div class="col-sm-7">
+                    <div class="form-group{{ $errors->has('bank_type') ? ' has-danger' : '' }}">
+                      <input class="form-control{{ $errors->has('bank_type') ? ' is-invalid' : '' }}" name="bank_type" id="input-bank_type" type="text" placeholder="{{ __('bank') }}" value="{{ old('bank_type', auth()->user()->profile!==null ? auth()->user()->profile->bank_type: '') }}" required />
+                      @if ($errors->has('bank_type'))
+                        <span id="bank_type-error" class="error text-danger" for="input-bank_type">{{ $errors->first('bank_type') }}</span>
+                      @endif
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <label class="col-sm-2 col-form-label">{{ __('account Number') }}</label>
+                  <div class="col-sm-7">
+                    <div class="form-group{{ $errors->has('account_number') ? ' has-danger' : '' }}">
+                      <input class="form-control{{ $errors->has('account_number') ? ' is-invalid' : '' }}" name="account_number" id="input-account_number" type="text" placeholder="{{ __('Account Number') }}" value="{{ old('account_number', auth()->user()->profile!==null ? auth()->user()->profile->account_number: '') }}" required />
+                      @if ($errors->has('account_number'))
+                        <span id="account_number-error" class="error text-danger" for="input-account_number">{{ $errors->first('account_number') }}</span>
+                      @endif
+                    </div>
+                  </div>
+                </div>
               </div>
               <div class="card-footer ml-auto mr-auto">
                 <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>

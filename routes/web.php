@@ -13,6 +13,7 @@ use App\Http\Controllers\Reseller\ResellerController;
 use App\Http\Controllers\Reseller\CommissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\CommissionController as adminCommision;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
 use App\Models\Commission;
@@ -91,10 +92,11 @@ Route::group(['prefix' => 'reseller'], function () {
 
 Route::group(['middleware' => 'auth'], function () {
 	// Route::resource('user', 'App\Http\Controllers\UserController', ['except' => ['show']]);
-	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'App\Http\Controllers\ProfileController@edit']);
-	Route::put('profile', ['as' => 'profile.update', 'uses' => 'App\Http\Controllers\ProfileController@update']);
-	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'App\Http\Controllers\ProfileController@password']);
-
+	Route::get('profile',[ProfileController::class,'edit'])->name('profile.edit');
+	Route::put('profile', [ProfileController::class,'update'])->name('profile.update');
+	Route::put('profile/password', [App\Http\Controllers\ProfileController::class,'password'])->name('profile.password');
+	
 });
+Route::get('profile/confirmation/{id}/{email}', [ProfileController::class,'EmailConfirmation'])->name('profile.email.confirmation');
 Route::post('/notification/read', [HomeController::class,'markReadNotify'])->name('notification.read');
 Route::post('register/{id}', [ApiController::class, 'RegisterApi']);
