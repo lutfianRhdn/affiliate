@@ -18,8 +18,11 @@ class CommissionController extends Controller
     public function index()
     {
         $commissions = Commission::where('user_id',auth()->user()->id)->get();
-        // dd($commissions);
-        return view('reseller.commission.index',compact('commissions'));
+        $totalCommission = $this->calculateCommission($commissions);
+        $remainingCommission =$this->calculateCommission($commissions->where('status',false));
+        $transferedCommission =$this->calculateCommission($commissions->where('status',true));
+
+        return view('reseller.commission.index',compact('commissions','totalCommission','remainingCommission','transferedCommission'));
     }
 
     /**
@@ -103,5 +106,12 @@ class CommissionController extends Controller
         return($transactionClient);
     }
 
-   
+   public function calculateCommission($data)
+   {
+       $total =0;
+    foreach ($data as $commission) {
+        $total += $commission->total_commission;
+    }
+    return $total;
+   }
 }

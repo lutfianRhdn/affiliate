@@ -49,6 +49,7 @@ class CalculateCommission extends Command
         foreach($products as $product){
             $setting = $product->setting->where('key','day of settelment')->first();
             $now= Carbon::now();
+            // \Log::info($setting);
             if ($now->format('d') == $setting->value) {
                 $resellers = $product->users;
                 foreach ($resellers as $reseller ) {

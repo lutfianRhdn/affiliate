@@ -49,10 +49,10 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 // ApiController
 
 Route::group(['middleware' => ['auth']], function () {
+	Route::get('/dashboard', [HomeController::class, 'index'])->name('admin');
 	Route::group(['prefix' => 'admin'], function () {
 		
 	Route::post('/swithaccount', [CompanyController::class,'switchAccount'])->name('account.switch');
-	Route::get('', [HomeController::class, 'index'])->name('admin');
 	// search bycompany
 	Route::get('/user/{company}', [AdminUserController::class, 'searchByCompany'])->name('admin.user.company');
 	Route::get('/reseller/{company}', [AdminResellerController::class, 'searchByCompany'])->name('admin.reseller.company');
@@ -73,6 +73,8 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('/approvalCompany', [CompanyController::class, 'approve'])->name('approveCompany');
 	Route::get('/status', [AdminResellerController::class, 'getStatus'])->name('getStatus');
 	Route::get('/get-city', [AdminResellerController::class, 'getCity']);
+	Route::get('/commission/export', [adminCommision::class, 'export'])->name('commission.export');
+	Route::get('/commission/filter', [adminCommision::class, 'filter'])->name('commission.filter');
 	Route::get('/get-city-edit', [AdminResellerController::class, 'getCityEdit']);
 	Route::patch('/{product}', [ProductController::class, 'updateCode'])->name('admin.product.updateCode');
 });
