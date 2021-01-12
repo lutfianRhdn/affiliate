@@ -9,7 +9,29 @@
                 <h4 class="card-title">Commision</h4>
                 <p class="category">Commision</p>
             </div>
+            <div class="mx-3">
+
+            <div class="card-header card-header-primary border border-light">
+                <h4>Summary</h4>
+                <div class="row text-center">
+                    <div class="col-4">
+                        <h6>Life Time Commission</h6>
+                        <p>Rp.{{$totalCommission}}</p>
+                    </div>
+                    <div class="col-4">
+                        <h6>Remaining</h6>
+                        <p>Rp.{{$remainingCommission}}</p>
+                    </div>
+                    <div class="col-4">
+                        <h6>Transferred</h6>
+                        <p>Rp.{{$transferedCommission}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
             <div class="card-body">
+                
                 <div class="table-responsive">
 
                     <table class="table data-table">
@@ -61,6 +83,7 @@
                                         data-total-commission="{{$commission->total_commission}}"
                                         data-percentage="{{$commission->percentage}}"
                                         data-issue-date="{{$commission->created_at->format('d-F-Y')}}"
+                                        data-issue-date-id="{{$commission->created_at->format('d F')}}"
                                         data-status="{{$commission->status == true ?'paid':'waiting'}}"
                                         data-from-company="{{$commission->company->name}}"
                                         data-from-admin="{{$commission->company->users()->whereHas('roles',function($q){$q->where('name','super-admin-company');})->get()->first()->name}}"
@@ -269,7 +292,7 @@
             })
         })
         $('#detailModal').modal('show')
-        $('#commission-id-detail').html($(this).data('commission-id'))
+        $('#commission-id-detail').html($(this).data('issue-date-id') +' - '+$(this).data('commission-id'))
         $('#issue-date-detail').html($(this).data('issue-date'))
         $('#from-company-detail').html($(this).data('from-company'))
         $('#from-admin-detail').html($(this).data('from-admin'))

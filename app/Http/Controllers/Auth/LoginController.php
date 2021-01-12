@@ -59,7 +59,7 @@ class LoginController extends Controller
                     addToLog("Login");
                     return redirect()->route('admin');
                 } elseif (auth()->user()->hasRole('reseller') && auth()->user()->approve == 1 && auth()->user()->status == 1 && auth()->user()->register_status == 1) {
-                    return redirect()->route('reseller.client.index');
+                    return redirect()->route('admin');
                 } else {
                     return redirect()->route('login')->with('error', 'Your provided information wrong!');
                 } 

@@ -425,6 +425,24 @@
       // Javascript method's body can be found in assets/js/demos.js
       md.initDashboardPageCharts();
       $("#preloaders").fadeOut(1000);
+      console.log(`{{auth()->user()->profile}}`)
+      if (`{{auth()->user()->profile}}` == '' && `{{auth()->user()->hasRole('reseller')}}`) {
+        Swal.fire({
+          type: 'info',
+          title: 'Complate your <strong class="text-primary">Profile</strong>!',
+          text:'Please Complate your Profile for Trander Commission',
+          showCloseButton: true,
+          showCancelButton: true,
+          confirmButtonText:`Go To Profile`,
+          confirmButtonColor: '#15BACF',
+          cancelButtonText:`Later`
+        }).then((res)=>{
+          console.log(res)
+          if (res.value ==true) {
+          window.location.replace(`{{route('profile.edit')}}`)  
+          }
+        })
+      }
     });
   </script>
 @endpush

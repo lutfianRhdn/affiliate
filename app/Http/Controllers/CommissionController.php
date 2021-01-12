@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\CommissionExport;
 use App\Models\Commission;
+use App\Models\Role;
+use App\Models\User;
 use App\Notifications\CompletedPaymentInvoiceNotification;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class CommissionController extends Controller
 {
@@ -13,11 +18,25 @@ class CommissionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    protected $months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
     public function index()
     {
         $commissions = filterData('App\Models\Commission');
         // dd($commissions);
-        return view('admin.commission',compact('commissions'));
+        $totalCommission = $this->calculateCommission($commissions);
+        $remainingCommission =$this->calculateCommission($commissions->where('status',false));
+        $transferedCommission =$this->calculateCommission($commissions->where('status',true));
+        $users = filterData('\App\Models\User');
+        $resellers = [];
+        foreach ($users as $user) {
+            if ($user->hasRole('reseller')) {
+                array_push($resellers,$user);
+            }
+        }
+        $months = $this->months;
+
+        return view('admin.commission',compact('commissions','totalCommission','remainingCommission','transferedCommission','resellers','months'));
     }
 
     /**
@@ -99,8 +118,42 @@ class CommissionController extends Controller
     {
         //
     }
-    public function upload(Request $request)
+    public function export()
     {
+        return  Excel::download(new CommissionExport(),'commission.csv');
+    }
+    public function filter(Request $request)
+    {
+        $commissions = filterData('App\Models\Commission');
+        if ($request->month !== 'null') {
+            $commissionsFiltered =[];
+            foreach ($commissions as $commission) {
+                if ($commission->created_at->format('F')== $request->month) {
+                    array_push($commissionsFiltered,$commission);
+                }
+            }
+            $commissions = collect($commissionsFiltered);
+        }
+        if ($request->reseller !== 'null') {
+            $commissions = $commissions->where('user.name',$request->reseller);
+        }
+        if ($request->status !== 'null') {
+            $commissions = $commissions->where('status',$request->status=='paid'? true:false); 
+            
+        }
+        // dd($commissions);
         
+        $totalCommission = $this->calculateCommission($commissions);
+        $remainingCommission =$this->calculateCommission($commissions->where('status',false));
+        $transferedCommission =$this->calculateCommission($commissions->where('status',true));
+        return response(['total_commission'=>$totalCommission,'remaining_commission'=>$remainingCommission,'transfered_commission'=>$transferedCommission],200);
+    }
+    public function calculateCommission($data)
+    {
+        $total =0;
+     foreach ($data as $commission) {
+         $total += $commission->total_commission;
+     }
+     return $total;
     }
 }

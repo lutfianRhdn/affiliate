@@ -42,7 +42,7 @@
                   <label class="col-sm-2 col-form-label">{{ __('Email') }}</label>
                   <div class="col-sm-7">
                     <div class="form-group{{ $errors->has('email') ? ' has-danger' : '' }}">
-                      <input class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" id="input-email" type="email" placeholder="{{ __('Email') }}" value="{{ old('email', auth()->user()->email) }}" required />
+                      <input class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" disabled  name="email" id="input-email" type="email" placeholder="{{ __('Email') }}" value="{{ old('email', auth()->user()->email) }}" required />
                       @if ($errors->has('email'))
                         <span id="email-error" class="error text-danger" for="input-email">{{ $errors->first('email') }}</span>
                       @endif
@@ -71,6 +71,7 @@
                     </div>
                   </div>
                 </div>
+                @role('reseller')
                 <div class="row">
                   <label class="col-sm-2 col-form-label">{{ __('bank') }}</label>
                   <div class="col-sm-7">
@@ -84,7 +85,7 @@
                 </div>
                 <div class="row">
                   <label class="col-sm-2 col-form-label">{{ __('account Number') }}</label>
-                  <div class="col-sm-7">
+                  <div class="coxl-sm-7">
                     <div class="form-group{{ $errors->has('account_number') ? ' has-danger' : '' }}">
                       <input class="form-control{{ $errors->has('account_number') ? ' is-invalid' : '' }}" name="account_number" id="input-account_number" type="text" placeholder="{{ __('Account Number') }}" value="{{ old('account_number', auth()->user()->profile!==null ? auth()->user()->profile->account_number: '') }}" required />
                       @if ($errors->has('account_number'))
@@ -93,6 +94,7 @@
                     </div>
                   </div>
                 </div>
+                @endrole
               </div>
               <div class="card-footer ml-auto mr-auto">
                 <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>

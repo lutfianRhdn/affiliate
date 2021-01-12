@@ -28,6 +28,10 @@ public function clients()
 {
     return $this->hasMany(Client::class);
 }
+public function commissions()
+{
+    return $this->hasMany(Commission::class);
+}
 
     public function getData()
     {
