@@ -87,7 +87,7 @@
                         </thead>
                         <tbody>
                             @foreach ($commissions as $commission)
-                            <tr class="text-center">
+                            <tr class="text-center" id="table-row-{{$loop->index +1}}">
                                 <td>{{$loop->index +1}}</td>
                                 <td>{{$commission->user->name}}</td>
                                 <td>{{$commission->created_at->format('F Y')}}</td>
@@ -121,8 +121,8 @@
                                     </a>
                                     @endif
                                 </td>
-                                <td class="d-flex">
-                                    <p rel="tooltip" class="btn btn-info btn-fab btn-fab-mini btn-round detail"
+                                <td class="d-flex detail-{{$loop->index}}">
+                                    <p rel="tooltip" class="btn btn-info btn-fab btn-fab-mini btn-round detail "
                                         id="detail-button-{{$commission->id}}" href="" data-original-title=""
                                         data-placement="bottom" title="detail"
                                         data-month="{{$commission->created_at->format('m')}}"
@@ -390,18 +390,14 @@
             return res;
         })
     }
-    $('.data-table').DataTable()
+    datatable = $('.data-table').DataTable()
     $('.select2').select2()
 
     $("#preloaders").fadeOut(1000);
     md.initDashboardPageCharts();
 
-    $('.detail').click(function () {
-        const month = $(this).data('month')
-        const year = $(this).data('year')
-        const user_id = $(this).data('user')
-        // console.log()
-        $.get(`{{url('/')}}/reseller/commision-month?user_id=${user_id}&month=${month}&year=${year}`, (res) => {
+   function showModal(month,year,user_id,data) {
+    $.get(`{{url('/')}}/reseller/commision-month?user_id=${user_id}&month=${month}&year=${year}`, (res) => {
             let card = $(`#show-detail`)
             card.html("");
             $('.t-column').remove()
@@ -411,7 +407,7 @@
                     <tr>
                         <td>${index+1}</td>
                         <td>${ el.name.length > 15 ?  el.name.substring(0,15)+'...' :el.name }</td>
-                        <td>${ el.company.length > 15 ?  el.company.substring(0,15)+'...' :el.company  }</td>
+                        <td>${el.company !== null ?(el.company.length > 15 ?  el.company.substring(0,15)+'...' :el.company):'-'  }</td>
                         <td> <b>Rp.${el.transaction}</b></td>
                     </tr>
                 `
@@ -419,39 +415,59 @@
             })
         })
         $('#detailModal').modal('show')
-        $('#commission-id-detail').html($(this).data('issue-date-id') +' - '+$(this).data('commission-id'))
-        $('#issue-date-detail').html($(this).data('issue-date'))
-        $('#from-company-detail').html($(this).data('from-company'))
-        $('#from-admin-detail').html($(this).data('from-admin'))
-        $('#total-commission-detail').html($(this).data('total-commission'))
-        $('#total-payment-detail').html($(this).data('total-payment'))
-        $('#percentage-detail').html($(this).data('percentage'))
-        $('#for-detail').html($(this).data('for'))
-        if ($(this).data('account-type') !=='') {
-            $('#account-number-detail').html($(this).data('account-number') + ' | '+$(this).data('account-type'))
+
+        $('#commission-id-detail').html(data.issue_date_id+' - '+data.commission_id)
+        $('#issue-date-detail').html(data.issue_date)
+        $('#from-company-detail').html(data.from_company)
+        $('#from-admin-detail').html(data.from_admin)
+        $('#total-commission-detail').html(data.total_commission)
+        $('#total-payment-detail').html(data.total_payment)
+        $('#percentage-detail').html(data.percentage)
+        $('#for-detail').html(data.for)
+        if (data.account_type) {
+            $('#account-number-detail').html(data.account_number + ' | '+ data.account_type)
         } else {
             $('#account-number-detail').html('null')
         }
-        if ($(this).data('status') == 'paid') {
+        if (status == 'paid') {
             $('#status-detail').closest('h2.border').removeClass('border-danger  text-danger')
             $('#status-detail').closest('h2.border').addClass('border-success  text-success')
         } else {
             $('#status-detail').closest('h2.border').removeClass('border-success  text-success')
             $('#status-detail').closest('h2.border').addClass('border-danger  text-danger')
         }
-        $('#status-detail').html($(this).data('status'))
+        $('#status-detail').html(data.status)
+   }
+//    document.getElementsByClassName('detail')[0].addEventListener('click', function() {
+//        alert('ok')
+//    })
+    $('.detail').on('click', function () {
+        detailClicked($(this).data('commission-id'))
     })
-    $('.filter-data').change(function () {
-        total = $('#total-commission')
-        remaining = $('#remaining-commission')
-        transfered = $('#transfered-commission')
-        filter = filterData($('#filterByReseller').val(),$('#filterByMonth').val(),$('#filterByStatus').val()).then(res=>{
-            total.text('Rp.'+res.total_commission)
-            remaining.text('Rp.'+res.remaining_commission)
-            transfered.text('Rp.'+res.transfered_commission)
+
+    const detailClicked=(id)=>{
+        const element = $(`#detail-button-${id}`)
+        const month = element.data('month')
+        const year = element.data('year')
+        const user_id = element.data('user')
+
+        const data ={
+            issue_date_id:element.data('issue-date-id'),
+            commission_id:id,
+            issue_date:element.data('issue-date'),
+            from_company:element.data('from-company'),
+            from_admin:element.data('from-admin'),
+            total_commission:element.data('total-commission'),
+            total_payment:element.data('total-payment'),
+            percentage:element.data('percentage'),
+            for:element.data('for'),
+            account_type:element.data('account-type'),
+            account_number:element.data('account-number'),
+            status:element.data('status'),
         }
-        )
-    })
+        showModal(month,year,user_id,data)
+    }
+
     $('#select-reseller').change(function () {
         
         $('#total-commission').val()
@@ -461,6 +477,90 @@
         $(`#detailModal-${dataLoop}`).modal('hide')
         $(`#upload-button-${dataLoop}`).click()
     }
+    $('.filter-data').change(function () {
+        total = $('#total-commission')
+        remaining = $('#remaining-commission')
+        transfered = $('#transfered-commission')
+        filterData($('#filterByReseller').val(),$('#filterByMonth').val(),$('#filterByStatus').val()).then(res=>{
+            datatable.clear();
+            res.data.forEach(el => {
+                el.row[8] =
+                `   
+                    <p rel="tooltip" class="btn btn-info btn-fab btn-fab-mini btn-round detail"
+                        id="detail-button-${el.data.id}" href="" data-original-title="detail"
+                        data-placement="bottom" title="detail"
+                        data-month="${el.data.month}"
+                        data-loop="${el.row[0]}"
+                        data-year="${el.data.year}"
+                        data-user="${el.data.user.id}" data-commission-id="${el.data.id}"
+                        data-account-number="${el.data.user.account_number}"
+                        data-account-type="${el.data.user.bank_type}"
+                        data-total-payment="${el.row[4]}"
+                        data-total-commission="${el.row[5]}"
+                        data-percentage="${el.row[6]}"
+                        data-issue-date="${el.data.created_at}"
+                        data-issue-date-id="${el.data.created_at}"
+                        data-status="${el.row[7] == 1 ?'paid':'unpaid'}"
+                        data-from-company="${el.data.company.name}"
+                        data-for="${el.data.user.name}" 
+                        onClick="detailClicked(${el.data.id})">
+                        <i class="material-icons">list</i>
+                        <div class="ripple-container"></div>
+                    </p>
+                `
+
+                if (el.row[7] == false) {
+                    el.row[7]= `
+                <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round " href="">
+                    <i class="material-icons">money_off</i>
+                    <div class="ripple-container"></div>
+                </a>
+            `
+            el.row[8]+=`
+            <a rel="tooltip" class="btn btn-success btn-fab btn-fab-mini btn-round"
+                                        id="upload-button-${el.row[0]}" href="" data-original-title=""
+                                        data-placement="bottom" title="upload transaction evidence" data-toggle="modal"
+                                        data-target="#file-upload-Modal-${el.row[0]}">
+                                        <i class="material-icons">upload</i>
+                                        <div class="ripple-container"></div>
+                                    </a>
+            `
+                }
+                else{
+                    el.row[7] =
+            `
+            <a rel="tooltip" class="btn btn-success btn-fab btn-fab-mini btn-round " href="">
+                <i class="material-icons">attach_money</i>
+                <div class="ripple-container"></div>
+            </a>
+            `
+            el.row[8] +=`
+            <a rel="tooltip" class="btn btn-primary btn-fab btn-fab-mini btn-round" href=""
+                                        data-original-title="" data-placement="bottom"
+                                        title="show transaction evidence " data-toggle="modal"
+                                        data-target="#show-image-Modal-${el.row[0]}">
+                                        <i class="material-icons">image</i>
+                                        <div class="ripple-container"></div>
+                                    </a>
+            `
+
+                }
+
+               
+                // console.log(el.data)
+            datatable.row.add(el.row);
+            // $('.even').eq(8).addClass('d-flex')
+            // datatable.row.cell(8).addClass('d-flex')
+            });
+            datatable.draw();
+            let cell= $('.odd td:last').addClass('d-flex')
+            console.log(cell)
+            total.text('Rp.'+res.total_commission)
+            remaining.text('Rp.'+res.remaining_commission)
+            transfered.text('Rp.'+res.transfered_commission)
+        }
+        )
+    })
 
     $('.form-file-simple .inputFileVisible').click(function () {
         $(this).siblings('.inputFileHidden').trigger('click');
@@ -499,6 +599,6 @@
     if (getUrlParameter('id')) {
         $(`#detail-button-${getUrlParameter('id')}`).click();
     }
-
+ 
 </script>
 @endpush
