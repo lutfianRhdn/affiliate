@@ -6,7 +6,7 @@
   -->
   <div class="logo">
     <a href="" class="simple-text logo-normal">
-      {{ __('Affiliate') }}
+      {{ auth()->user()->company == null ?'Affiliate':auth()->user()->company->name  }}
     </a>
   </div>
   <div class="sidebar-wrapper">
@@ -121,7 +121,7 @@
           href="{{ route('admin.commissions.index')}}"
         @endrole
         >
-          <i class="material-icons">receipt_long</i>
+          <i class="material-icons">payments</i>
             <p>{{ __('commission') }}</p>
         </a>
       </li>

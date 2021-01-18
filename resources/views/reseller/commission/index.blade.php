@@ -16,15 +16,15 @@
                 <div class="row text-center">
                     <div class="col-4">
                         <h6>Life Time Commission</h6>
-                        <p>Rp.{{$totalCommission}}</p>
+                        <p>Rp.{{number_format($totalCommission,2)}}</p>
                     </div>
                     <div class="col-4">
                         <h6>Remaining</h6>
-                        <p>Rp.{{$remainingCommission}}</p>
+                        <p>Rp.{{number_format($remainingCommission,2)}}</p>
                     </div>
                     <div class="col-4">
                         <h6>Transferred</h6>
-                        <p>Rp.{{$transferedCommission}}</p>
+                        <p>Rp.{{number_format($transferedCommission,2)}}</p>
                     </div>
                 </div>
             </div>
@@ -51,7 +51,7 @@
                             <tr class="text-center">
                                 {{-- {{dd($commission->user)}} --}}
                                 <td>{{$loop->index +1}}</td>
-                                <td>{{$commission->created_at->format('M-Y')}}</td>
+                                <td>{{$commission->created_at->format('F Y')}}</td>
                                 @php
                                 $clients = $commission->user->clients;
                                 $totalClient=[];
@@ -66,8 +66,8 @@
                                 $totalClient = count($totalClient);
                                 @endphp
                                 <td>{{$totalClient}}</td>
-                                <td>{{$commission->total_payment}}</td>
-                                <td>{{$commission->total_commission}}</td>
+                                <td>Rp {{number_format($commission->total_payment,2)}}</td>
+                                <td>Rp {{number_format($commission->total_commission,2)}}</td>
                                 <td>{{$commission->percentage}}%</td>
 
                                 <td class="d-flex">
@@ -79,8 +79,8 @@
                                         data-year="{{ $commission->created_at->format('Y') }}"
 
                                         data-commission-id="{{$commission->id}}"
-                                        data-total-payment="{{$commission->total_payment}}"
-                                        data-total-commission="{{$commission->total_commission}}"
+                                        data-total-payment="{{number_format($commission->total_payment,2)}}"
+                                        data-total-commission="{{number_format($commission->total_commission,2)}}"
                                         data-percentage="{{$commission->percentage}}"
                                         data-issue-date="{{$commission->created_at->format('d-F-Y')}}"
                                         data-issue-date-id="{{$commission->created_at->format('d F')}}"
@@ -100,7 +100,6 @@
                                     </a>
                                 </td>
                             </tr>
-
 
                             {{-- upload evidance modal --}}
                             <div class="modal fade" id="show-image-Modal-{{$loop->index +1}}" tabindex="-1"
@@ -201,7 +200,7 @@
                         <thead class="text-bold text-primary">
                             <tr>
                                 <th>#</th>
-                                <th class="w-75">Name</th>
+                                <th class="w-50">Name</th>
                                 <th>Company</th>
                                 <th>Amount</th>
                             </tr>
@@ -214,23 +213,23 @@
                         <small>
 
                             <div class="row justify-content-end text-right">
-                                <div class="col-8  ">
+                                <div class="col-7  ">
                                     Total Payment
                                 </div>
-                                <div class="col-4">
-                                    Rp.<span id="total-payment-detail"></span>
+                                <div class="col-5">
+                                    Rp <span id="total-payment-detail"></span>
                                 </div>
-                                <div class="col-8  ">
+                                <div class="col-7  ">
                                     Commission
                                 </div>
-                                <div class="col-4">
+                                <div class="col-5">
                                     <span id="percentage-detail"></span> %
                                 </div>
-                                <div class="col-8  ">
+                                <div class="col-7  ">
                                     Total Commission
                                 </div>
-                                <div class="col-4">
-                                    Rp.<span id="total-commission-detail"></span>
+                                <div class="col-5">
+                                    Rp <span id="total-commission-detail"></span>
                                 </div>
                             </div>
                         </small>
@@ -271,21 +270,18 @@
         const month = $(this).data('month')
         const year = $(this).data('year')
         const user_id = '{{auth()->user()->id}}'
-        // console.log()
         $.get(`{{url('/')}}/reseller/commision-month?user_id=${user_id}&month=${month}&year=${year}`, (res) => {
             let card = $(`#show-detail`)
             card.html("");
-            // console.log('res', res)
             $('.t-column').remove()
             res.map((el, index) => {
-                console.log(el.name, el.data)
                 let show =
                     `
                     <tr>
                         <td>${index+1}</td>
                         <td>${el.name }</td>
                         <td class="w-100"> ${ el.company.length > 15 ?  el.company.substring(0,15)+'...' :el.company  }</td>
-                        <td> <b>Rp.${el.transaction}</b></td>
+                        <td> <b>Rp.${parseInt(el.transaction).toFixed(3)}</b></td>
                     </tr>
                 `
                 card.append(show)

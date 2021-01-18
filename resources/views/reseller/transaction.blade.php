@@ -36,8 +36,8 @@
                             <td>{{$loop->index+1}}</td>
                             <td>{{$transaction->client->name}}</td>
                             <td>{{$transaction->client->company}}</td>
-                            <td>Rp.{{$transaction->total_payment == null ?'0':$transaction->total_payment}}</td>
-                            <td>{{date('d-m-Y', strtotime($transaction->payment_date))}}</td>
+                            <td>Rp.{{$transaction->total_payment == null ?'0': number_format($transaction->total_payment,2)}}</td>
+                            <td>{{date('d-F-Y', strtotime($transaction->payment_date))}}</td>
                         </tr>
                         @endforeach
                     </tbody>
