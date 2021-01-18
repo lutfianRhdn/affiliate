@@ -34,13 +34,13 @@
               </a>
               @else
               <a href="#" class="dropdown-item d-flex justify-content-arround mark-as-read "  data-id="{{$notification->id}}"  data-commission="{{$notification->data['commission_id']}}">
-                You have received a &nbsp; <b>Commission </b>&nbsp; in {{ $notification->data['month'] }} for &nbsp; <b> Rp. {{ $notification->data['commission'] }} </b>
+                You have received a &nbsp; <b>Commission </b>&nbsp; in {{ $notification->data['month'] }} for &nbsp; <b> Rp {{ number_format($notification->data['commission'],2) }} </b>
               </a>
 
               @endif
             @else
             <a href="#" class="dropdown-item d-flex justify-content-arround mark-as-read "  data-id="{{$notification->id}}"  data-commission="{{$notification->data['commission_id']}}">
-              You have a commission that&nbsp; <b> must be paid </b>&nbsp; to <b>&nbsp; {{$notification->data['reseller_name']}} </b>&nbsp; for Rp. {{$notification->data['commission']}}
+              You have a commission that&nbsp; <b> must be paid </b>&nbsp; to <b>&nbsp; {{$notification->data['reseller_name']}} </b>&nbsp; for Rp {{ number_format($notification->data['commission'],2)}}
             </a>
             @endif
          

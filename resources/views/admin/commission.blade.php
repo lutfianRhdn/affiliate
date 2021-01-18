@@ -20,50 +20,57 @@
                 <p class="category">Commision</p>
             </div>
             <div class="mx-3">
-            <div class="card-header card-header-primary border border-light">
-                <h4>Summary</h4>
-                <div class="row text-center">
-                    <div class="col-4">
-                        <h6>Life Time Commission</h6>
-                        <p id="total-commission">Rp.{{$totalCommission}}</p>
-                        <div>
-                            <select name="filterByReseller" id="filterByReseller" class="select2 filter-data w-75">
-                                <option value="" selected disabled>Select Reseller</option>
-                                @foreach ($resellers as $reseller)
-                                <option value="{{$reseller->name}}">{{$reseller->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <h6>Remaining</h6>
-                        <p id="remaining-commission">Rp.{{$remainingCommission}}</p>
-                        <div>
-                            <select name="filterByMonth" id="filterByMonth" class="select2 filter-data w-75">
-                                <option value="" selected disabled>Select Month</option>
-                                @foreach ($months as $month)
-                                <option value="{{$month}}">{{$month}}</option>
-                            @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <h6>Transferred</h6>
-                        <p class="transferd-commission">Rp.{{$transferedCommission}}</p>
-                        <div>
-                            <select name="filterByStatus" id="filterByStatus" class="select2 filter-data w-75">
-                                <option value="" selected disabled>Select Status</option>
-                                <option value="paid">Paid</option>
-                                <option value="unpaid">Unpaid</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
+
             </div>
-        </div>
             <div class="card-body">
-                <div class="row px-2">
-                    
+                <div class="">
+                    <div class="d-flex align-self-center mb-3">
+
+                        <h3 class="mt-2  border-right px-2 py-0 border-dark"> Summary</h3>
+                        <p class="ml-2 my-auto"> Filter Data Commission </p>
+                    </div>
+                    <div class="row text-center  ">
+                        <div class="col-4">
+                            <h6>Life Time Commission</h6>
+                            <p id="total-commission">Rp {{number_format($totalCommission,2)}}</p>
+                            <div>
+                                <select name="filterByReseller" id="filterByReseller" class="select2 filter-data w-75">
+                                    <option value="" selected disabled>Select Reseller</option>
+                                    @foreach ($resellers as $reseller)
+                                    <option value="{{$reseller->name}}">{{$reseller->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <h6>Remaining</h6>
+                            <p id="remaining-commission">Rp {{number_format($remainingCommission)}}</p>
+                            <div>
+                                <select name="filterByMonth" id="filterByMonth" class="select2 filter-data w-75">
+                                    <option value="" selected disabled>Select Month</option>
+                                    @foreach ($months as $month)
+                                    <option value="{{$month}}">{{$month}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <h6>Transferred</h6>
+                            <p class="transferd-commission">Rp {{number_format($transferedCommission)}}</p>
+                            <div>
+                                <select name="filterByStatus" id="filterByStatus" class="select2 filter-data w-75">
+                                    <option value="" selected disabled>Select Status</option>
+                                    <option value="paid">Paid</option>
+                                    <option value="unpaid">Unpaid</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <hr class="border-seccondary my-3">
+                <div class="row px-2 ">
+
                     <div class="col-12 ">
                         <div class="d-flex justify-content-end">
                             <a href="{{route('commission.export')}}" class="btn btn-success ">Export To Excel</a>
@@ -105,8 +112,8 @@
                                 $totalClient = count($totalClient);
                                 @endphp
                                 <td>{{ $totalClient }}</td>
-                                <td>{{$commission->total_payment}}</td>
-                                <td>{{$commission->total_commission}}</td>
+                                <td>Rp {{number_format($commission->total_payment,2)}}</td>
+                                <td>Rp {{number_format($commission->total_commission,2)}}</td>
                                 <td>{{$commission->percentage}}%</td>
                                 <td>
                                     @if ($commission->status == true)
@@ -129,8 +136,8 @@
                                         data-loop="{{$loop->index +1}}"
                                         data-year="{{ $commission->created_at->format('Y') }}"
                                         data-user="{{ $commission->user->id }}" data-commission-id="{{$commission->id}}"
-                                       data-account-number="{{$commission->user->profile !== null ?$commission->user->profile->account_number:''}}"
-                                       data-account-type="{{$commission->user->profile!== null ?$commission->user->profile->bank_type:''}}"
+                                        data-account-number="{{$commission->user->profile !== null ?$commission->user->profile->account_number:''}}"
+                                        data-account-type="{{$commission->user->profile!== null ?$commission->user->profile->bank_type:''}}"
                                         data-total-payment="{{$commission->total_payment}}"
                                         data-total-commission="{{$commission->total_commission}}"
                                         data-percentage="{{$commission->percentage}}"
@@ -316,7 +323,7 @@
                         <thead class="text-bold text-primary">
                             <tr>
                                 <th>#</th>
-                                <th class="w-100">Name</th>
+                                <th class="w-50">Name</th>
                                 <th>Company</th>
                                 <th>Amount</th>
                             </tr>
@@ -333,7 +340,7 @@
                                     Total Payment
                                 </div>
                                 <div class="col-4">
-                                    Rp.<span id="total-payment-detail"></span>
+                                    Rp <span id="total-payment-detail"></span>
                                 </div>
                                 <div class="col-8  ">
                                     Commission
@@ -345,7 +352,7 @@
                                     Total Commission
                                 </div>
                                 <div class="col-4">
-                                    Rp.<span id="total-commission-detail"></span>
+                                    Rp <span id="total-commission-detail"></span>
                                 </div>
                             </div>
                         </small>
@@ -385,8 +392,10 @@
             document.getElementById(`uploadPreview-${loop}`).src = oFREvent.target.result;
         };
     };
-    function filterData(reseller,month,status) {
-        return $.get(`{{url('/admin/commission/filter')}}?reseller=${reseller}&month=${month}&status=${status}`,res=>{
+
+    function filterData(reseller, month, status) {
+        return $.get(`{{url('/admin/commission/filter')}}?reseller=${reseller}&month=${month}&status=${status}`,
+        res => {
             return res;
         })
     }
@@ -396,8 +405,8 @@
     $("#preloaders").fadeOut(1000);
     md.initDashboardPageCharts();
 
-   function showModal(month,year,user_id,data) {
-    $.get(`{{url('/')}}/reseller/commision-month?user_id=${user_id}&month=${month}&year=${year}`, (res) => {
+    function showModal(month, year, user_id, data) {
+        $.get(`{{url('/')}}/reseller/commision-month?user_id=${user_id}&month=${month}&year=${year}`, (res) => {
             let card = $(`#show-detail`)
             card.html("");
             $('.t-column').remove()
@@ -408,7 +417,7 @@
                         <td>${index+1}</td>
                         <td>${ el.name.length > 15 ?  el.name.substring(0,15)+'...' :el.name }</td>
                         <td>${el.company !== null ?(el.company.length > 15 ?  el.company.substring(0,15)+'...' :el.company):'-'  }</td>
-                        <td> <b>Rp.${el.transaction}</b></td>
+                        <td> <b>Rp ${parseInt(el.transaction).toFixed(3)}</b></td>
                     </tr>
                 `
                 card.append(show)
@@ -416,16 +425,16 @@
         })
         $('#detailModal').modal('show')
 
-        $('#commission-id-detail').html(data.issue_date_id+' - '+data.commission_id)
+        $('#commission-id-detail').html(data.issue_date_id + ' - ' + data.commission_id)
         $('#issue-date-detail').html(data.issue_date)
         $('#from-company-detail').html(data.from_company)
         $('#from-admin-detail').html(data.from_admin)
-        $('#total-commission-detail').html(data.total_commission)
-        $('#total-payment-detail').html(data.total_payment)
+        $('#total-commission-detail').html(data.total_commission.toFixed(3))
+        $('#total-payment-detail').html(data.total_payment.toFixed(3))
         $('#percentage-detail').html(data.percentage)
         $('#for-detail').html(data.for)
         if (data.account_type) {
-            $('#account-number-detail').html(data.account_number + ' | '+ data.account_type)
+            $('#account-number-detail').html(data.account_number + ' | ' + data.account_type)
         } else {
             $('#account-number-detail').html('null')
         }
@@ -437,42 +446,43 @@
             $('#status-detail').closest('h2.border').addClass('border-danger  text-danger')
         }
         $('#status-detail').html(data.status)
-   }
-//    document.getElementsByClassName('detail')[0].addEventListener('click', function() {
-//        alert('ok')
-//    })
+    }
+    //    document.getElementsByClassName('detail')[0].addEventListener('click', function() {
+    //        alert('ok')
+    //    })
     $('.detail').on('click', function () {
         detailClicked($(this).data('commission-id'))
     })
 
-    const detailClicked=(id)=>{
+    const detailClicked = (id) => {
         const element = $(`#detail-button-${id}`)
         const month = element.data('month')
         const year = element.data('year')
         const user_id = element.data('user')
 
-        const data ={
-            issue_date_id:element.data('issue-date-id'),
-            commission_id:id,
-            issue_date:element.data('issue-date'),
-            from_company:element.data('from-company'),
-            from_admin:element.data('from-admin'),
-            total_commission:element.data('total-commission'),
-            total_payment:element.data('total-payment'),
-            percentage:element.data('percentage'),
-            for:element.data('for'),
-            account_type:element.data('account-type'),
-            account_number:element.data('account-number'),
-            status:element.data('status'),
+        const data = {
+            issue_date_id: element.data('issue-date-id'),
+            commission_id: id,
+            issue_date: element.data('issue-date'),
+            from_company: element.data('from-company'),
+            from_admin: element.data('from-admin'),
+            total_commission: element.data('total-commission'),
+            total_payment: element.data('total-payment'),
+            percentage: element.data('percentage'),
+            for: element.data('for'),
+            account_type: element.data('account-type'),
+            account_number: element.data('account-number'),
+            status: element.data('status'),
         }
-        showModal(month,year,user_id,data)
+        showModal(month, year, user_id, data)
     }
 
     $('#select-reseller').change(function () {
-        
+
         $('#total-commission').val()
-        
+
     })
+
     function complatePayment(dataLoop) {
         $(`#detailModal-${dataLoop}`).modal('hide')
         $(`#upload-button-${dataLoop}`).click()
@@ -481,11 +491,12 @@
         total = $('#total-commission')
         remaining = $('#remaining-commission')
         transfered = $('#transfered-commission')
-        filterData($('#filterByReseller').val(),$('#filterByMonth').val(),$('#filterByStatus').val()).then(res=>{
-            datatable.clear();
-            res.data.forEach(el => {
-                el.row[8] =
-                `   
+        filterData($('#filterByReseller').val(), $('#filterByMonth').val(), $('#filterByStatus').val()).then(
+            res => {
+                datatable.clear();
+                res.data.forEach(el => {
+                    el.row[8] =
+                        `   
                     <p rel="tooltip" class="btn btn-info btn-fab btn-fab-mini btn-round detail"
                         id="detail-button-${el.data.id}" href="" data-original-title="detail"
                         data-placement="bottom" title="detail"
@@ -509,14 +520,14 @@
                     </p>
                 `
 
-                if (el.row[7] == false) {
-                    el.row[7]= `
+                    if (el.row[7] == false) {
+                        el.row[7] = `
                 <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round " href="">
                     <i class="material-icons">money_off</i>
                     <div class="ripple-container"></div>
                 </a>
             `
-            el.row[8]+=`
+                        el.row[8] += `
             <a rel="tooltip" class="btn btn-success btn-fab btn-fab-mini btn-round"
                                         id="upload-button-${el.row[0]}" href="" data-original-title=""
                                         data-placement="bottom" title="upload transaction evidence" data-toggle="modal"
@@ -525,16 +536,15 @@
                                         <div class="ripple-container"></div>
                                     </a>
             `
-                }
-                else{
-                    el.row[7] =
-            `
+                    } else {
+                        el.row[7] =
+                            `
             <a rel="tooltip" class="btn btn-success btn-fab btn-fab-mini btn-round " href="">
                 <i class="material-icons">attach_money</i>
                 <div class="ripple-container"></div>
             </a>
             `
-            el.row[8] +=`
+                        el.row[8] += `
             <a rel="tooltip" class="btn btn-primary btn-fab btn-fab-mini btn-round" href=""
                                         data-original-title="" data-placement="bottom"
                                         title="show transaction evidence " data-toggle="modal"
@@ -544,28 +554,28 @@
                                     </a>
             `
 
-                }
+                    }
 
-               
-                // console.log(el.data)
-            datatable.row.add(el.row);
-            // $('.even').eq(8).addClass('d-flex')
-            // datatable.row.cell(8).addClass('d-flex')
-            });
-            datatable.draw();
-            let cell= $('.odd td:last').addClass('d-flex')
-            console.log(cell)
-            total.text('Rp.'+res.total_commission)
-            remaining.text('Rp.'+res.remaining_commission)
-            transfered.text('Rp.'+res.transfered_commission)
-        }
+
+                    // console.log(el.data)
+                    datatable.row.add(el.row);
+                    // $('.even').eq(8).addClass('d-flex')
+                    // datatable.row.cell(8).addClass('d-flex')
+                });
+                datatable.draw();
+                let cell = $('.odd td:last').addClass('d-flex')
+                console.log(cell)
+                total.text('Rp ' + res.total_commission.toFixed(3))
+                remaining.text('Rp ' + res.remaining_commission.toFixed(3))
+                transfered.text('Rp ' + res.transfered_commission.toFixed(3))
+            }
         )
     })
 
     $('.form-file-simple .inputFileVisible').click(function () {
         $(this).siblings('.inputFileHidden').trigger('click');
     });
-// file input
+    // file input
     $('.form-file-simple .inputFileHidden').change(function () {
         var filename = $(this).val().replace(/C:\\fakepath\\/i, '');
         $(this).siblings('.inputFileVisible').val(filename);
@@ -595,10 +605,10 @@
     $('.form-file-multiple .btn').on('focusout', function () {
         $(this).parent().siblings().trigger('focusout');
     });
-// file input end
+    // file input end
     if (getUrlParameter('id')) {
         $(`#detail-button-${getUrlParameter('id')}`).click();
     }
- 
+
 </script>
 @endpush
