@@ -90,6 +90,7 @@
 
     <!-- select 2 -->
     <script src="{{ asset('js/select2.min.js') }}"></script>
+    <script src="{{ asset('js/numeral.js') }}"></script>
 
 
     @stack('js')
