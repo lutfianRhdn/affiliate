@@ -9,28 +9,33 @@
                 <h4 class="card-title">Commision</h4>
                 <p class="category">Commision</p>
             </div>
-            <div class="mx-3">
+            <div class="card-body">         
+                      <div class="">
+                <div class="d-flex align-self-center mb-3">
 
-            <div class="card-header card-header-primary border border-light">
-                <h4>Summary</h4>
-                <div class="row text-center">
+                    <h3 class="mt-2  border-right px-2 py-0 border-dark"> Summary</h3>
+                    <p class="ml-2 my-auto"> Filter Data Commission </p>
+                </div>
+                <div class="row text-center  ">
                     <div class="col-4">
                         <h6>Life Time Commission</h6>
-                        <p>Rp.{{number_format($totalCommission,2)}}</p>
+                        <p id="total-commission">Rp {{number_format($totalCommission,2)}}</p>
+                       
                     </div>
                     <div class="col-4">
                         <h6>Remaining</h6>
-                        <p>Rp.{{number_format($remainingCommission,2)}}</p>
+                        <p id="remaining-commission">Rp {{number_format($remainingCommission)}}</p>
+                        
                     </div>
                     <div class="col-4">
                         <h6>Transferred</h6>
-                        <p>Rp.{{number_format($transferedCommission,2)}}</p>
+                        <p class="transferd-commission">Rp {{number_format($transferedCommission)}}</p>
+                        
                     </div>
                 </div>
-            </div>
-        </div>
 
-            <div class="card-body">
+            </div>
+            <hr class="border-seccondary my-3">
                 
                 <div class="table-responsive">
 

@@ -50,6 +50,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::group(['middleware' => ['auth']], function () {
 	Route::get('/dashboard', [HomeController::class, 'index'])->name('admin');
+	Route::get('/dashboard/filter', [HomeController::class, 'filterByMonth'])->name('dashboard.filter.month');
 	Route::group(['prefix' => 'admin'], function () {
 		
 	Route::post('/swithaccount', [CompanyController::class,'switchAccount'])->name('account.switch');
