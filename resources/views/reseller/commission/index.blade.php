@@ -1,6 +1,16 @@
 @extends('layouts.app', ['activePage' => 'commission', 'titlePage' => __('Commission')])
 
 @section('content')
+<style>
+    h2.status {
+        border-width: .4rem !important;
+    }
+
+    .rotate-status {
+        -webkit-transform: rotate(-15deg);
+    }
+
+</style>
 <div id="preloaders" class="preloader"></div>
 <div class="content">
     <div class="container-fluid">
@@ -17,23 +27,40 @@
                     <p class="ml-2 my-auto"> Filter Data Commission </p>
                 </div>
                 <div class="row text-center  ">
-                    <div class="col-4">
+                    <div class="col-md-4">
                         <h6>Life Time Commission</h6>
                         <p id="total-commission">Rp {{number_format($totalCommission,2)}}</p>
                        
                     </div>
-                    <div class="col-4">
+                    <div class="col-md-4">
                         <h6>Remaining</h6>
                         <p id="remaining-commission">Rp {{number_format($remainingCommission)}}</p>
                         
                     </div>
-                    <div class="col-4">
+                    <div class="col-md-4">
                         <h6>Transferred</h6>
                         <p class="transferd-commission">Rp {{number_format($transferedCommission)}}</p>
-                        
                     </div>
                 </div>
-
+                <div class="row ">
+                    <div class="col-6 w-100  ">
+                        <div class="mx-auto">
+                            <select name="filterByMonth" id="filterByMonth" class="select2 ml-5 filter-data ">
+                                <option value="" selected disabled>Select Month</option>
+                                @foreach ($months as $month)
+                                <option value="{{$month}}">{{$month}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6 w-100 ">
+                        <select name="filterByStatus" id="filterByStatus" class="select2 filter-data w-50 w-auto">
+                            <option value="" selected disabled>Select Status</option>
+                            <option value="paid">Paid</option>
+                            <option value="unpaid">Unpaid</option>
+                        </select>
+                    </div>
+                </div>
             </div>
             <hr class="border-seccondary my-3">
                 
@@ -180,8 +207,14 @@
                                     <span id="issue-date-detail"></span>
                                 </div>
                             </div>
-
-                            <div class="col-4">
+                            <div class="col-4 rotate-status align-content-center">
+                                <h2 class=" d-inline border status px-2 ">
+                                    <b class="text-uppercase">
+                                        <span id="status-detail"></span>
+                                    </b>
+                                </h2>
+                            </div>
+                            <div class="col-3">
                                 <div class="row">
                                     <div class="col-6 d-flex justify-content-end">From</div>
                                     <div class="col-6 border-left border-dark py-2">
@@ -249,6 +282,146 @@
 @endsection
 @push('js')
 <script>
+  
+
+    datatable =$('.data-table').DataTable()
+    $('.select2').select2()
+
+    md.initDashboardPageCharts();
+
+
+
+    $('.detail').on('click', function () {
+        detailClicked($(this).data('commission-id'))
+    })
+    function showModal(month, year, user_id, data) {
+        $.get(`{{url('/')}}/reseller/commision-month?user_id=${user_id}&month=${month}&year=${year}`, (res) => {
+            let card = $(`#show-detail`)
+            card.html("");
+            $('.t-column').remove()
+            res.map((el, index) => {
+                let show =
+                    `
+                    <tr>
+                        <td>${index+1}</td>
+                        <td>${ el.name.length > 15 ?  el.name.substring(0,15)+'...' :el.name }</td>
+                        <td>${el.company !== null ?(el.company.length > 15 ?  el.company.substring(0,15)+'...' :el.company):'-'  }</td>
+                        <td> <b>Rp ${parseInt(el.transaction).toFixed(3)}</b></td>
+                    </tr>
+                `
+                card.append(show)
+            })
+        })
+        $('#detailModal').modal('show')
+
+        $('#commission-id-detail').html(data.issue_date_id + ' - ' + data.commission_id)
+        $('#issue-date-detail').html(data.issue_date)
+        $('#from-company-detail').html(data.from_company)
+        $('#from-admin-detail').html(data.from_admin)
+        $('#total-commission-detail').html(data.total_commission.toFixed(3))
+        $('#total-payment-detail').html(data.total_payment.toFixed(3))
+        $('#percentage-detail').html(data.percentage)
+        $('#for-detail').html(data.for)
+        if (data.account_type) {
+            $('#account-number-detail').html(data.account_number + ' | ' + data.account_type)
+        } else {
+            $('#account-number-detail').html('null')
+        }
+        if (data.status == 'paid') {
+            $('#status-detail').closest('h2.border').removeClass('border-danger  text-danger')
+            $('#status-detail').closest('h2.border').addClass('border-success  text-success')
+        } else {
+            $('#status-detail').closest('h2.border').removeClass('border-success  text-success')
+            $('#status-detail').closest('h2.border').addClass('border-danger  text-danger')
+        }
+        $('#status-detail').html(data.status)
+    }
+    function filterData(reseller, month, status) {
+        return $.get(`{{url('/admin/commission/filter')}}?reseller=${reseller}&month=${month}&status=${status}`,
+        res => {
+            return res;
+        })
+    }
+    const detailClicked = (id) => {
+        const element = $(`#detail-button-${id}`)
+        const month = element.data('month')
+        const year = element.data('year')
+        const user_id = element.data('user')
+
+        const data = {
+            issue_date_id: element.data('issue-date-id'),
+            commission_id: id,
+            issue_date: element.data('issue-date'),
+            from_company: element.data('from-company'),
+            from_admin: element.data('from-admin'),
+            total_commission: element.data('total-commission'),
+            total_payment: element.data('total-payment'),
+            percentage: element.data('percentage'),
+            for: element.data('for'),
+            account_type: element.data('account-type'),
+            account_number: element.data('account-number'),
+            status: element.data('status'),
+        }
+        showModal(month, year, user_id, data)
+    }
+
+
+    $('.filter-data').change(function () {
+        total = $('#total-commission')
+        remaining = $('#remaining-commission')
+        transfered = $('#transfered-commission')
+        filterData('{{auth()->user()->name}}', $('#filterByMonth').val(), $('#filterByStatus').val()).then(
+            res => {
+                datatable.clear();
+                res.data.forEach(el => {
+                    el.row[7] =
+                        `   
+                    <p rel="tooltip" class="btn btn-info btn-fab btn-fab-mini btn-round detail"
+                        id="detail-button-${el.data.id}" href="" data-original-title="detail"
+                        data-placement="bottom" title="detail"
+                        data-month="${el.data.month}"
+                        data-loop="${el.row[0]}"
+                        data-year="${el.data.year}"
+                        data-user="${el.data.user.id}" data-commission-id="${el.data.id}"
+                        data-account-number="${el.data.user.account_number}"
+                        data-account-type="${el.data.user.bank_type}"
+                        data-total-payment="${el.row[4]}"
+                        data-total-commission="${el.row[5]}"
+                        data-percentage="${el.row[6]}"
+                        data-issue-date="${el.data.created_at}"
+                        data-issue-date-id="${el.data.created_at}"
+                        data-status="${el.row[7] == 1 ?'paid':'unpaid'}"
+                        data-from-company="${el.data.company.name}"
+                        data-for="${el.data.user.name}" 
+                        onClick="detailClicked(${el.data.id})">
+                        <i class="material-icons">list</i>
+                        <div class="ripple-container"></div>
+                    </p>
+                `
+
+                        el.row[7] += `
+            <a rel="tooltip" class="btn btn-primary btn-fab btn-fab-mini btn-round" href=""
+                                        data-original-title="" data-placement="bottom"
+                                        title="show transaction evidence " data-toggle="modal"
+                                        data-target="#show-image-Modal-${el.row[0]}">
+                                        <i class="material-icons">image</i>
+                                        <div class="ripple-container"></div>
+                                    </a>
+            `
+                                    el.row.splice(1,1);
+                    datatable.row.add(el.row);
+                });
+                datatable.draw();
+                let cell = $('.odd td:last').addClass('d-flex')
+                console.log(cell)
+                total.text('Rp ' + res.total_commission.toFixed(3))
+                remaining.text('Rp ' + res.remaining_commission.toFixed(3))
+                transfered.text('Rp ' + res.transfered_commission.toFixed(3))
+            }
+        )
+    })
+
+
     var getUrlParameter = function getUrlParameter(sParam) {
         var sPageURL = window.location.search.substring(1),
             sURLVariables = sPageURL.split('&'),
@@ -263,49 +436,13 @@
             }
         }
     }
-
-    $('.data-table').DataTable()
+    if (getUrlParameter('id')) {
+        setTimeout(() => {
+        $(`#detail-button-${getUrlParameter('id')}`).trigger('click');
+        }, 100);
+    }
     $("#preloaders").fadeOut(1000);
 
-    md.initDashboardPageCharts();
-
-
-
-    $('.detail').click(function () {
-        const month = $(this).data('month')
-        const year = $(this).data('year')
-        const user_id = '{{auth()->user()->id}}'
-        $.get(`{{url('/')}}/reseller/commision-month?user_id=${user_id}&month=${month}&year=${year}`, (res) => {
-            let card = $(`#show-detail`)
-            card.html("");
-            $('.t-column').remove()
-            res.map((el, index) => {
-                let show =
-                    `
-                    <tr>
-                        <td>${index+1}</td>
-                        <td>${el.name }</td>
-                        <td class="w-100"> ${ el.company.length > 15 ?  el.company.substring(0,15)+'...' :el.company  }</td>
-                        <td> <b>Rp.${parseInt(el.transaction).toFixed(3)}</b></td>
-                    </tr>
-                `
-                card.append(show)
-            })
-        })
-        $('#detailModal').modal('show')
-        $('#commission-id-detail').html($(this).data('issue-date-id') +' - '+$(this).data('commission-id'))
-        $('#issue-date-detail').html($(this).data('issue-date'))
-        $('#from-company-detail').html($(this).data('from-company'))
-        $('#from-admin-detail').html($(this).data('from-admin'))
-        $('#total-commission-detail').html($(this).data('total-commission'))
-        $('#total-payment-detail').html($(this).data('total-payment'))
-        $('#percentage-detail').html($(this).data('percentage'))
-        $('#status-detail').html($(this).data('status'))
-        $('#for-detail').html($(this).data('for'))
-    })
-    if (getUrlParameter('id')) {
-        $(`#detail-button-${getUrlParameter('id')}`).click();
-    }
 
 </script>
 @endpush

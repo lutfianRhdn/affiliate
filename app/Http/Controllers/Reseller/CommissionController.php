@@ -15,14 +15,16 @@ class CommissionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    protected $months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
     public function index()
     {
         $commissions = Commission::where('user_id',auth()->user()->id)->get();
         $totalCommission = $this->calculateCommission($commissions);
         $remainingCommission =$this->calculateCommission($commissions->where('status',false));
         $transferedCommission =$this->calculateCommission($commissions->where('status',true));
-
-        return view('reseller.commission.index',compact('commissions','totalCommission','remainingCommission','transferedCommission'));
+        $months = $this->months;
+        return view('reseller.commission.index',compact('commissions','totalCommission','remainingCommission','transferedCommission','months'));
     }
 
     /**

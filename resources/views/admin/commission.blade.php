@@ -438,7 +438,7 @@
         } else {
             $('#account-number-detail').html('null')
         }
-        if (status == 'paid') {
+        if (data.status == 'paid') {
             $('#status-detail').closest('h2.border').removeClass('border-danger  text-danger')
             $('#status-detail').closest('h2.border').addClass('border-success  text-success')
         } else {
@@ -607,7 +607,9 @@
     });
     // file input end
     if (getUrlParameter('id')) {
-        $(`#detail-button-${getUrlParameter('id')}`).click();
+        setTimeout(() => {
+        $(`#detail-button-${getUrlParameter('id')}`).trigger('click');
+        }, 100);
     }
 
 </script>
