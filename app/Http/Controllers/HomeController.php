@@ -57,6 +57,24 @@ class HomeController extends Controller
         }
         return $total;
     }
+    private function calculateRevenue($data =null){
+        $result =[];
+        $now = Carbon::now();
+
+        foreach ($this->months as $month ) {
+            $commission = Commission::whereMonth('created_at',Carbon::parse($month)
+            ->format('m'))->whereYear('created_at',$now->format('Y'))
+            ->where('user_id',auth()->user()->id);
+            if ($data !== null) {
+                $commission=$commission->where('status',$data)->first();
+            }else{
+                $commission=$commission->first();
+            }
+            
+            $result += [$month=>$commission !== null ?$commission->total_commission : 0];
+        }
+        return $result;
+    }
     private function resellerCommission()
     {
         $commissions =Commission::where('user_id',auth()->user()->id)->get();
@@ -69,15 +87,11 @@ class HomeController extends Controller
         $clients = Client::whereMonth('created_at',$now->format('m'))->where('user_id',auth()->user()->id)->limit(5)->get();
         // dd($clients);
         $data =[];
-        
-        foreach ($this->months as $month ) {
-            $commission = Commission::whereMonth('created_at',Carbon::parse($month)
-            ->format('m'))->whereYear('created_at',$now->format('Y'))
-            ->where('user_id',auth()->user()->id)
-            ->first();
-            
-            $data += [$month=>$commission !== null ?$commission->total_commission : 0];
-        }
+        $revenue =$this->calculateRevenue();
+        $remaining =$this->calculateRevenue(false);
+        $transfered =$this->calculateRevenue(true);
+        $data = ['revenue'=>$revenue,'remaining'=>$remaining,'transfered'=>$transfered];
+       
         $data= json_encode($data);
         $months= $this->months;
         return view('admin.dashboard',compact(
