@@ -244,23 +244,23 @@
 
             })
         })
-        // if (`{{auth()->user()->profile}}` == '' && `{{auth()->user()->hasRole('reseller')}}`) {
-        //   Swal.fire({
-        //     type: 'info',
-        //     title: 'Complate your <strong class="text-primary">Profile</strong>!',
-        //     text:'Please Complate your Profile for Trander Commission',
-        //     showCloseButton: true,
-        //     showCancelButton: true,
-        //     confirmButtonText:`Go To Profile`,
-        //     confirmButtonColor: '#15BACF',
-        //     cancelButtonText:`Later`
-        //   }).then((res)=>{
-        //     console.log(res)
-        //     if (res.value ==true) {
-        //     window.location.replace(`{{route('profile.edit')}}`)  
-        //     }
-        //   })
-        // }
+        if (`{{auth()->user()->profile}}` == '' && `{{auth()->user()->hasRole('reseller')}}`) {
+          Swal.fire({
+            type: 'info',
+            title: 'Complate your <strong class="text-primary">Profile</strong>!',
+            text:'Please Complate your Profile for Trander Commission',
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText:`Go To Profile`,
+            confirmButtonColor: '#15BACF',
+            cancelButtonText:`Later`
+          }).then((res)=>{
+            console.log(res)
+            if (res.value ==true) {
+            window.location.replace(`{{route('profile.edit')}}`)  
+            }
+          })
+        }
     });
 
 </script>

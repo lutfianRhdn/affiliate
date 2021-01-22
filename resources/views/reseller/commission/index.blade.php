@@ -44,8 +44,8 @@
                 </div>
                 <div class="row ">
                     <div class="col-6 w-100  ">
-                        <div class="mx-auto">
-                            <select name="filterByMonth" id="filterByMonth" class="select2 ml-5 filter-data ">
+                        <div class=" ml-5  d-flex align-items-start justify-content-start w-100">
+                            <select name="filterByMonth" id="filterByMonth" class="select2 w-50 filter-data ">
                                 <option value="" selected disabled>Select Month</option>
                                 @foreach ($months as $month)
                                 <option value="{{$month}}">{{$month}}</option>
@@ -53,12 +53,14 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-6 w-100 ">
-                        <select name="filterByStatus" id="filterByStatus" class="select2 filter-data w-50 w-auto">
-                            <option value="" selected disabled>Select Status</option>
-                            <option value="paid">Paid</option>
-                            <option value="unpaid">Unpaid</option>
-                        </select>
+                    <div class="col-6 w-100  pr-5">
+                        <div class=" d-flex align-items-end justify-content-end  w-100" >
+                            <select name="filterByStatus" id="filterByStatus" class="select2 filter-data w-50 w-auto">
+                                <option value="" selected disabled>Select Status</option>
+                                <option value="paid">Paid</option>
+                                <option value="unpaid">Unpaid</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
