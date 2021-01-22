@@ -14,14 +14,14 @@
         </div>
         <div class="row">
             <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="card card-stats">
-                    <div class="card-header card-header-warning card-header-icon">
+                <div class="card card-stats w-100 ">
+                    <div class="card-header card-header-warning card-header-icon h-100">
                         <div class="card-icon">
                             <i class="material-icons">supervisor_account</i>
                         </div>
                         <p class="card-category">Clients</p>
-                        <h3 class="card-title" id="total-client">{{$totalClient}}
-                        </h3>
+                        <h5 class="card-title" id="total-client">{{$totalClient}}
+                        </h5>
                     </div>
                     <div class="card-footer">
                         <div class="stats">
@@ -31,13 +31,13 @@
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="card card-stats">
+                <div class="card card-stats w-100">
                     <div class="card-header card-header-success card-header-icon">
                         <div class="card-icon">
                             <i class="material-icons">store</i>
                         </div>
                         <p class="card-category">Revenue</p>
-                        <h3 class="card-title" id="total-revenue">Rp {{number_format($totalCommission,2)}}</h3>
+                        <h4 class="card-title" id="total-revenue">Rp {{number_format($totalCommission,2)}}</h4>
                     </div>
                     <div class="card-footer">
                         <div class="stats">
@@ -47,13 +47,13 @@
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="card card-stats">
+                <div class="card card-stats w-100">
                     <div class="card-header card-header-danger card-header-icon">
                         <div class="card-icon">
                             <i class="material-icons">receipt_long</i>
                         </div>
                         <p class="card-category">Remaining</p>
-                        <h3 class="card-title" id="total-remaining">Rp {{number_format($remainingCommission,2)}}</h3>
+                        <h4 class="card-title" id="total-remaining">Rp {{number_format($remainingCommission,2)}}</h4>
                     </div>
                     <div class="card-footer">
                       <div class="stats">
@@ -63,13 +63,13 @@
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="card card-stats">
+                <div class="card card-stats w-100">
                     <div class="card-header card-header-info card-header-icon">
                         <div class="card-icon">
                             <i class="material-icons">payments</i>
                         </div>
                         <p class="card-category">Transfered</p>
-                        <h3 class="card-title" id="total-transfered">Rp {{number_format($transferedCommission,2)}}</h3>
+                        <h4 class="card-title" id="total-transfered">Rp {{number_format($transferedCommission,2)}}</h4>
                     </div>
                     <div class="card-footer">
                       <div class="stats">
@@ -225,11 +225,11 @@
             $.get(`{{route('dashboard.filter.month')}}?month=${$(this).val()}`, function (res) {
                 // console.log(res)
                 $('#total-client').text(res.data.total_client)
-                $('#total-remaining').html('Rp <br> ' + numeral(res.data.total_remaining).format(
+                $('#total-remaining').html('Rp' + numeral(res.data.total_remaining).format(
                     '0,0.00'))
-                $('#total-transfered').html('Rp <br>' + numeral(res.data.total_transfered).format(
+                $('#total-transfered').html('Rp' + numeral(res.data.total_transfered).format(
                     '0,0.00'))
-                $('#total-revenue').html('Rp <br>' + numeral(res.data.total_commission).format(
+                $('#total-revenue').html('Rp' + numeral(res.data.total_commission).format(
                     '0,0.00'))
                 let tbody = $('#table-clients')
                 tbody.html("")
