@@ -39,7 +39,7 @@
                     </div>
                     <div class="col-md-4">
                         <h6>Transferred</h6>
-                        <p class="transferd-commission">Rp {{number_format($transferedCommission)}}</p>
+                        <p id="transfered-commission">Rp {{number_format($transferedCommission)}}</p>
                     </div>
                 </div>
                 <div class="row ">
@@ -306,20 +306,22 @@
                         <td>${index+1}</td>
                         <td>${ el.name.length > 15 ?  el.name.substring(0,15)+'...' :el.name }</td>
                         <td>${el.company !== null ?(el.company.length > 15 ?  el.company.substring(0,15)+'...' :el.company):'-'  }</td>
-                        <td> <b>Rp ${parseInt(el.transaction).toFixed(3)}</b></td>
+                        <td> <b>Rp ${numeral(el.transaction).format('$0,0.00' )}</b></td>
                     </tr>
                 `
                 card.append(show)
             })
+console.log('res',res)
+
         })
         $('#detailModal').modal('show')
-
+console.log('data',data);
         $('#commission-id-detail').html(data.issue_date_id + ' - ' + data.commission_id)
         $('#issue-date-detail').html(data.issue_date)
         $('#from-company-detail').html(data.from_company)
         $('#from-admin-detail').html(data.from_admin)
-        $('#total-commission-detail').html(data.total_commission.toFixed(3))
-        $('#total-payment-detail').html(data.total_payment.toFixed(3))
+        $('#total-commission-detail').html(data.total_commission)
+        $('#total-payment-detail').html(data.total_payment)
         $('#percentage-detail').html(data.percentage)
         $('#for-detail').html(data.for)
         if (data.account_type) {
@@ -346,7 +348,7 @@
         const element = $(`#detail-button-${id}`)
         const month = element.data('month')
         const year = element.data('year')
-        const user_id = element.data('user')
+        const user_id = `{{auth()->user()->id}}`
 
         const data = {
             issue_date_id: element.data('issue-date-id'),
@@ -385,8 +387,8 @@
                         data-user="${el.data.user.id}" data-commission-id="${el.data.id}"
                         data-account-number="${el.data.user.account_number}"
                         data-account-type="${el.data.user.bank_type}"
-                        data-total-payment="${el.row[4]}"
-                        data-total-commission="${el.row[5]}"
+                        data-total-payment="${numeral(el.row[4]).format('0,0.00')}"
+                        data-total-commission="${numeral(el.row[5]).format('0,0.00')}"
                         data-percentage="${el.row[6]}"
                         data-issue-date="${el.data.created_at}"
                         data-issue-date-id="${el.data.created_at}"
@@ -409,14 +411,18 @@
                                     </a>
             `
                                     el.row.splice(1,1);
+                                    el.row[3] ='Rp' + numeral(el.row[3]).format('0,0.00')
+                                    el.row[4] ='Rp' + numeral(el.row[4]).format('0,0.00')
+                                    console.log(el.row)
                     datatable.row.add(el.row);
                 });
                 datatable.draw();
-                let cell = $('.odd td:last').addClass('d-flex')
-                console.log(cell)
-                total.text('Rp ' + res.total_commission.toFixed(3))
-                remaining.text('Rp ' + res.remaining_commission.toFixed(3))
-                transfered.text('Rp ' + res.transfered_commission.toFixed(3))
+                let cell = $('td:last').addClass('d-flex')
+                // console.log(cell)
+                console.log(res)
+                total.text('Rp ' + numeral(res.total_commission).format('0,0.00'))
+                remaining.text('Rp ' + numeral(res.remaining_commission).format('0,0.00'))
+                transfered.text('Rp ' + numeral(res.transfered_commission).format('0,0.00'))
             }
         )
     })
