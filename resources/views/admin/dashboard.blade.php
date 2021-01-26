@@ -37,11 +37,11 @@
                             <i class="material-icons">store</i>
                         </div>
                         <p class="card-category">Revenue</p>
-                        <h4 class="card-title" id="total-revenue">Rp {{number_format($totalCommission,2)}}</h4>
+                        <h4 class="card-title" id="total-revenue">{{$totalCommission}}</h4>
                     </div>
                     <div class="card-footer">
                         <div class="stats">
-                            <i class="material-icons">date_range</i> {{$lastCommission->created_at->diffforhumans()}}
+                            <i class="material-icons">date_range</i> {{$lastCommission !==null ?$lastCommission->created_at->diffforhumans():"your revenue hasn't generated"}}
                         </div>
                     </div>
                 </div>
@@ -53,11 +53,11 @@
                             <i class="material-icons">receipt_long</i>
                         </div>
                         <p class="card-category">Remaining</p>
-                        <h4 class="card-title" id="total-remaining">Rp {{number_format($remainingCommission,2)}}</h4>
+                        <h4 class="card-title" id="total-remaining">{{$remainingCommission}}</h4>
                     </div>
                     <div class="card-footer">
                       <div class="stats">
-                          <i class="material-icons">date_range</i> {{$lastCommission->created_at->diffforhumans()}}
+                          <i class="material-icons">date_range</i> {{$lastCommission !==null ?$lastCommission->created_at->diffforhumans():"your revenue   hasn't generated"}}
                       </div>
                   </div>
                 </div>
@@ -69,11 +69,11 @@
                             <i class="material-icons">payments</i>
                         </div>
                         <p class="card-category">Transfered</p>
-                        <h4 class="card-title" id="total-transfered">Rp {{number_format($transferedCommission,2)}}</h4>
+                        <h4 class="card-title" id="total-transfered">{{$transferedCommission}}</h4>
                     </div>
                     <div class="card-footer">
                       <div class="stats">
-                          <i class="material-icons">date_range</i> {{$lastCommission->created_at->diffforhumans()}}
+                          <i class="material-icons">date_range</i> {{$lastCommission !==null ?$lastCommission->created_at->diffforhumans():"your revenue   hasn't generated"}}
                       </div>
                   </div>
                 </div>
@@ -90,7 +90,7 @@
                     </div>
                     <div class="card-footer">
                         <div class="stats">
-                            <i class="material-icons">access_time</i> {{$lastCommission->created_at->diffforhumans()}}
+                            <i class="material-icons">access_time</i> {{$lastCommission !==null ?$lastCommission->created_at->diffforhumans():"your revenue    hasn't generated"}}
                         </div>
                     </div>
                 </div>
@@ -132,6 +132,9 @@
         $('.select2').select2()
         let dataChart = JSON.parse('{!! $data !!}')
         let result = []
+        $('#total-revenue').text('Rp '+ numeral($('#total-revenue').text()).format('O.ooa'))
+        $('#total-remaining').text('Rp '+ numeral($('#total-remaining').text()).format('O.ooa'))
+        $('#total-transfered').text('Rp '+ numeral($('#total-transfered').text()).format('O.ooa'))
         Object.keys(dataChart).map(el => {
             let data = []
             for (var key in dataChart[el]) {
@@ -141,39 +144,73 @@
                 [el]: data
             })
         })
+        let revenue =[]
+        result[0].revenue.forEach((el,index) => {
+            revenue.push(el- result[1].remaining[index] - result[2].transfered[index])
+        });
+        // console.log(revenue)
+        // const maxRes =0;
+        const Maxres = Math.max.apply(Math,result[0].revenue).toString()
+        let heightChart= 
+        Maxres.split('')
+        .filter(e=> e !== '0')
+        .map((el,i)=> i ==0 ? `${el}.`:el)
+        .join('')
+        let zero = 
+            Maxres.split('')
+            // .filter(e=> e == '0')
+            .map((el,i)=> i !==0 ? '0' :'' )
+            .join('')
+        const bb = '1' + zero.toString()
+        console.log('nih ', result[3])
+        heightChart = Math.round(parseFloat(heightChart))*bb
+
         var data = {
             labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             datasets: [{
-                    label: "revenue",
-                    data: result[0].revenue,
-                    backgroundColor: '#63B967'
+                    label: "Revenue",
+                    data:revenue,
+                    stack:'client',
+                    backgroundColor: '#45aaf2'
                 },
                 {
-                    label: "remaining",
+                    label: "Remaining",
                     data: result[1].remaining,
-                    backgroundColor: '#E63B37'
-
+                    stack:'client',
+                    backgroundColor: '#fc5c65'
                 },
                 {
-                    label: "transfered",
+                    label: "Transfered",
                     data: result[2].transfered,
+                    stack:'client',
+                    backgroundColor: '#26de81'
+                },
+               
 
-                    backgroundColor: '#02AEC3'
-                }
             ]
         };
+        if (result[3] !== undefined) {
+                data.datasets.push(
+                    {
+                        label: "Reseller",
+                        data: result[3].reseller,
+                        stack:'reseller',
+                        
+                        backgroundColor: '#778ca3'
+                    })
+                }
         const options = {
             // barValueSpacing: 20,
             responsive: true,
             scaleBeginAtZero: true,
             defaultFontColor: '#fff',
             hover: {
-                mode: 'index',
-                intersect: false
+                mode: 'x',
+                intersect: true
             },
             tooltips: {
-                mode: 'index',
-                intersect: false,
+                mode: 'x',
+                intersect: true,
                 callbacks: {
                     title: function (el) {
                         return "";
@@ -181,22 +218,24 @@
                     label: function (item, data) {
                         var datasetLabel = data.datasets[item.datasetIndex].label || "";
                         var dataPoint = item.yLabel;
-                        console.log(datasetLabel)
-                        return datasetLabel + ": " + "Rp " + numeral(dataPoint).format('Oa');
+                        if (datasetLabel == 'Revenue') {
+                             dataPoint += result[1].remaining[item.index] + result[2].transfered[item.index] 
+                        }
+                        return datasetLabel + ": " + "Rp " + numeral(dataPoint).format('O.ooa');
                     }
                 }
             },
 
             scales: {
                 xAxes: [{
-                    stacked: true
+                    stacked: true,
                 }],
                 yAxes: [{
-                    display: true,
+                    stacked: true,
                     ticks: {
                         beginAtZero: true, 
                         callback: function (label, index, labels) {
-                            return numeral(label).format('Oa')
+                            return numeral(label).format('O.oa')
                         }
                     },
                     stepSize: 1,
@@ -206,18 +245,18 @@
                 }]
             }
         }
+        Chart.defaults.global.defaultFontColor = "#fff";
         Chart.scaleService.updateScaleDefaults('linear', {
             ticks: {
-                max: 1000000
+                max: (heightChart ) 
             }
         });
-
+        // new Chart(ctx));
         var myBarChart = new Chart($('#chart'), {
             type: 'bar',
             data: data,
             options: options
-        });
-
+        })
 
         $("#preloaders").fadeOut(1000);
         $('#filterByMonth').change(function () {
@@ -225,12 +264,12 @@
             $.get(`{{route('dashboard.filter.month')}}?month=${$(this).val()}`, function (res) {
                 // console.log(res)
                 $('#total-client').text(res.data.total_client)
-                $('#total-remaining').html('Rp' + numeral(res.data.total_remaining).format(
-                    '0,0.00'))
-                $('#total-transfered').html('Rp' + numeral(res.data.total_transfered).format(
-                    '0,0.00'))
-                $('#total-revenue').html('Rp' + numeral(res.data.total_commission).format(
-                    '0,0.00'))
+                $('#total-remaining').html('Rp ' + numeral(res.data.total_remaining).format(
+                    'O.ooa'))
+                $('#total-transfered').html('Rp ' + numeral(res.data.total_transfered).format(
+                    'O.ooa'))
+                $('#total-revenue').html('Rp ' + numeral(res.data.total_commission).format(
+                    'O.ooa'))
                 let tbody = $('#table-clients')
                 tbody.html("")
                 res.data.clients.map(function (el, index) {

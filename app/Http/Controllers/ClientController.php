@@ -15,9 +15,13 @@ class ClientController extends Controller
      */
     public function index()
     {
-        $clients = Client::where('user_id',auth()->user()->id)
-        ->where('product_id',auth()->user()->product->id)
-        ->orderBy('id','desc')
+        $clients = new Client;
+        if (auth()->user()->hasRole('reseller')) {
+            $clients=$clients->where('user_id',auth()->user()->id)->where('product_id',auth()->user()->product->id);
+        }else{
+            $clients= $clients->where('company_id',1);
+        }
+        $clients = $clients->orderBy('id','desc')
         ->get();
         return view('reseller.clients',compact('clients'));
     }
