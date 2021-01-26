@@ -23,8 +23,8 @@ class TransactionFactory extends Factory
     public function definition()
     {
         return [
-            'total_payment'=> rand(1,9) . '0000',
-            'payment_date'=> $this->faker->dateTimeBetween('-5 years','now'),
+            'total_payment'=> rand(1,9) . '000000',
+            'payment_date'=> $this->faker->dateTimeBetween('-1 years','now'),
             'client_id'=>Client::all()->random()->id
         ];
     }

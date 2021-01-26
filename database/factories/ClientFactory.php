@@ -25,10 +25,12 @@ class ClientFactory extends Factory
      */
     public function definition()
     {
+        $user =User::whereHas('roles',function($q){$q->where('name','reseller');})->get()->random();
         return [
             'name'=> $this->faker->name,
-            'product_id'=>Product::all()->random()->id,
-            'user_id'=>User::whereHas('roles',function($q){$q->where('name','reseller');})->get()->random()->id,
+            'product_id'=>$user->product->id,
+            'company_id'=>$user->company->id,
+            'user_id'=>$user->id,
             'unic_code'=>Str::random(6),
             'company'=> $this->faker->company
         ];

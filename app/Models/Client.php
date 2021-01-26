@@ -22,4 +22,8 @@ class Client extends Model
     {
         return $this->hasMany(Transaction::class);
     }
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
 }
