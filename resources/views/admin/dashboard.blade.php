@@ -32,12 +32,28 @@
             </div>
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="card card-stats w-100">
-                    <div class="card-header card-header-success card-header-icon">
+                    <div class="card-header card-header-primary card-header-icon">
                         <div class="card-icon">
                             <i class="material-icons">store</i>
                         </div>
                         <p class="card-category">Revenue</p>
-                        <h4 class="card-title" id="total-revenue">{{$totalCommission}}</h4>
+                        <h4 class="card-title" id="total-revenue">{{$totalRevenue}}</h4>
+                    </div>
+                    <div class="card-footer">
+                        <div class="stats">
+                            <i class="material-icons">date_range</i> {{$lastCommission !==null ?$lastCommission->created_at->diffforhumans():"your revenue hasn't generated"}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card card-stats w-100">
+                    <div class="card-header card-header-success card-header-icon">
+                        <div class="card-icon">
+                            <i class="material-icons">payments</i>
+                        </div>
+                        <p class="card-category">Commissions</p>
+                        <h4 class="card-title" id="total-commission">{{$totalCommission}}</h4>
                     </div>
                     <div class="card-footer">
                         <div class="stats">
@@ -133,6 +149,7 @@
         let dataChart = JSON.parse('{!! $data !!}')
         let result = []
         $('#total-revenue').text('Rp '+ numeral($('#total-revenue').text()).format('O.ooa'))
+        $('#total-commission').text('Rp '+ numeral($('#total-commission').text()).format('O.ooa'))
         $('#total-remaining').text('Rp '+ numeral($('#total-remaining').text()).format('O.ooa'))
         $('#total-transfered').text('Rp '+ numeral($('#total-transfered').text()).format('O.ooa'))
         Object.keys(dataChart).map(el => {
@@ -145,11 +162,7 @@
             })
         })
         let revenue =[]
-        result[0].revenue.forEach((el,index) => {
-            revenue.push(el- result[1].remaining[index] - result[2].transfered[index])
-        });
-        // console.log(revenue)
-        // const maxRes =0;
+        result[0].revenue
         const Maxres = Math.max.apply(Math,result[0].revenue).toString()
         let heightChart= 
         Maxres.split('')
@@ -161,43 +174,36 @@
             // .filter(e=> e == '0')
             .map((el,i)=> i !==0 ? '0' :'' )
             .join('')
-        const bb = '1' + zero.toString()
-        console.log('nih ', result[3])
-        heightChart = Math.round(parseFloat(heightChart))*bb
-
+        const nominal = '1' + zero.toString()
+        heightChart = Math.round(parseFloat(heightChart))*nominal
         var data = {
             labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             datasets: [{
                     label: "Revenue",
-                    data:revenue,
+                    data:result[0].revenue,
                     stack:'client',
                     backgroundColor: '#45aaf2'
                 },
-                {
-                    label: "Remaining",
-                    data: result[1].remaining,
-                    stack:'client',
-                    backgroundColor: '#fc5c65'
-                },
-                {
-                    label: "Transfered",
-                    data: result[2].transfered,
-                    stack:'client',
-                    backgroundColor: '#26de81'
-                },
-               
-
+ 
             ]
         };
         if (result[3] !== undefined) {
                 data.datasets.push(
-                    {
-                        label: "Reseller",
-                        data: result[3].reseller,
-                        stack:'reseller',
-                        
-                        backgroundColor: '#778ca3'
-                    })
+                {
+                    label: "Transfered",
+                    data: result[2].transfered,
+                    stack:'reseller',
+                    backgroundColor: '#26de81'
+                },
+                {
+                    label: "Remaining",
+                    data: result[1].remaining,
+                    stack:'reseller',
+                    backgroundColor: '#fc5c65'
+                },
+               
+                )
+
                 }
         const options = {
             // barValueSpacing: 20,
@@ -264,11 +270,13 @@
             $.get(`{{route('dashboard.filter.month')}}?month=${$(this).val()}`, function (res) {
                 // console.log(res)
                 $('#total-client').text(res.data.total_client)
+                $('#total-commission').html('Rp ' + numeral(res.data.total_commission).format(
+                    'O.ooa'))
                 $('#total-remaining').html('Rp ' + numeral(res.data.total_remaining).format(
                     'O.ooa'))
                 $('#total-transfered').html('Rp ' + numeral(res.data.total_transfered).format(
                     'O.ooa'))
-                $('#total-revenue').html('Rp ' + numeral(res.data.total_commission).format(
+                $('#total-revenue').html('Rp ' + numeral(res.data.total_revenue).format(
                     'O.ooa'))
                 let tbody = $('#table-clients')
                 tbody.html("")

@@ -55,11 +55,11 @@ class HomeController extends Controller
         }
         return response(['status'=>'success'],200);
     }
-    private function calculateCommission($data)
+    private function calculateCommission($data,$collumn = 'total_commission')
     {
         $total =0;
         foreach ($data as $commission) {
-            $total += $commission->total_commission;
+            $total += $commission->$collumn;
         }
         return $total;
     }
@@ -90,6 +90,7 @@ class HomeController extends Controller
         $totalCommission= $this->calculateCommission($commissions);
         $remainingCommission =$this->calculateCommission($commissions->where('status',false));
         $transferedCommission =$this->calculateCommission($commissions->where('status',true));
+        $totalRevenue =0;
         $lastCommission = Commission::latest()->where($where,$value)->first();
         $now = Carbon::now();
         $clients = Client::whereMonth('created_at',$now->format('m'))->where($where,$value)->limit(5)->get();
@@ -98,10 +99,10 @@ class HomeController extends Controller
         $remaining =$this->calculateRevenue(false,$where,$value);
         $transfered =$this->calculateRevenue(true,$where,$value);
         $data = ['revenue'=>$revenue,'remaining'=>$remaining,'transfered'=>$transfered];
-        // dd($lastCommission);
         if (!auth()->user()->hasRole('reseller')) {
             $data['revenue']= $this->calculateRevenue(null,$where,$value,'total_payment');
             $data['reseller']= $this->calculateRevenue(null,$where,$value);
+            $totalRevenue = $this->calculateCommission($commissions,'total_payment');
         }
         $data= json_encode($data);
         $months= $this->months;
@@ -109,7 +110,7 @@ class HomeController extends Controller
             'totalClient','clients',
             'totalCommission','data',
             'remainingCommission','transferedCommission',
-            'lastCommission','months'));
+            'lastCommission','months','totalRevenue'));
     }
     public function filterByMonth(Request $request)
     {
@@ -118,6 +119,7 @@ class HomeController extends Controller
         $commissions =Commission::whereMonth('created_at',$month)->where('company_id',auth()->user()->company_id)->get();
         $totalClient = Client::whereMonth('created_at',$month)->where('company_id',auth()->user()->company_id)->get()->count();
         $totalCommission= $this->calculateCommission($commissions);
+        $totalRevenue= $this->calculateCommission($commissions,'total_payment');
         $remainingCommission =$this->calculateCommission($commissions->where('status',false));
         $transferedCommission =$this->calculateCommission($commissions->where('status',true));
         $clientsData = Client::whereMonth('created_at',$month)->where('company_id',auth()->user()->company_id)->limit(5)->get();
@@ -136,6 +138,7 @@ class HomeController extends Controller
                 'total_commission'=>$totalCommission,
                 'total_transfered'=>$transferedCommission,
                 'total_remaining'=>$remainingCommission,
+                'total_revenue'=>$totalRevenue,
                 'clients'=>$clients
             ]
         ],200);
