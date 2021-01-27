@@ -162,7 +162,6 @@
             })
         })
         let revenue =[]
-        result[0].revenue
         const Maxres = Math.max.apply(Math,result[0].revenue).toString()
         let heightChart= 
         Maxres.split('')
@@ -175,7 +174,7 @@
             .map((el,i)=> i !==0 ? '0' :'' )
             .join('')
         const nominal = '1' + zero.toString()
-        heightChart = Math.round(parseFloat(heightChart))*nominal
+        heightChart = Math.ceil(parseFloat(heightChart))*nominal
         var data = {
             labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             datasets: [{
@@ -224,9 +223,9 @@
                     label: function (item, data) {
                         var datasetLabel = data.datasets[item.datasetIndex].label || "";
                         var dataPoint = item.yLabel;
-                        if (datasetLabel == 'Revenue') {
-                             dataPoint += result[1].remaining[item.index] + result[2].transfered[item.index] 
-                        }
+                        // if (datasetLabel == 'Revenue') {
+                        //      dataPoint += result[1].remaining[item.index] + result[2].transfered[item.index] 
+                        // }
                         return datasetLabel + ": " + "Rp " + numeral(dataPoint).format('O.ooa');
                     }
                 }
