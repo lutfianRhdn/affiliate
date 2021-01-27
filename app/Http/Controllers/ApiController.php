@@ -252,7 +252,7 @@ class ApiController extends Controller
                 'error'=>'your reseller isnt registered'
             ],400);
         }
-        $request->request->add(['user_id'=>$reseller->first()->id,'product_id'=>$product->id]);
+        $request->request->add(['user_id'=>$reseller->first()->id,'product_id'=>$product->id,'company_id'=>$reseller->first()->company_id]);
         $clientsModel = new Client;
         $client = $clientsModel->createClient($request->all());
         return response([
