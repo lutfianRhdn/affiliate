@@ -106,17 +106,34 @@ class HomeController extends Controller
         }
         $data= json_encode($data);
         $months= $this->months;
+        $years = [];
+        $index =0;
+        for ($i=(int)auth()->user()->created_at->format('Y'); $i <= (int)Carbon::now()->format('Y') ; $i++) { 
+            array_push($years, $i);
+        $index +=1;
+        }
         return view('admin.dashboard',compact(
             'totalClient','clients',
             'totalCommission','data',
             'remainingCommission','transferedCommission',
-            'lastCommission','months','totalRevenue'));
+            'lastCommission','months',
+            'totalRevenue','years'));
     }
     public function filterByMonth(Request $request)
     {
         $now = Carbon::now();
         $month = Carbon::parse($request->month)->format('m');
-        $commissions =Commission::whereMonth('created_at',$month)->where('company_id',auth()->user()->company_id)->get();
+        $year = Carbon::parse($request->year)->format('Y');
+        $commissions =  new Commission();
+
+        if ($request->month) {
+            $commissions = $commissions->whereMonth('created_at',$month);
+        }
+
+        if ($request->year) {
+            $commissions = $commissions->whereYear('created_at',$request->year);
+        }
+        $commissions = $commissions->where('company_id',auth()->user()->company_id)->get();
         $totalClient = Client::whereMonth('created_at',$month)->where('company_id',auth()->user()->company_id)->get()->count();
         $totalCommission= $this->calculateCommission($commissions);
         $totalRevenue= $this->calculateCommission($commissions,'total_payment');

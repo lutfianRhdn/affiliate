@@ -4,11 +4,16 @@
 <div class="content">
     <div class="container-fluid">
         <div>
-
-            <select name="filterByMonth" id="filterByMonth" class="select2 w-25">
+            <select name="filterByMonth" id="filterByMonth" class="select2 w-25 filter-dashboard">
                 <option value="" selected>Select Month</option>
                 @foreach ($months as $month)
                 <option value="{{$month}}">{{$month}}</option>
+                @endforeach
+            </select>
+            <select name="filterByMonth" id="filterByYear" class="select2 w-25 filter-dashboard">
+                <option value="" selected>Select Year</option>
+                @foreach ($years as $year)
+                <option value="{{$year}}">{{$year}}</option>
                 @endforeach
             </select>
         </div>
@@ -264,10 +269,10 @@
         })
 
         $("#preloaders").fadeOut(1000);
-        $('#filterByMonth').change(function () {
+        $('.filter-dashboard').change(function () {
             // console.log($(this).val())
-            $.get(`{{route('dashboard.filter.month')}}?month=${$(this).val()}`, function (res) {
-                // console.log(res)
+            $.get(`{{route('dashboard.filter.month')}}?month=${$('#filterByMonth').val()}&year=${$('#filterByYear').val()}`, function (res) {
+                console.log(res)
                 $('#total-client').text(res.data.total_client)
                 $('#total-commission').html('Rp ' + numeral(res.data.total_commission).format(
                     'O.ooa'))
