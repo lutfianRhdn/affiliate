@@ -35,22 +35,24 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="card card-stats w-100">
-                    <div class="card-header card-header-primary card-header-icon">
-                        <div class="card-icon">
-                            <i class="material-icons">store</i>
+            @if (!auth()->user()->hasRole('reseller'))
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card card-stats w-100">
+                        <div class="card-header card-header-primary card-header-icon">
+                            <div class="card-icon">
+                                <i class="material-icons">store</i>
+                            </div>
+                            <p class="card-category">Revenue</p>
+                            <h4 class="card-title" id="total-revenue">{{$totalRevenue}}</h4>
                         </div>
-                        <p class="card-category">Revenue</p>
-                        <h4 class="card-title" id="total-revenue">{{$totalRevenue}}</h4>
-                    </div>
-                    <div class="card-footer">
-                        <div class="stats">
-                            <i class="material-icons">date_range</i> {{$lastCommission !==null ?$lastCommission->created_at->diffforhumans():"your revenue hasn't generated"}}
+                        <div class="card-footer">
+                            <div class="stats">
+                                <i class="material-icons">date_range</i> {{$lastCommission !==null ?$lastCommission->created_at->diffforhumans():"your revenue hasn't generated"}}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            @endif
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="card card-stats w-100">
                     <div class="card-header card-header-success card-header-icon">
