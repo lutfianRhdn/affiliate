@@ -1,6 +1,7 @@
 @extends('layouts.app', ['activePage' => 'log', 'titlePage' => __('Log Activities')])
 
 @section('content')
+<div id="preloaders" class="preloader"></div>
 <div class="content">
     <div class="container">
         <div class="row">
@@ -22,14 +23,13 @@
                             @endif
                         </div>
                         <div class="table-responsive">
-                            <table class="table" id="log_table">
+                            <table class="table" id="table_log">
                                 <thead class=" text-primary">
                                     <tr>
-                                        <th>No.</th>
-                                        <th>Time</th>
+                                        <th style="width: 10%">No.</th>
+                                        <th style="width: 20%">Time</th>
                                         <th>Subject</th>
-                                        <th>User Id</th>
-                                        <th class="text-right">Actions</th>
+                                        <th class="text-right no-sort" style="width: 10%">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -39,11 +39,10 @@
                                         <td>{{++$key}}</td>
                                         <td>{{ $log->created_at }}</td>
                                         <td>{{ $log->subject }}</td>
-                                        <td>{{ $log->user_id }}</td>
                                         <td class="td-actions text-right">
                                             <a rel="tooltip" class="btn btn-danger btn-fab btn-fab-mini btn-round mr-2"
                                                 href="" data-placement="bottom" title="Delete" data-toggle="modal"
-                                        data-target="#deleteModal{{$log->id}}">
+                                                data-target="#deleteModal{{$log->id}}">
                                                 <i class="material-icons">delete</i>
                                                 <div class="ripple-container"></div>
                                             </a>
@@ -93,8 +92,14 @@
 @push('js')
 <script>
     $(document).ready(function () {
-
+        $('#table_log').DataTable({
+            "aoColumnDefs": [{
+                'bSortable': false,
+                'aTargets': ['no-sort']
+            }]
+        });
+        $('.custom-select').selectpicker();
+        $("#preloaders").fadeOut(1000);
     });
-
 </script>
 @endpush

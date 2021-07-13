@@ -9,6 +9,12 @@ class LogActivity extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'subject'
+        'subject','user_id','company_id'
     ];
+
+    public function getData()
+    {
+        $logs = LogActivity::all();
+        return $logs;
+    }
 }

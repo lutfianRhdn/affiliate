@@ -21,9 +21,10 @@ class KonfirmasiEmail extends Mailable
 
     public $user;
 
-    public function __construct(User $user)
+    public function __construct($user, $pass)
     {
         $this->user = $user;
+        $this->pass = $pass;
     }
 
     /**
@@ -32,12 +33,14 @@ class KonfirmasiEmail extends Mailable
      * @return $this
      */
     public function build()
-    {
-        $product = DB::table('users')
-        ->join('products', 'users.product_id', '=', 'products.id')
-        ->select('products.product_name','products.regex')
-        ->where('users.id', $this->user->id)
-        ->get();
-        return $this->view('auth.emailTemplate', ["pp" => $this->user, "product" => $product]);
+    {   
+        $data = User::select('users.name as name', 'users.email as email', 'users.phone as phone', 'users.address as address', 'users.ref_code as ref_code',
+            'products.product_name','cities.city_name_full as city_name_full', 'provinces.province_name as province_name')
+            ->where('users.id', $this->user)
+            ->join('products','products.id','=','users.product_id')
+            ->join('cities','cities.city_id','=','users.region')
+            ->join('provinces','provinces.province_id','=','users.state')->get();
+
+        return $this->view('auth.emailTemplate', ["user" => $data, "pass" => $this->pass]);
     }
 }

@@ -1,15 +1,22 @@
 <?php
 
-use App\Helpers\LogActivity;
 use App\Http\Controllers\AdminResellerController;
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LogActivityController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Reseller\ResellerController;
+use App\Http\Controllers\Reseller\CommissionController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\CommissionController as adminCommision;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
+use App\Models\Commission;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -29,71 +36,70 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/registration', [RegisterController::class, 'index']);
+Route::get('/registration', [RegisterController::class, 'index'])->name('registration');
+Route::get('/registration/get-city', [RegisterController::class, 'getCity']);
 // Route::get('/registration/create', [RegisterController::class, 'create'])->name('registration.create');
 // Route::get('/registration', [RegisterController::class, 'store'])->name('registrations.store');
-Route::get('/confirmation/{email}/{ref_code}', [App\Http\Controllers\Auth\RegisterController::class, 'konfirmasiemail'])->name('konfirmasiemail');
+Route::get('/confirmation/{email}', [App\Http\Controllers\Auth\RegisterController::class, 'emailConfirmation'])->name('emailConfirmation');
 
 Auth::routes();
+
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// ApiController
 
-Auth::routes();
-Route::get('/admin', [HomeController::class, 'index'])->name('admin')->middleware('auth');
-// Route::get('/admin/user', [AdminUserController::class, 'index'])->name('admin.user')->middleware('auth');
-// Route::get('/admin/user/create', [AdminUserController::class, 'create']);
-// Route::delete('/admin/{user}', [AdminUserController::class, 'destroy'])->middleware('auth');
-// Route::get('/admin/{user}/edit', [AdminUserController::class, 'edit']);
-// Route::patch('/admin/{user}', [AdminUserController::class, 'update'])->middleware('auth');
-Route::resource('/admin/user', AdminUserController::class);
-Route::resource('/admin/reseller', AdminResellerController::class);
-Route::resource('/admin/product', ProductController::class);
-Route::resource('/admin/setting', SettingController::class);
-Route::resource('/admin/log', LogActivityController::class);
-
-Route::get('/reseller', [ResellerController::class, 'index'])->name('reseller');
-
-
-
-// Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home')->middleware('auth');
-
-
-// Route::group(['middleware' => 'auth'], function () {
-// 	Route::get('table-list', function () {
-// 		return view('pages.table_list');
-// 	})->name('table');
-
-// 	Route::get('typography', function () {
-// 		return view('pages.typography');
-// 	})->name('typography');
-
-// 	Route::get('icons', function () {
-// 		return view('pages.icons');
-// 	})->name('icons');
-
-// 	Route::get('map', function () {
-// 		return view('pages.map');
-// 	})->name('map');
-
-// 	Route::get('notifications', function () {
-// 		return view('pages.notifications');
-// 	})->name('notifications');
-
-// 	Route::get('rtl-support', function () {
-// 		return view('pages.language');
-// 	})->name('language');
-
-// 	Route::get('upgrade', function () {
-// 		return view('pages.upgrade');
-// 	})->name('upgrade');
-// });
-
-Route::group(['middleware' => 'auth'], function () {
-	// Route::resource('user', 'App\Http\Controllers\UserController', ['except' => ['show']]);
-	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'App\Http\Controllers\ProfileController@edit']);
-	Route::put('profile', ['as' => 'profile.update', 'uses' => 'App\Http\Controllers\ProfileController@update']);
-	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'App\Http\Controllers\ProfileController@password']);
+Route::group(['middleware' => ['auth']], function () {
+	Route::get('/dashboard', [HomeController::class, 'index'])->name('admin');
+	Route::get('/dashboard/filter', [HomeController::class, 'filterByMonth'])->name('dashboard.filter.month');
+	Route::group(['prefix' => 'admin'], function () {
+		
+	Route::post('/swithaccount', [CompanyController::class,'switchAccount'])->name('account.switch');
+	// search bycompany
+	Route::get('/user/{company}', [AdminUserController::class, 'searchByCompany'])->name('admin.user.company');
+	Route::get('/reseller/{company}', [AdminResellerController::class, 'searchByCompany'])->name('admin.reseller.company');
+	Route::get('/role/{company}', [RoleController::class, 'searchByCompany'])->name('admin.role.company');
+	Route::get('/product/{company}', [ProductController::class, 'searchByCompany'])->name('admin.product.company');
+	// route resouce
+	Route::resource('/company', CompanyController::class, ["as" => "admin"]);
+	Route::resource('/user', AdminUserController::class, ["as" => "admin"]);
+	Route::resource('/role', RoleController::class, ["as" => "admin"]);
+	Route::resource('/product', ProductController::class, ["as" => "admin"]);
+	Route::resource('/setting', SettingController::class, ["as" => "admin"]);
+	Route::resource('/commissions', adminCommision::class, ["as" => "admin"]);
+	Route::resource('/log', LogActivityController::class, ["as" => "admin"]);
+	Route::resource('/reseller', AdminResellerController::class, ["as" => "admin"]);
+	
+	// custom route
+	Route::post('/approval', [AdminResellerController::class, 'getApproval'])->name('getApproval');
+	Route::post('/approvalCompany', [CompanyController::class, 'approve'])->name('approveCompany');
+	Route::get('/status', [AdminResellerController::class, 'getStatus'])->name('getStatus');
+	Route::get('/get-city', [AdminResellerController::class, 'getCity']);
+	Route::get('/commission/export', [adminCommision::class, 'export'])->name('commission.export');
+	Route::get('/commission/filter', [adminCommision::class, 'filter'])->name('commission.filter');
+	Route::get('/get-city-edit', [AdminResellerController::class, 'getCityEdit']);
+	Route::patch('/{product}', [ProductController::class, 'updateCode'])->name('admin.product.updateCode');
+});
+Route::group(['prefix' => 'reseller'], function () {
+	Route::get('', [HomeController::class, 'index'])->name('reseller');
+	Route::resource('/client', ClientController::class,["as"=>"reseller"]);
+	Route::resource('/commission', CommissionController::class,["as"=>"reseller"]);
+	Route::get('/transaction/{client}', [ClientController::class,'searchByClient'],["as"=>"reseller"])->name('reseller.client.search');
+	Route::get('/transaction', [ClientController::class,'transaction'],["as"=>"reseller"])->name('reseller.client.transaction');
+	Route::get('/commision-month', [CommissionController::class,'getTransactionMonth'],["as"=>"reseller"])->name('reseller.client.transaction-month');
+	Route::post('/swithaccount/reseller', [ResellerController::class,'switchAccount'])->name('account.switch.reseller');
+});
 
 });
 
 
+
+Route::group(['middleware' => 'auth'], function () {
+	// Route::resource('user', 'App\Http\Controllers\UserController', ['except' => ['show']]);
+	Route::get('profile',[ProfileController::class,'edit'])->name('profile.edit');
+	Route::put('profile', [ProfileController::class,'update'])->name('profile.update');
+	Route::put('profile/password', [App\Http\Controllers\ProfileController::class,'password'])->name('profile.password');
+	
+});
+Route::get('profile/confirmation/{id}/{email}', [ProfileController::class,'EmailConfirmation'])->name('profile.email.confirmation');
+Route::post('/notification/read', [HomeController::class,'markReadNotify'])->name('notification.read');
+Route::post('register/{id}', [ApiController::class, 'RegisterApi']);

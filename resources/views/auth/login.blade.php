@@ -1,4 +1,5 @@
-@extends('layouts.app', ['class' => 'off-canvas-sidebar', 'activePage' => 'login', 'title' => __('Affiliate Program'),
+@extends('layouts.BaseApp', ['class' => 'off-canvas-sidebar', 'activePage' => 'login', 'title' => __('Affiliate
+Program'),
 'titlePage' => 'Login'])
 
 @section('content')
@@ -17,6 +18,14 @@
                         <h4 class="card-title"><strong>{{ __('Login') }}</strong></h4>
                     </div>
                     <div class="card-body mt-3">
+                        @if (Session::has('error'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{Session::get('error')}}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        @endif
                         @if (session('regis-succ'))
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             {{session('regis-succ')}}
@@ -51,7 +60,8 @@
                                 <input type="password" name="password" id="password" class="form-control"
                                     placeholder="{{ __('Password...') }}" required>
                                 <span class="form-check-sign" id="check">
-                                    <i class="fa fa-eye text-secondary" aria-hidden="true" id="icon-pass"></i>
+                                    <i class="material-icons password-icon text-secondary" aria-hidden="true"
+                                        id="icon-pass">remove_red_eye</i>
                                 </span>
                             </div>
                             @if ($errors->has('password'))
@@ -67,20 +77,6 @@
                     </div>
                 </div>
             </form>
-            <div class="row">
-                {{-- <div class="col-6">
-                    @if (Route::has('password.request'))
-                    <a href="{{ route('password.request') }}" class="text-light">
-                        <small>{{ __('Forgot password?') }}</small>
-                    </a>
-                    @endif
-                </div> --}}
-                <div class="col-12 text-center">
-                    <a href="/registration" class="text-light">
-                        <small>{{ __('Create new account') }}</small>
-                    </a>
-                </div>
-            </div>
         </div>
     </div>
 </div>
@@ -90,14 +86,16 @@
 <script>
     $(document).ready(function () {
         $('#check').click(function () {
-            if ('password' == $('#password').attr('type')) {
-                $('#password').prop('type', 'text');
-                $('#icon-pass').removeClass("fa fa-eye");
-                $('#icon-pass').addClass("fa fa-eye-slash");
+            input = '#password';
+            icon = '#icon-pass';
+            if ($(input).attr('type') == 'password') {
+                $(input).prop('type', 'text');
+                $(icon).removeClass('text-secondary')
+                $(icon).addClass('text-info');
             } else {
-                $('#password').prop('type', 'password');
-                $('#icon-pass').removeClass("fa fa-eye-slash");
-                $('#icon-pass').addClass("fa fa-eye");
+                $(icon).removeClass('text-info');
+                $(icon).addClass('text-secondary');
+                $(input).prop('type', 'password');
             }
         });
     });

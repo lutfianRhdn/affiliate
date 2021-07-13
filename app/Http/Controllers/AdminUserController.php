@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\LogActivity;
+use App\Mail\EmailApprovalCompany;
+use App\Mail\EmailConfirmation;
 use App\Mail\KonfirmasiEmail;
+use App\Models\Company;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -11,15 +13,32 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
-
 class AdminUserController extends Controller
 {
+
+    
+    public function __construct()
+    {
+        $this->middleware('permission:admin.view')->only('index');
+        $this->middleware('permission:admin.create')->only('store');
+        $this->middleware('permission:admin.edit')->only('update');
+        $this->middleware('permission:admin.delete')->only('destroy');
+    }
+
+
     public function index()
     {
-        $users = DB::table('users')
-            ->where('role', 1)
-            ->paginate(5);
-        return view('admin.user', ['users' => $users]);
+        $userAdmin= [];
+        $users= filterData('\App\Models\User');
+        $roles = filterData('\App\Models\Role')->whereNotIn('name',['admin','reseller','super-admin-company','super-admin']);
+        // $companies= getAllCompanies();
+        foreach($users as $user){
+            if ($user->hasRole('admin')) {
+                array_push($userAdmin,$user);
+            }
+        }
+        $users =$userAdmin ;
+        return view('admin.user', compact('users','roles'));
     }
 
     public function create() {
@@ -32,34 +51,15 @@ class AdminUserController extends Controller
         $this->validate($request,[
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed',
-                'regex:/[a-z]/',
-                'regex:/[A-Z]/',
-                'regex:/[0-9]/',
-                'regex:/[@$!%*#?&]/'],
             'phone' => ['required', 'min:9', 'max:14'],
-            ]);
-            // dd($request->all());
-        // $regex = DB::table('products')->select('products.regex')->where('products.id', $request->product_id)->get();
-        
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'password' => Hash::make($request->password),
-            'role' => $request->role,
-            'ref-code' => '',
-            'register_status' => '1',
-            'country' => 'Indonesia',
-            'state' => 'JAWA BARAT',
-            'region' => 'Kota Bandung',
-            'address' => 'Jl. Holis Regency No.37A, Babakan, Babakan Ciparay'
         ]);
-
-        $role = $request->role == '1' ? ' Admin' : 'Reseller';
+            $userModel = new User;
+            $request->request->add(['password'=>Str::random(8),'address'=>'indonesia']);
+           $user = $userModel->CreateAdmin($request->all());
+            Mail::to($user->email)->send(new EmailConfirmation($user->id,$request->password));
         // Mail::to($user['email'])->send(new KonfirmasiEmail($user));
-        LogActivity::addToLog("Menambahkan ".$role." ".$request->email);
-        return redirect("/admin/user")->with('status', 'Admin successfully added');
+        addToLog("Menambahkan Adminn".$request->email);
+        return redirect(route('admin.user.index'))->with('status', 'Admin successfully added');
     }
 
     public function show(User $user)
@@ -74,31 +74,56 @@ class AdminUserController extends Controller
 
     public function update(Request $request, User $user)
     {
-        // dd($request->all());
         $this->validate($request, [
             'name' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'min:9', 'max:14'],
             'role' => ['required'],
         ]);
-
-        User::where('id', $user->id)
-            ->update([
+        $user->update([
                 'name' => $request->name,
                 'phone' => $request->phone,
-                'role' => $request->role,
             ]);
-        $role = $request->role == '1' ? ' Admin' : 'Reseller';
-        LogActivity::addToLog("Mengubah data " . $role . " " . $request->email);
-        return redirect("/admin/user")->with('status', 'Berhasil update data '.$request->name);
+            unset($user->getRoleNames()[0]);
+            foreach($user->getRoleNames() as $role){
+                $user->removeRole($role);
+
+            }
+            $user->assignRole('admin');
+            foreach($request->role as $role){
+                $user->assignRole($role);
+            }
+        addToLog("Mengubah data admin " . $user->email);
+        return redirect(route('admin.user.index'))->with('status', 'Berhasil update data '.$request->name);
     }
 
     public function destroy(User $user)
     {
         if($user->email != 'admin@admin.com'){
             User::destroy($user->id);
-            LogActivity::addToLog("Delete account " . $user->email);
-            return redirect("/admin/user")->with('status', 'Data deleted successfully');
+            addToLog("Delete account " . $user->email);
+            return redirect(route('admin.user.index'))->with('status', 'Data deleted successfully');
         }
-        return redirect("/admin/user")->with('statusAdmin', 'Admin cannot be deleted');
+        return redirect(route('admin.user.index'))->with('statusAdmin', 'Admin cannot be deleted');
+    }
+    // custom
+    public function searchByCompany($company)
+    {
+        $companies = Company::where('name',$company)->get()->first();
+        $users =[];
+        foreach ($companies->users as $user) {
+            if($user->hasRole('admin')){
+                array_push($users,$user);
+            }
+        }
+        // $companies = getAllCompanies();
+        return view('admin.user', compact('users'));
+    }
+    public function approve(Request $request)
+    {
+        $company = User::find($request->id);
+        $company->approve=1;
+        $company->save();
+        Mail::to($company->email)->send(new EmailApprovalCompany($company->id));
+        return true; 
     }
 }

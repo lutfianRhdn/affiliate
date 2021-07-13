@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\LogActivity;
+use App\Models\Company;
 use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -14,10 +13,23 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $this->middleware('permission:product.view')->only('index');
+        $this->middleware('permission:product.create')->only('store');
+        $this->middleware('permission:product.edit')->only('update');
+        $this->middleware('permission:product.delete')->only('destroy');
+    }
+
     public function index()
     {
-        $product = Product::all();
-        return view('admin.product', compact('product'));
+        $product =filterData('\App\Models\Product');
+        $companies = getAllCompanies();
+        if (!auth()->user()->hasRole('super-admin')) {
+            $product = Product::where('company_id',auth()->user()->company->id)->get();
+        }
+        return view('admin.product', compact('product','companies'));
     }
 
     /**
@@ -43,15 +55,15 @@ class ProductController extends Controller
             'product_name' => ['required'],
             'description' => ['required'],
             'regex' => ['required', 'unique:products'],
+            'permissionUrl' =>['required','url'],
+            'urlProduct'=>['required','url']
         ]);
         
-        Product::create([
-            'product_name' => $request->product_name,
-            'description' => $request->description,
-            'regex' => $request->regex . "-"
-        ]);
-        LogActivity::addToLog("Menambahkan product ".$request->product_name);
-        return redirect('/admin/product')->with('status', 'Data inserted successfully');
+        $productModel = new Product;
+        $productModel->createProduct($request->all());
+
+        addToLog("Menambahkan product ".$request->product_name);
+        return redirect(route('admin.product.index'))->with('status', 'Data inserted successfully');
     }
 
     /**
@@ -73,7 +85,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        return view('admin.editProduct', compact('product'));
+        // 
     }
 
     /**
@@ -88,17 +100,23 @@ class ProductController extends Controller
         $this->validate($request, [
             'product_name' => 'required',
             'description' => 'required',
-            'regex' => ['required', 'unique:products'],
+            'regex' => ['required'],
+            'permissionUrl' => ['required', 'url']
         ]);
 
-        Product::where('id', $product->id)->update([
-            'product_name' => $request->product_name,
-            'description' => $request->description,
-            'regex' => $request->regex."-",
-            ]);
+        $productModel = new Product;
+        $productModel->updateProduct($request, $product->id);
         
-        LogActivity::addToLog("Mengedit produk id ".$product->id);
-        return redirect('/admin/product')->with('status', 'Data updated successfully');
+        addToLog("Edit product id ".$product->id);
+        return redirect(route('admin.product.index'))->with('status', 'Data updated successfully');
+    }
+
+    public function updateCode(Request $request, Product $product) {
+        $productModel = new Product;
+        $productModel->updateCode($request, $product->id);
+
+        return
+        redirect(route('admin.product.index'))->with('status', 'Code updated successfully');
     }
 
     /**
@@ -110,7 +128,18 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         Product::destroy($product->id);
-        LogActivity::addToLog("Menghapus product ".$product->product_name);
-        return redirect('/admin/product')->with('status', 'Item deleted successfully');
+        addToLog("Delete product ".$product->product_name);
+        return redirect(route('admin.product.index'))->with('status', 'Item deleted successfully');
+    }
+    // custom
+
+    public function searchByCompany($company)
+    {
+        $companies = Company::where('name',$company)->get()->first();
+        $product= $companies->products;
+        $companies = getAllCompanies();
+        return view('admin.product', compact('product','companies'));
+
+        
     }
 }

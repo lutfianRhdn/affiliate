@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ApiController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +19,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// Route::get('products', [ApiController::class, 'ProductApi']);
+
+Route::post('/client/register/{hash}',[ApiController::class,'RegisterClientApi']);
+Route::post('/client/transaction/{hash}', [ApiController::class,'TransactionClientApi']);
+Route::delete('/client/delete/{hash}', [ApiController::class,'DeleteClientApi']);
+Route::put('/client/update/{hash}', [ApiController::class,'updateClientApi']);

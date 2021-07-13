@@ -4,13 +4,18 @@ namespace App\Http\Controllers\Auth;
 
 
 use App\Http\Controllers\Controller;
-use App\Mail\KonfirmasiEmail;
+use App\Mail\EmailConfirmation;
+use App\Mail\EmailConfirmationCompany;
 use App\Models\Product;
 use App\Models\Province;
+use App\Models\City;
+use App\Models\Company;
 use App\Models\Regency;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Doctrine\DBAL\Schema\Table;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Foundation\Auth\RedirectsUsers;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +23,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-
+use Symfony\Contracts\Service\Attribute\Required;
 
 class RegisterController extends Controller
 {
@@ -41,7 +46,7 @@ class RegisterController extends Controller
      * @var string
      */
     protected $redirectTo = RouteServiceProvider::HOME;
-
+private $pass ='';
     /**
      * Create a new controller instance.
      *
@@ -49,13 +54,15 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        // $this->middleware('guest');
+        $this->middleware('guest')->except(['logout','emailConfirmation']); 
     }
 
     public function index() {
-        $product = Product::all();
-        $provinces = Province::all();
-        return view("auth.register", ['products' => $product, 'provinces' => $provinces]);
+        $model_product = new Product;
+        $product = $model_product->getData();
+        // $model_province = new Province;
+        // $provinces = $model_province->getData();
+        return view("auth.register");
     }
 
     /**
@@ -74,12 +81,10 @@ class RegisterController extends Controller
                 'regex:/[A-Z]/',
                 'regex:/[0-9]/',
                 'regex:/[@$!%*#?&]/'],
+            'password_confirmation' => ['required_with:password','same:password'],
+            'company'=>['required','unique:companies,name'],
             'phone' => ['required', 'min:9', 'max:14'],
-            'product_id' => ['required'],
-            'country' => ['required'],
-            'state' => ['required'],
-            'address' => ['required'],
-            'policy' => ['required']
+            'address' => ['required']
         ]);
     }
 
@@ -92,37 +97,51 @@ class RegisterController extends Controller
 
     protected function create(array $data)
     {
-
-        $regex = DB::table('products')->select('products.regex')->where('products.id', $data['product_id'])->get();
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'phone' => $data['phone'],
-            'product_id' => $data['product_id'],
-            'password' => Hash::make($data['password']),
-            'role' => $data['role'],
-            'ref_code' => $regex[0]->regex. strtoupper(Str::random(6)),
-            'country' => $data['country'],
-            'state' => $data['state'],
-            'region' => $data['city'],
-            'address' => $data['address'],
-        ]);
-        
-        
-        Mail::to($user['email'])->send(new KonfirmasiEmail($user));
+        $validator = $this->validator($data);
+        if ($validator->fails()) {
+            return $validator->errors();
+        }
+        $company = new Company;
+        $user= $company->addCompany($data);
         return $user;
+    
     }
 
-    public function konfirmasiemail($email, $ref_code)
+    public function register(Request $request)
     {
-        User::where([
-            'email' => $email,
-            'ref_code' => $ref_code])
-            ->update([
-                'register_status' => '1', 
-                'ref_code' => NULL]);
-                
-        return redirect('login')->with('regis-succ', 'Email activated!');
+        $this->validator($request->all())->validate();
+    
+        event(new Registered($user = $this->create($request->all())));
+        Mail::to($user->email)->send(new EmailConfirmation($user->id, $this->pass));
+        return redirect()->back()->with('success','Your Account has been Successfully Registered, please Check Email for Activation');
+    }
+    public function emailConfirmation($email)
+    {
+        $user = new User;
+        $productModel = new Product;
+        $product= $user->getProductID($email);
+        $user=User::where('email',$email)->get()->first();
+        $user->register_status =1;
+        $user->save();
+        if ($product) {
+            $url = $productModel->getUrl($product->product_id);
+        }else{
+            $company = Company::where('email',$email)->get()->first();
+            $company->is_active = 1;
+            $company->save();
+            $url = null;
+        }
+        if ($url ==null) {
+            return redirect(url('/thankyou.php?st=0&res=Activation Sucess Please wait for Approval'));
+        }else{
+            $url = $url->url;
+        }
+        if($user->emailConfirmation($email)){
+            // return redirect('login')->with('regis-succ', 'Your account has been successfully activated, now you have to wait for admin approval.');
+            return redirect($url);
+        } else {
+            return redirect('/');
+        }
     }
 
     public function store(Request $request)
@@ -130,5 +149,19 @@ class RegisterController extends Controller
         $region = DB::table('indoregion_regencies')->select('indoregion_regencies.id', 'indoregion_regencies.name')->where('indoregion_regencies.province_id', $request->id)->get();
 
         return response()->json($region);
+    }
+
+    public function getCity(Request $request)
+    {   
+        $term = empty($request->term['term']) ? '' : ($request->term['term']);
+        $cities = new City;
+        $cities = $cities->getCity($request->province, $term);
+        
+        $result = array();
+        foreach ($cities as $key => $value) {
+            array_push($result, ['id'=>$value->id, 'text'=>$value->city_name_full]);
+        }
+        
+        return ['results' => $result];
     }
 }

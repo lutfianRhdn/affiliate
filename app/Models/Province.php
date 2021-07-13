@@ -17,21 +17,26 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Province extends Model
 {
-    use ProvinceTrait;
-    /**
-     * Table name.
-     *
-     * @var string
-     */
-    protected $table = 'indoregion_provinces';
+    public $timestamps = false;
+    
+    protected $casts = [
+        'id' => 'integer',
+        'province_lat' => 'float',
+        'province_lon' => 'float',
+        'province_capital_city_id' => 'integer',
+        'timezone' => 'integer',
+    ];
 
-    /**
-     * Province has many regencies.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function regencies()
-    {
-        return $this->hasMany(Regency::class);
-    }
+    protected $primaryKey = 'id';
+    
+    // public function cities()
+    // {
+    //     return $this->hasMany('App\Model\City','province_id');
+    // }
+    
+    // public function getData()
+    // {
+    //     $provinces = Province::select('id','province_name')->orderBy('province_name')->get();
+    //     return $provinces;
+    // }
 }
