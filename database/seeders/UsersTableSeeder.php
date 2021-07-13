@@ -25,7 +25,7 @@ class UsersTableSeeder extends Seeder
             'role' => '2',
             'phone' => '08123456789',
             'register_status' => '1',
-            'company_id' => Company::where('name', 'Affiliate')->get()->first()->id,
+            'company_id' => Company::where('name', 'Affiliate')->first()->id,
             'address' => 'Jl. Holis Regency No.37A, Babakan, Babakan Ciparay',
             'password' => Hash::make('admin1234'),
             'created_at' => now(),
